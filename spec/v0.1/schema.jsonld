@@ -1,0 +1,64 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "um": "https://universalmanifest.net/ns/universal-manifest/v0.1#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "id": "@id",
+    "type": "@type",
+    "Manifest": "um:Manifest",
+    "Facet": "um:Facet",
+    "Entity": "um:Entity",
+    "manifestVersion": "um:manifestVersion",
+    "subject": {
+      "@id": "um:subject",
+      "@type": "@id"
+    },
+    "issuedAt": {
+      "@id": "um:issuedAt",
+      "@type": "xsd:dateTime"
+    },
+    "expiresAt": {
+      "@id": "um:expiresAt",
+      "@type": "xsd:dateTime"
+    },
+    "facets": {
+      "@id": "um:facets",
+      "@container": "@set"
+    },
+    "claims": {
+      "@id": "um:claims",
+      "@container": "@set"
+    },
+    "consents": {
+      "@id": "um:consents",
+      "@container": "@set"
+    },
+    "devices": {
+      "@id": "um:devices",
+      "@container": "@set"
+    },
+    "pointers": {
+      "@id": "um:pointers",
+      "@container": "@set"
+    },
+    "name": "schema:name",
+    "description": "schema:description",
+    "ref": {
+      "@id": "um:ref",
+      "@type": "@id"
+    },
+    "entity": {
+      "@id": "um:entity"
+    },
+    "signature": {
+      "@id": "um:signature"
+    },
+    "algorithm": "um:algorithm",
+    "keyRef": {
+      "@id": "um:keyRef",
+      "@type": "@id"
+    },
+    "value": "um:value"
+  }
+}

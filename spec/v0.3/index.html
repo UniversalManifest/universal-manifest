@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Universal Manifest v0.3 Specification</title>
+    <link rel="canonical" href="https://universalmanifest.net/spec/latest/">
+    <!-- Use the official W3C Working Draft style -->
+    <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/W3C-WD" type="text/css">
+    <style>
+        /* Specific enhancements per W3C specification layout */
+        html, body { margin: 0; padding: 0; }
+        body { max-width: none; line-height: 1.5; font-family: sans-serif; background-image: none !important; }
+        .head { margin-bottom: 1.25rem; }
+        .head a.logo, img[alt="W3C"], .w3c-logo { display: none !important; } /* Strip W3C branding injected by fixup.js */
+        .head h1 { color: #005a9c; }
+        .head h2 {
+            margin-bottom: 0.45rem;
+            margin-top: 0.45rem;
+        }
+        .head dl {
+            display: grid;
+            gap: 0.25rem 0.75rem;
+            grid-template-columns: max-content minmax(0, 1fr);
+            margin: 0.8rem 0;
+        }
+        .head dd,
+        .head dt {
+            margin: 0;
+        }
+        .head .copyright {
+            margin: 0.65rem 0;
+        }
+        .um-site-nav {
+            align-items: center;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            margin-top: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .um-site-nav__label {
+            color: #5a6677;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            margin-right: 0.15rem;
+            text-transform: uppercase;
+        }
+        .um-site-nav a {
+            background: #ffffff;
+            border: 1px solid #c9d3dd;
+            border-radius: 999px;
+            color: #1f2a36;
+            display: inline-flex;
+            font-size: 0.84rem;
+            font-weight: 700;
+            gap: 0.25rem;
+            padding: 0.42rem 0.72rem;
+            text-decoration: none;
+        }
+        .um-site-nav a:hover,
+        .um-site-nav a:focus-visible {
+            background: #eef4fb;
+            outline: none;
+        }
+        .um-site-nav a.is-current {
+            background: #005a9c;
+            border-color: #005a9c;
+            color: #ffffff;
+        }
+        body:not(.toc-inline) #toc,
+        body.toc-sidebar #toc {
+            background: #f4f6f8;
+            border-right: 1px solid #d4dce3;
+            box-sizing: border-box;
+            font-weight: bold;
+            bottom: 0;
+            height: 100vh;
+            left: 0 !important;
+            margin: 0;
+            min-height: 100vh;
+            overflow-y: auto;
+            padding: 1rem 1.25rem 1.5rem;
+            padding-left: 1rem;
+            position: fixed;
+            right: auto;
+            top: 0 !important;
+            width: 22rem;
+        }
+        body:not(.toc-inline),
+        body.toc-sidebar {
+            margin: 0;
+            padding-left: 0;
+        }
+        .toc h2 {
+            font-size: 0.75rem;
+            letter-spacing: 0.06em;
+            margin: 0 0 0.8rem;
+            text-transform: uppercase;
+        }
+        .toc ol {
+            counter-reset: item;
+            list-style: none;
+            margin: 0;
+            padding-left: 0;
+        }
+        .toc li {
+            counter-increment: item;
+            display: block;
+            margin: 0.1rem 0;
+        }
+        .toc li > a {
+            color: #1f2a36;
+            display: flex;
+            font-weight: 600;
+            gap: 0.35rem;
+            line-height: 1.25;
+            padding: 0.18rem 0;
+            text-decoration: none;
+        }
+        .toc li > a::before {
+            content: counters(item, ".") ".";
+            flex: 0 0 auto;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+        .toc ol ol {
+            margin: 0.12rem 0 0.25rem;
+            padding-left: 1rem;
+        }
+        .toc ol ol li > a {
+            font-weight: 500;
+        }
+        .toc a.toc-active {
+            color: #005a9c;
+            font-weight: 700;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        html body #toc-nav,
+        html body.toc-sidebar #toc-nav {
+            align-items: center;
+            bottom: 0 !important;
+            display: flex !important;
+            gap: 0.75rem !important;
+            justify-content: flex-start;
+            left: 0 !important;
+            margin: 0 !important;
+            max-width: 100vw;
+            padding: 0.5rem 0.5rem 0.5rem 1rem !important;
+            position: fixed !important;
+            right: auto !important;
+            transform: none !important;
+            width: auto !important;
+            z-index: 1002 !important;
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+        html body.toc-inline #toc-nav {
+            align-items: center;
+            bottom: 0 !important;
+            display: flex !important;
+            gap: 0.75rem !important;
+            justify-content: flex-start;
+            left: 0 !important;
+            margin: 0 !important;
+            padding: 0.5rem 0.5rem 0.5rem 1rem !important;
+            position: fixed !important;
+            width: auto !important;
+            z-index: 1002 !important;
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+        html body #toc-nav a,
+        html body #toc-nav a#toc-toggle,
+        html body #toc-nav a#toc-jump {
+            align-items: center !important;
+            background: #ffffff !important;
+            border: 1px solid #c9d3dd !important;
+            border-radius: 6px !important;
+            box-sizing: border-box !important;
+            color: #1f2a36 !important;
+            display: inline-flex !important;
+            float: none !important;
+            font-size: 0.85rem !important;
+            gap: 0.35rem !important;
+            height: auto !important;
+            left: auto !important;
+            line-height: 1.2 !important;
+            margin: 0 !important;
+            max-width: none !important;
+            min-height: 0 !important;
+            min-width: 0 !important;
+            padding: 0.45rem 0.6rem !important;
+            position: static !important;
+            right: auto !important;
+            text-decoration: none !important;
+            top: auto !important;
+            width: auto !important;
+            white-space: nowrap !important;
+        }
+        
+        #toc-nav a span#toc-jump-text,
+        #toc-nav a span#toc-expand-text,
+        #toc-nav a span#toc-collapse-text {
+            display: none !important;
+        }
+        html body #toc-nav a:hover {
+            background: #eef4fb;
+        }
+        html body #toc-nav a:focus-visible {
+            outline: 2px solid #005a9c;
+            outline-offset: 2px;
+        }
+        body:not(.toc-inline) > :not(#toc):not(script) {
+            margin-left: calc(22rem + 1.2rem);
+            margin-right: 1.4rem;
+            max-width: 50em;
+        }
+        body.toc-inline > :not(script) {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 50em;
+            padding-left: 1.4rem;
+            padding-right: 1.4rem;
+            box-sizing: border-box;
+        }
+        body.toc-inline #toc {
+            clear: both;
+            margin-bottom: 2rem;
+        }
+        body.toc-inline #toc + section {
+            clear: both;
+        }
+        .note, .issue, .example { padding: .5em; border-left: .5em solid; margin: 1em 0; }
+        .example { border-color: #e0cb52; background: #fcfaee; }
+        .example-title { font-weight: bold; margin-bottom: 0.5em; }
+        .migration-callout {
+            background: #eef4fb;
+            border-left: 0.35rem solid #005a9c;
+            box-sizing: border-box;
+            margin-bottom: 1.25rem;
+            margin-top: -1.25rem;
+            padding: 0.65rem 0.85rem;
+        }
+        .migration-callout p {
+            margin: 0;
+        }
+        pre { background-color: #f8f8f8; border: 1px solid #ddd; padding: 1em; overflow: auto; }
+        code { font-family: Inconsolata, Consolas, "Liberation Mono", monospace; color: #c83232; }
+        .rfc2119 { text-transform: lowercase; font-variant: small-caps; font-style: normal; font-weight: bold; color: #900; }
+        @media (max-width: 1100px) {
+            .toc {
+                height: auto;
+                max-height: 45vh;
+                position: static;
+                width: auto;
+            }
+            html body #toc-nav,
+            html body.toc-sidebar #toc-nav,
+            html body.toc-inline #toc-nav {
+                width: auto !important;
+            }
+            html body #toc-nav a#toc-jump span#toc-jump-text {
+                display: none;
+            }
+            body > :not(#toc):not(script) {
+                margin-left: auto;
+                margin-right: auto;
+                max-width: 50em;
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="h-entry">
+    <!-- Astro owns the outer /spec/latest/ route shell; this file remains the source of truth for the spec body, W3C styling, and reader behavior. -->
+    <div class="head">
+        <h1 id="title" class="title p-name">Universal Manifest v0.3 Specification</h1>
+        <h2 id="subtitle">W3C-style specification on a stable subordinate route</h2>
+        <h2><time class="dt-published" datetime="2026-05-19">19 May 2026</time></h2>
+        <dl>
+            <dt>This version:</dt>
+            <dd><a class="u-url" href="https://universalmanifest.net/spec/v0.3/">https://universalmanifest.net/spec/v0.3/</a></dd>
+            <dt>Latest published version:</dt>
+            <dd><a href="https://universalmanifest.net/spec/v0.3/">https://universalmanifest.net/spec/v0.3/</a></dd>
+            <dt>Previous version:</dt>
+            <dd><a href="https://universalmanifest.net/spec/v0.2/">https://universalmanifest.net/spec/v0.2/</a></dd>
+            <dt>History:</dt>
+            <dd>Changelog</dd>
+            <dt>Editors:</dt>
+            <dd class="p-author h-card vcard">
+                Universal Manifest Working Group
+            </dd>
+        </dl>
+        <p class="copyright">
+            Copyright &copy; 2026 the Contributors to the Universal Manifest Specification.
+        </p>
+        <hr title="Separator for header">
+    </div>
+
+    <aside class="migration-callout" aria-label="v0.1 migration guide">
+        <p><strong>Coming from v0.1?</strong> See the Migration Guide before upgrading to v0.2.</p>
+    </aside>
+
+    <aside class="migration-callout" aria-label="v0.2 to v0.3 changes">
+        <p><strong>Coming from v0.2?</strong> See <a href="#changes-from-v02">Changes from v0.2</a> for a summary of additions in v0.3: receiver pipeline, encrypted facets, structured receipts, and normative promotions.</p>
+    </aside>
+
+    <!-- Abstract -->
+    <section id="abstract" class="introductory">
+        <h2>Abstract</h2>
+        <p>This specification defines a JSON-LD-based file format known as the <strong>Universal Manifest</strong>, a portable state capsule. Formulated as a hybrid synthesis of web publication metadata and web application parameters, this format provides developers and issuers with a standardized envelope to convey linked-data identity references, role permissions, device registrations, and pointers to canonical data sources.</p>
+        <p>The Universal Manifest is specifically designed for local-first environments (e.g., venue edges, public displays) where consumers must tolerate partial connectivity and rely on cached, verifiable state. Using this standard, user agents, smart displays, and network edges can securely interoperate without requiring a continuous cloud connection, facilitating seamless cross-context experiences.</p>
+    </section>
+
+    <!-- Status of This Document -->
+    <section id="sotd" class="introductory">
+        <h2>Status of This Document</h2>
+        <p><em>This section describes the status of this document at the time of its publication.</em></p>
+        <p>Universal Manifest v0.3 is the current published version of the Universal Manifest specification. It builds on the v0.1 base format (core JSON-LD envelope, lifecycle, caching) and v0.2 extensions (normative signature profile, identity binding framework, tiered trust model, <code>claims[].claimProof</code>). Version 0.3 introduces a normative receiver-behavior contract (the six-stage receiver pipeline), encrypted inline facets (JWE profile), structured receipts, and promotes cross-DID binding, <code>requiredTrustTier</code>, and agent delegation from non-normative conventions to normative requirements.</p>
+        <p>Because Universal Manifest is still in the v0.x line, minor-version bumps may still include breaking changes when those changes are reflected by a new version folder. Implementors should review the v0.1 to v0.2 migration guide and the <a href="#changes-from-v02">Changes from v0.2</a> section before upgrading.</p>
+        <p>Future changes are managed through the RFC mechanism and the breaking-change policy. This document uses layout formats established by major web standard groups to present normative requirements cleanly, and may be cited as the published Universal Manifest v0.3 specification.</p>
+        <p><strong>For implementers:</strong> use the Implementation Guide, run the Standalone Conformance Suite, review <a href="https://universalmanifest.net/conformance/v0.2/">Conformance v0.2</a>, and compare against the <a href="https://github.com/grigb/um-typescript">TypeScript reference implementation</a>.</p>
+    </section>
+
+    <!-- Changes from v0.2 -->
+    <section id="changes-from-v02" class="introductory">
+        <h2>Changes from v0.2</h2>
+        <p>The following substantive changes were made between v0.2 and v0.3:</p>
+        <ul>
+            <li><strong>Receiver pipeline</strong> (<a href="#receiver-pipeline">Section 3.1</a>): Replaced the three-step manifest processing model with a normative six-stage receiver pipeline (Arrive, Verify, Project, Consent, Compose, Receipt).</li>
+            <li><strong>Structured receipts</strong> (<a href="#structured-receipts">Section 3.3</a>): Defined a normative receipt schema as the output of the receiver pipeline, with four outcome categories.</li>
+            <li><strong>Encrypted inline facets</strong> (<a href="#encrypted-facets">Section 2.3</a>): Added a JWE inline encryption profile for facets, including key rotation and recipient revocation.</li>
+            <li><strong>Cross-DID binding promoted</strong> (<a href="#cross-did-binding">Section 6.4.4</a>): Promoted from non-normative convention to normative requirement.</li>
+            <li><strong><code>requiredTrustTier</code> promoted</strong> (<a href="#required-trust-tier">Section 6.4.5</a>): Promoted from non-normative convention to normative requirement.</li>
+            <li><strong>Agent delegation promoted</strong> (<a href="#agent-delegation">Section 6.5</a>): Promoted from non-normative convention to normative requirement.</li>
+            <li><strong>Tier 2 defined</strong> (<a href="#tiered-trust">Section 6.4.2</a>): Tier 2 (cryptographic binding via zero-knowledge proof of cross-DID control) is now normatively defined. Marked at risk.</li>
+            <li><strong>Consumer behavior expanded</strong> (<a href="#required-behavior-consumer">Section 4.1</a>): Added receiver contract obligations referencing the pipeline.</li>
+            <li><strong>Privacy model expanded</strong> (<a href="#privacy-considerations">Section 7</a>): Added opacity and projection privacy considerations for encrypted facets.</li>
+            <li><strong>Signature limitations softened</strong> (<a href="#signature-limitations">Section 6.1</a>): Reduced v0.1 caveat language to reflect v0.2 signature profile delivery.</li>
+            <li><strong>Signature integrity updated</strong> (<a href="#signature-integrity">Section 1.5</a>): Removed "reserved for subsequent iterations" language.</li>
+            <li><strong>Informative references</strong> (<a href="#informative-references">Section 8.2</a>): Added URLs to all citations.</li>
+        </ul>
+    </section>
+
+    <!-- Table of Contents -->
+    <nav id="toc" class="toc">
+        <h2>Table of Contents</h2>
+        <ol>
+            <li><a href="#universal-manifest">Universal Manifest</a>
+                <ol>
+                    <li><a href="#examples">Examples</a></li>
+                    <li><a href="#json-ld-core-members">JSON-LD Core Members</a></li>
+                    <li><a href="#identities-lifespans">Identities &amp; Lifespans</a></li>
+                    <li><a href="#structural-state-members">Structural State Members</a></li>
+                    <li><a href="#signature-integrity">Signature Integrity</a></li>
+                    <li><a href="#signature-profile-v02">v0.2 Signature Profile: JCS + Ed25519</a></li>
+                </ol>
+            </li>
+            <li><a href="#entities-and-facets">Entities and Facets</a>
+                <ol>
+                    <li><a href="#umfacet-module">um:Facet Module</a></li>
+                    <li><a href="#umentity-base">um:Entity Base</a></li>
+                    <li><a href="#encrypted-facets">Encrypted Facets (JWE Inline Profile)</a></li>
+                </ol>
+            </li>
+            <li><a href="#manifest-lifecycle-and-caching">Manifest Lifecycle and Caching</a>
+                <ol>
+                    <li><a href="#receiver-pipeline">Receiver Pipeline</a></li>
+                    <li><a href="#caching-formulation">Caching Formulation</a></li>
+                    <li><a href="#structured-receipts">Structured Receipts</a></li>
+                </ol>
+            </li>
+            <li><a href="#conformance">Conformance</a>
+                <ol>
+                    <li><a href="#required-behavior-consumer">Consumer Behavior</a></li>
+                    <li><a href="#required-behavior-issuer">Issuer Behavior</a></li>
+                    <li><a href="#standalone-conformance-suite">Standalone Conformance Suite</a></li>
+                </ol>
+            </li>
+            <li><a href="#extensibility-profiles">Extensibility &amp; Profiles</a></li>
+            <li><a href="#security-considerations">Security Considerations</a>
+                <ol>
+                    <li><a href="#signature-limitations">Signature Limitations</a></li>
+                    <li><a href="#ttl-enforcement">TTL Enforcement</a></li>
+                    <li><a href="#resource-limits">Resource Limits</a></li>
+                    <li><a href="#identity-binding-claim-authenticity">Identity Binding and Claim Authenticity</a></li>
+                    <li><a href="#agent-delegation">Agent Delegation</a></li>
+                </ol>
+            </li>
+            <li><a href="#privacy-considerations">Privacy Considerations</a></li>
+            <li><a href="#references">References</a>
+                <ol>
+                    <li><a href="#normative-references">Normative References</a></li>
+                    <li><a href="#informative-references">Informative References</a></li>
+                </ol>
+            </li>
+        </ol>
+    </nav>
+
+    <!-- Content Sections -->
+    <section id="universal-manifest">
+        <h2><span class="secno">1. </span>Universal Manifest</h2>
+        <p>A <strong>Universal Manifest</strong> is a <a href="https://www.w3.org/TR/json-ld/">JSON-LD</a> document acting as a cross-platform data envelope. It blends the semantic linkability of a Web Publication Manifest with the applied processing lifecycle of a Web App Manifest.</p>
+
+        <section id="examples">
+            <h3><span class="secno">1.1. </span>Examples</h3>
+            <p>The following is an example of a minimal Universal Manifest:</p>
+            <div class="example">
+                <div class="example-title">Example 1: Minimal Universal Manifest payload</div>
+<pre class="json"><code>{
+  "@context": [
+    "https://universalmanifest.net/ns/v0.1"
+  ],
+  "@id": "urn:uuid:123e4567-e89b-12d3-a456-426614174000",
+  "@type": ["um:Manifest"],
+  "manifestVersion": "0.1",
+  "subject": "did:example:123",
+  "issuedAt": "2026-03-01T00:00:00Z",
+  "expiresAt": "2026-03-02T00:00:00Z"
+}</code></pre>
+            </div>
+        </section>
+
+        <section id="json-ld-core-members">
+            <h3><span class="secno">1.2. </span>JSON-LD Core Members</h3>
+            <h4 id="context-member">1.2.1. <code>@context</code> member</h4>
+            <p>The <code>@context</code> member establishes the semantic definitions of terms used within the manifest. It <span class="rfc2119">MUST</span> include the Universal Manifest namespace (e.g., <code>https://universalmanifest.net/ns/v0.1</code>).</p>
+
+            <h4 id="id-member">1.2.2. <code>@id</code> member</h4>
+            <p>The <code>@id</code> member provides a primary identifier. Issuers <span class="rfc2119">SHOULD</span> generate <code>@id</code> as an opaque, offline-safe identifier (e.g., <code>urn:uuid:&lt;uuidv4&gt;</code>).</p>
+
+            <h4 id="type-member">1.2.3. <code>@type</code> member</h4>
+            <p>The <code>@type</code> member indicates the document type classifying the resource. It <span class="rfc2119">MUST</span> include the value <code>um:Manifest</code>.</p>
+        </section>
+
+        <section id="identities-lifespans">
+            <h3><span class="secno">1.3. </span>Identities &amp; Lifespans</h3>
+            <h4 id="subject-member">1.3.1. <code>subject</code> member</h4>
+            <p>The <code>subject</code> member specifies the primary entity (user, app, venue) the manifest describes. It <span class="rfc2119">MUST</span> contain a stable identifier URI (e.g., a Decentralized Identifier / DID).</p>
+
+            <h4 id="lifetime">1.3.2. <code>issuedAt</code> and <code>expiresAt</code> members</h4>
+            <p>The <code>issuedAt</code> and <code>expiresAt</code> members formulate the bounding constraints (TTL) for the manifest's validity. Both parameters are formatted as ISO 8601 / RFC 3339 date-time strings.</p>
+        </section>
+
+        <section id="structural-state-members">
+            <h3><span class="secno">1.4. </span>Structural State Members</h3>
+            <p>The manifest structure relies on domain-specific members akin to Web Publication linkages.</p>
+
+            <h4 id="facets-member">1.4.1. <code>facets</code> member</h4>
+            <p>The <code>facets</code> member organizes extended functional blocks (<code>um:Facet</code>), packaging specific verifiable capabilities, metadata subsets, or configuration modules.</p>
+
+            <h4 id="arrays">1.4.2. <code>claims</code>, <code>consents</code>, <code>devices</code>, and <code>pointers</code></h4>
+            <p>These arrays group specific operational contexts representing permissions, deployed hardware targets, and external data reference pointers connected to the <code>subject</code>.</p>
+        </section>
+
+        <section id="signature-integrity">
+            <h3><span class="secno">1.5. </span>Signature Integrity</h3>
+            <h4 id="signature-member">1.5.1. <code>signature</code> member</h4>
+            <p>The <code>signature</code> member encapsulates cryptographic proofs of the manifest payload. In v0.1, its format is intentionally permissive. Version 0.2 introduces the first normative signature profile (see <a href="#signature-profile-v02">Section 1.6</a>).</p>
+        </section>
+
+        <section id="signature-profile-v02">
+            <h3><span class="secno">1.6. </span>v0.2 Signature Profile: JCS + Ed25519</h3>
+            <p>Version 0.2 introduces the first normative signature profile. This profile constrains the <code>signature</code> member to a deterministic, portable format suitable for local-first verification on constrained devices.</p>
+            <p>Signature profiles are additive. Future versions <span class="rfc2119">MAY</span> introduce additional profiles (e.g., post-quantum algorithms or W3C Data Integrity proofs). Consumers verify the profiles they support and safely ignore unknown profiles.</p>
+
+            <h4 id="sig-canonicalization">1.6.1. Canonicalization and Algorithm</h4>
+            <p>The v0.2 profile uses <strong>JSON Canonicalization Scheme</strong> (JCS, <a href="https://www.rfc-editor.org/rfc/rfc8785">RFC 8785</a>) for canonicalization and <strong>Ed25519</strong> for signing. Signature values are encoded as <strong>base64url</strong>.</p>
+            <p>This combination provides deterministic signing input without requiring JSON-LD expansion or RDF canonicalization, matching the specification's "state capsule" usage where the JSON shape is the primary contract.</p>
+
+            <h4 id="sig-shape">1.6.2. Signature Shape</h4>
+            <p>The <code>signature</code> object <span class="rfc2119">MUST</span> contain the following fields for this profile:</p>
+            <ul>
+                <li><code>signature.algorithm</code> &mdash; <span class="rfc2119">MUST</span> be <code>"Ed25519"</code>.</li>
+                <li><code>signature.canonicalization</code> &mdash; <span class="rfc2119">MUST</span> be <code>"JCS-RFC8785"</code>.</li>
+                <li><code>signature.keyRef</code> &mdash; URI reference to verification key material (recommended: DID URL or HTTPS URL).</li>
+                <li><code>signature.value</code> &mdash; base64url-encoded Ed25519 signature over the canonical bytes.</li>
+            </ul>
+            <p>The following fields are <span class="rfc2119">OPTIONAL</span>:</p>
+            <ul>
+                <li><code>signature.publicKeySpkiB64</code> &mdash; base64-encoded SPKI DER public key bytes for offline/fixture/local-first verification.</li>
+                <li><code>signature.created</code> &mdash; ISO 8601 date-time indicating when the signature was produced.</li>
+                <li><code>signature.statusRef</code> &mdash; URI to revocation/status material for this signature.</li>
+                <li><code>signature.revocationCursor</code> &mdash; monotonic status cursor/version string for cache-aware revocation checks.</li>
+            </ul>
+            <p>Additional fields <span class="rfc2119">MAY</span> exist for future profiles, but consumers <span class="rfc2119">SHOULD</span> rely on <code>algorithm</code> + <code>canonicalization</code> to decide whether they can verify a given signature.</p>
+            <p>The <code>signature</code> property is <strong>not included</strong> in the signing input to avoid circularity. The fields <code>statusRef</code> and <code>revocationCursor</code>, when present, are metadata for revocation-aware policy checks and do not alter the signing input.</p>
+
+            <div class="example">
+                <div class="example-title">Example 2: v0.2 signature object</div>
+<pre class="json"><code>{
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:key:z6MkAlice#keys-1",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEA...",
+    "created": "2026-04-01T10:00:00Z",
+    "value": "base64url-encoded-signature-bytes"
+  }
+}</code></pre>
+            </div>
+
+            <h4 id="sig-input">1.6.3. Signing Input Procedure</h4>
+            <p>To compute the signature for this profile:</p>
+            <ol>
+                <li>Start with the complete manifest JSON object.</li>
+                <li>Remove the <code>signature</code> property entirely.</li>
+                <li>Canonicalize the remaining object using JCS (<a href="https://www.rfc-editor.org/rfc/rfc8785">RFC 8785</a>), producing a UTF-8 byte sequence.</li>
+                <li>Compute the Ed25519 signature over those bytes.</li>
+                <li>Set the <code>signature</code> property on the manifest with the fields defined above.</li>
+            </ol>
+            <p>This yields a stable, portable verification input for any implementation that supports JCS + Ed25519.</p>
+
+            <h4 id="sig-verifier">1.6.4. Verifier Checklist</h4>
+            <p>A verifier implementing this profile <span class="rfc2119">MUST</span>:</p>
+            <ol>
+                <li>Confirm the document is a v0.x Universal Manifest (required fields present and <code>@type</code> includes <code>um:Manifest</code>).</li>
+                <li>Enforce TTL: reject for use if <code>now &gt; expiresAt</code>; sanity-check <code>issuedAt &lt;= expiresAt</code>.</li>
+                <li>Determine signature profile support: require <code>signature.algorithm === "Ed25519"</code>, <code>signature.canonicalization === "JCS-RFC8785"</code>, and a non-empty <code>signature.value</code>.</li>
+                <li>Obtain a public key: if <code>signature.publicKeySpkiB64</code> exists, a consumer <span class="rfc2119">MAY</span> use it directly (SPKI DER bytes, base64); otherwise, resolve <code>signature.keyRef</code> to public key material (method-specific, e.g., DID resolution or HTTPS fetch).</li>
+                <li>Recompute the signing input (remove <code>signature</code>, JCS canonicalize).</li>
+                <li>Verify the Ed25519 signature over the canonical bytes.</li>
+            </ol>
+            <p>If verification fails, the manifest <span class="rfc2119">MUST</span> be rejected for use (but <span class="rfc2119">MAY</span> be retained for debugging).</p>
+
+            <h4 id="sig-profile-id">1.6.5. Profile Identification</h4>
+            <p>Consumers <span class="rfc2119">MUST</span> treat the pair <code>signature.algorithm</code> + <code>signature.canonicalization</code> as the explicit profile identity.</p>
+            <ul>
+                <li>If the pair is unsupported, the manifest <span class="rfc2119">MUST</span> be rejected when strict verification is required by policy.</li>
+                <li>Consumers <span class="rfc2119">MUST NOT</span> reinterpret unknown pairs as the baseline profile.</li>
+            </ul>
+
+            <h4 id="sig-revocation">1.6.6. Revocation-Aware Verification Extension</h4>
+            <p>For consumers claiming revocation-aware verification:</p>
+            <ol>
+                <li>If <code>signature.statusRef</code> is present, resolve status from that URI (or a configured equivalent).</li>
+                <li>If <code>signature.revocationCursor</code> is present, use it to prevent stale-status acceptance and to drive cache revalidation policy.</li>
+                <li>If revocation status cannot be determined and policy requires active status, the manifest <span class="rfc2119">MUST</span> be rejected for use.</li>
+            </ol>
+            <p>Consumers that do not implement revocation-aware verification <span class="rfc2119">MUST</span> report revocation status as <code>unchecked</code> and <span class="rfc2119">MUST NOT</span> claim revocation-aware conformance.</p>
+        </section>
+    </section>
+
+    <section id="entities-and-facets">
+        <h2><span class="secno">2. </span>Entities and Facets</h2>
+        <p>Universal Manifest adopts a compositional pattern allowing nested structures (<code>facets</code> mapping to specific <code>entities</code>), drawing from semantic web standards for deeply interlinked resources.</p>
+
+        <section id="umfacet-module">
+            <h3><span class="secno">2.1. </span>um:Facet Module</h3>
+            <p>A facet is a composable part grouped within a manifest's envelope. A facet <span class="rfc2119">MUST</span> explicitly declare <code>@type: um:Facet</code>. It <span class="rfc2119">MAY</span> optionally declare a <code>name</code> for display purposes, a <code>ref</code> routing to its authoritative source, and an <code>entity</code> holding the payload parameters (<code>um:Entity</code>).</p>
+        </section>
+
+        <section id="umentity-base">
+            <h3><span class="secno">2.2. </span>um:Entity Base</h3>
+            <p>The <code>um:Entity</code> acts as the base classification for all embedded configurations, representations, or localized states. It <span class="rfc2119">MUST</span> be resolvable through an <code>@id</code> URI and typed accordingly (<code>@type</code> array).</p>
+        </section>
+
+        <section id="encrypted-facets">
+            <h3><span class="secno">2.3. </span>Encrypted Facets (JWE Inline Profile)</h3>
+            <p>A facet <span class="rfc2119">MAY</span> carry an encrypted entity payload using the JWE inline encryption profile. This enables the issuer to include sensitive data that is readable only by designated recipients while remaining opaque to all other consumers. Encrypted facets support the opacity principle: consumers acknowledge encrypted facets as present but cannot read their contents without the appropriate decryption key.</p>
+
+            <h4 id="encrypted-facet-declaration">2.3.1. Declaration</h4>
+            <p>To declare an encrypted facet, the facet <span class="rfc2119">MUST</span> include the field <code>encryptionProfile</code> with the value <code>"jwe-inline-v1"</code>. When <code>encryptionProfile</code> is present, the <code>entity</code> field <span class="rfc2119">MUST</span> contain a JWE JSON Serialization object instead of a plain <code>um:Entity</code>.</p>
+
+            <h4 id="encrypted-facet-jwe-structure">2.3.2. JWE Structure</h4>
+            <p>The <code>entity</code> value for an encrypted facet <span class="rfc2119">MUST</span> conform to the following structure:</p>
+            <ul>
+                <li><code>protected</code> &mdash; base64url-encoded JWE Protected Header. <span class="rfc2119">MUST</span> specify <code>alg</code> (key agreement algorithm) and <code>enc</code> (content encryption algorithm).</li>
+                <li><code>recipients</code> &mdash; Array of recipient objects. Each recipient object <span class="rfc2119">MUST</span> contain a <code>header</code> object with a <code>kid</code> field (key identifier, typically a DID URL) and an <code>encrypted_key</code> field (base64url-encoded wrapped content encryption key).</li>
+                <li><code>iv</code> &mdash; base64url-encoded initialization vector.</li>
+                <li><code>ciphertext</code> &mdash; base64url-encoded encrypted payload.</li>
+                <li><code>tag</code> &mdash; base64url-encoded authentication tag.</li>
+            </ul>
+            <p>Consumers that do not possess a decryption key for any recipient entry <span class="rfc2119">MUST</span> treat the facet as opaque. Consumers <span class="rfc2119">MUST NOT</span> reject a manifest solely because it contains encrypted facets they cannot decrypt.</p>
+
+            <div class="example">
+                <div class="example-title">Example 3: Facet with JWE inline encryption</div>
+<pre class="json"><code>{
+  "@type": "um:Facet",
+  "name": "privateHealth",
+  "encryptionProfile": "jwe-inline-v1",
+  "entity": {
+    "protected": "eyJhbGciOiJFQ0RILUVTK0EyNTZLVyIsImVuYyI6IkEyNTZHQ00ifQ",
+    "recipients": [
+      {
+        "header": {
+          "kid": "did:example:clinic#key-agree-1"
+        },
+        "encrypted_key": "base64url-encrypted-key-for-k1"
+      }
+    ],
+    "iv": "base64url-iv-1",
+    "ciphertext": "base64url-ciphertext-1",
+    "tag": "base64url-tag-1"
+  }
+}</code></pre>
+            </div>
+
+            <h4 id="encrypted-facet-key-rotation">2.3.3. Key Rotation</h4>
+            <p>When a recipient's key agreement key is rotated, the issuer <span class="rfc2119">MUST</span> re-encrypt the content encryption key under the new key and update the <code>recipients</code> array. The JWE entity object <span class="rfc2119">MAY</span> include the following fields to signal key rotation:</p>
+            <ul>
+                <li><code>previousKid</code> &mdash; the <code>kid</code> of the replaced key.</li>
+                <li><code>rotationReason</code> &mdash; human-readable description of the rotation cause.</li>
+            </ul>
+
+            <h4 id="encrypted-facet-revocation">2.3.4. Recipient Revocation</h4>
+            <p>To revoke a recipient's access, the issuer <span class="rfc2119">MUST</span> remove the recipient from the <code>recipients</code> array, re-encrypt the payload with a new content encryption key, and re-issue the manifest. The JWE entity object <span class="rfc2119">MAY</span> include the following fields to signal revocation:</p>
+            <ul>
+                <li><code>revokedRecipientKid</code> &mdash; the <code>kid</code> of the revoked recipient.</li>
+                <li><code>revocationAction</code> &mdash; human-readable description of the revocation action taken.</li>
+            </ul>
+            <p>When all recipients are revoked, the <code>recipients</code> array <span class="rfc2119">MUST</span> be an empty array. The encrypted payload remains present but is not decryptable by any party.</p>
+        </section>
+    </section>
+
+    <section id="manifest-lifecycle-and-caching">
+        <h2><span class="secno">3. </span>Manifest Lifecycle and Caching</h2>
+        <p>Parallel to the Web Application Manifest lifecycle, the Universal Manifest must be systematically processed, applied, and occasionally evicted from client edges.</p>
+
+        <section id="receiver-pipeline">
+            <h3><span class="secno">3.1. </span>Receiver Pipeline</h3>
+            <p>When a user agent, smart edge, or any consuming platform encounters a Universal Manifest, it <span class="rfc2119">MUST</span> process the manifest through a six-stage receiver pipeline. Each stage produces a defined output that feeds the next stage. Implementations <span class="rfc2119">MAY</span> short-circuit the pipeline at any stage by emitting a rejection receipt (see <a href="#structured-receipts">Section 3.3</a>).</p>
+
+            <h4 id="pipeline-arrive">3.1.1. Stage 1: Arrive</h4>
+            <p>The manifest is received and its envelope structure becomes visible to the consumer. The consumer <span class="rfc2119">MUST</span> parse the JSON document, confirm the existence of required properties (<code>@context</code>, <code>@id</code>, <code>subject</code>, <code>issuedAt</code>, <code>expiresAt</code>), and discard any unknown fields to preserve forward compatibility. If parsing or structural validation fails, the pipeline terminates with a <code>rejected</code> receipt.</p>
+
+            <h4 id="pipeline-verify">3.1.2. Stage 2: Verify</h4>
+            <p>The consumer <span class="rfc2119">MUST</span> verify the manifest's cryptographic integrity and freshness. This stage includes:</p>
+            <ol>
+                <li>Signature verification against the JCS-canonicalized payload per the declared signature profile (see <a href="#signature-profile-v02">Section 1.6</a>).</li>
+                <li>Freshness enforcement: reject if <code>now &gt; expiresAt</code> or if <code>issuedAt &gt; expiresAt</code>.</li>
+                <li>Revocation status resolution, if <code>signature.statusRef</code> is present and the consumer implements revocation-aware verification.</li>
+            </ol>
+            <p>If signature verification fails, the manifest <span class="rfc2119">MUST</span> be rejected. The consumer <span class="rfc2119">MAY</span> retain the manifest for debugging purposes.</p>
+
+            <h4 id="pipeline-project">3.1.3. Stage 3: Project</h4>
+            <p>The consumer <span class="rfc2119">MUST</span> extract only the facets, claims, and pointers relevant to its processing context. Projection is sender-controlled: the manifest issuer determines which facets are included in a given manifest instance. The consumer <span class="rfc2119">MUST NOT</span> assume that the manifest contains the complete set of the subject's facets. Facets not included in the manifest are not absent &mdash; they are not projected for this interaction.</p>
+
+            <h4 id="pipeline-consent">3.1.4. Stage 4: Consent</h4>
+            <p>The consumer <span class="rfc2119">MUST</span> evaluate per-facet consent records before acting on facet data. For each facet:</p>
+            <ul>
+                <li>If a <code>consents</code> entry governs the facet, the consumer <span class="rfc2119">MUST</span> verify that consent scope, purpose, and expiry are satisfied.</li>
+                <li>If a facet is encrypted (see <a href="#encrypted-facets">Section 2.3</a>), the consumer <span class="rfc2119">MUST</span> acknowledge the facet as opaque if it lacks a decryption key. Opaque facets are recorded as present but not read.</li>
+            </ul>
+            <p>Consumers <span class="rfc2119">MUST NOT</span> process facet data when required consent is absent or expired.</p>
+
+            <h4 id="pipeline-compose">3.1.5. Stage 5: Compose</h4>
+            <p>The consumer composes the processing result into one of four outcome categories:</p>
+            <ul>
+                <li><code>accepted</code> &mdash; all projected facets processed, all consent requirements satisfied, signature valid.</li>
+                <li><code>accepted-with-warnings</code> &mdash; manifest accepted but one or more non-critical conditions were noted (e.g., revocation status could not be checked).</li>
+                <li><code>accepted-partial</code> &mdash; some facets were processed; others were rejected, opaque, or lacked consent.</li>
+                <li><code>rejected</code> &mdash; the manifest failed a mandatory check (signature, freshness, structural validity, or required consent).</li>
+            </ul>
+            <p>The composed result <span class="rfc2119">MUST</span> be machine-readable and <span class="rfc2119">MUST</span> include per-facet status.</p>
+
+            <h4 id="pipeline-receipt">3.1.6. Stage 6: Receipt</h4>
+            <p>The consumer <span class="rfc2119">MUST</span> produce a structured receipt (see <a href="#structured-receipts">Section 3.3</a>) that honestly records what the receiver actually did. The receipt captures the outcome of each preceding stage. Consumers <span class="rfc2119">MUST NOT</span> omit failed checks or suppress negative outcomes from the receipt.</p>
+        </section>
+
+        <section id="caching-formulation">
+            <h3><span class="secno">3.2. </span>Caching Formulation</h3>
+            <p>For constrained devices and public displays:</p>
+            <ol>
+                <li><strong>TTL Ejection</strong>: Caches <span class="rfc2119">MUST</span> immediately evict or reject payloads where the system clock surpasses <code>expiresAt</code>.</li>
+                <li><strong>Telemetry Minimization</strong>: Centralized logging platforms <span class="rfc2119">SHOULD</span> stream only the <code>@id</code> string (and potentially a content hash), bypassing the full JSON payload to conserve bandwidth.</li>
+                <li><strong>Identifier Rotation</strong>: Identifiers (<code>@id</code>) <span class="rfc2119">SHOULD</span> be rotated iteratively per-issuance to avert heuristic tracking.</li>
+            </ol>
+        </section>
+
+        <section id="structured-receipts">
+            <h3><span class="secno">3.3. </span>Structured Receipts</h3>
+            <p>A structured receipt is the terminal output of the receiver pipeline (<a href="#receiver-pipeline">Section 3.1</a>). It provides an honest, machine-readable record of what the receiver did with the manifest. Consumers <span class="rfc2119">MUST</span> produce a receipt for every manifest processed through the pipeline.</p>
+
+            <h4 id="receipt-fields">3.3.1. Receipt Fields</h4>
+            <p>A receipt <span class="rfc2119">MUST</span> include the following fields:</p>
+            <ul>
+                <li><code>manifestId</code> &mdash; the <code>@id</code> of the processed manifest.</li>
+                <li><code>outcome</code> &mdash; one of <code>"accepted"</code>, <code>"accepted-with-warnings"</code>, <code>"accepted-partial"</code>, or <code>"rejected"</code>.</li>
+                <li><code>signatureCheck</code> &mdash; result of signature verification: <code>"valid"</code>, <code>"invalid"</code>, or <code>"unsupported-profile"</code>.</li>
+                <li><code>freshnessCheck</code> &mdash; result of TTL enforcement: <code>"fresh"</code> or <code>"expired"</code>.</li>
+            </ul>
+            <p>A receipt <span class="rfc2119">SHOULD</span> include the following fields when applicable:</p>
+            <ul>
+                <li><code>revocationStatus</code> &mdash; <code>"active"</code>, <code>"revoked"</code>, or <code>"unchecked"</code>.</li>
+                <li><code>facetStatuses</code> &mdash; array of per-facet status objects, each containing a <code>name</code> (facet name), <code>status</code> (<code>"processed"</code>, <code>"opaque"</code>, <code>"consent-denied"</code>, <code>"consent-missing"</code>, or <code>"not-projected"</code>), and an optional <code>reason</code> string.</li>
+                <li><code>consentStatuses</code> &mdash; array of per-consent status objects indicating whether each consent requirement was satisfied.</li>
+                <li><code>processedAt</code> &mdash; ISO 8601 date-time when the receipt was produced.</li>
+                <li><code>warnings</code> &mdash; array of warning strings for the <code>accepted-with-warnings</code> outcome.</li>
+            </ul>
+
+            <p class="note"><strong>Note:</strong> The receipt schema is preliminary. Conformance fixtures for receipt validation are forthcoming.</p>
+
+            <div class="example">
+                <div class="example-title">Example 4: Structured receipt</div>
+<pre class="json"><code>{
+  "manifestId": "urn:uuid:123e4567-e89b-12d3-a456-426614174000",
+  "outcome": "accepted-partial",
+  "signatureCheck": "valid",
+  "freshnessCheck": "fresh",
+  "revocationStatus": "unchecked",
+  "facetStatuses": [
+    { "name": "publicProfile", "status": "processed" },
+    { "name": "privateHealth", "status": "opaque", "reason": "no decryption key" }
+  ],
+  "processedAt": "2026-05-19T12:00:00Z"
+}</code></pre>
+            </div>
+        </section>
+    </section>
+
+    <section id="conformance">
+        <h2><span class="secno">4. </span>Conformance</h2>
+        <section id="required-behavior-consumer">
+            <h3><span class="secno">4.1. </span>Consumer Behavior</h3>
+            <p>A consumer platform parsing the manifest <span class="rfc2119">MUST</span> validate structural parameters and securely ignore unknown elements without raising fatal invocation errors. Freshness (via <code>expiresAt</code> TTL constraints) is an absolute rejection gateway. Implementers <span class="rfc2119">MUST</span> verify <code>issuedAt &lt;= expiresAt</code>.</p>
+            <p>Consumers claiming v0.3 conformance <span class="rfc2119">MUST</span> implement the six-stage receiver pipeline defined in <a href="#receiver-pipeline">Section 3.1</a>. Specifically, a conformant consumer <span class="rfc2119">MUST</span>:</p>
+            <ol>
+                <li>Execute all six pipeline stages in order (Arrive, Verify, Project, Consent, Compose, Receipt).</li>
+                <li>Produce a structured receipt (<a href="#structured-receipts">Section 3.3</a>) for every processed manifest.</li>
+                <li>Treat encrypted facets as opaque when the consumer lacks a decryption key, recording them as present in the receipt.</li>
+                <li>Respect <code>requiredTrustTier</code> declarations at the manifest, claim, and facet levels.</li>
+            </ol>
+        </section>
+
+        <section id="required-behavior-issuer">
+            <h3><span class="secno">4.2. </span>Issuer Behavior</h3>
+            <p>Issuers generating the manifest <span class="rfc2119">MUST</span> assign a globally stable identifier URI for the <code>subject</code> (preferably an established DID) and a random URI for the manifest root (<code>@id</code>). To shield clients from unbounded trust windows, issuers <span class="rfc2119">MUST</span> strictly bound <code>expiresAt</code> to a sensible interaction lifetime (e.g., hours or days).</p>
+        </section>
+
+        <section id="standalone-conformance-suite">
+            <h3><span class="secno">4.3. </span>Standalone Conformance Suite</h3>
+            <p>Implementations validate conformance claims natively by testing against the official <code>conformance/</code> suite&mdash;which includes fixture validation (accepting valid stubs and correctly isolating/flagging malformed artifacts like missing contexts or expired logic trees).</p>
+            <p>Implementations claiming v0.2 conformance <span class="rfc2119">MUST</span> pass the standalone conformance suite and should publish their claimed level using the guidance at <a href="https://universalmanifest.net/conformance/v0.2/">https://universalmanifest.net/conformance/v0.2/</a>.</p>
+        </section>
+    </section>
+
+    <section id="extensibility-profiles">
+        <h2><span class="secno">5. </span>Extensibility &amp; Profiles</h2>
+        <p>Echoing the extensibility models of generic W3C recommendations, proprietary manifest members can be injected via fully qualified URIs inside the linked <code>@context</code>. Consumers ignoring unrecognized properties guarantees that domain-specific profiles won't shatter cross-system interoperability.</p>
+    </section>
+
+    <section id="security-considerations">
+        <h2><span class="secno">6. </span>Security Considerations</h2>
+        <p><strong>Warning:</strong> Version 0.1 intentionally defers universal cryptographic standardization. Version 0.2 introduces a normative signature profile and an identity binding framework. Version 0.3 defines Tier 2 cryptographic binding via zero-knowledge proofs (at risk; see <a href="#tiered-trust">Section 6.4.2</a>). Multi-party ceremony mechanisms (Tier 3) are deferred to future versions.</p>
+
+        <section id="signature-limitations">
+            <h3><span class="secno">6.1. </span>Signature Limitations</h3>
+            <p>The v0.1 baseline format does not prescribe canonicalization or algorithm constraints. Version 0.2 addressed this gap by introducing the normative JCS + Ed25519 signature profile (see <a href="#signature-profile-v02">Section 1.6</a>). Implementers <span class="rfc2119">MUST</span> use the v0.2 signature profile or a subsequent normative profile for production deployments. The v0.1 permissive signature format <span class="rfc2119">MUST NOT</span> be relied upon for tamper protection.</p>
+        </section>
+
+        <section id="ttl-enforcement">
+            <h3><span class="secno">6.2. </span>TTL Enforcement</h3>
+            <p>Bounding the <code>expiresAt</code> timeline dictates the primary line of defense against presentation replay spoofing.</p>
+        </section>
+
+        <section id="resource-limits">
+            <h3><span class="secno">6.3. </span>Resource Limits</h3>
+            <p>Denial-of-Service vectors originating from disproportionately inflated arrays or recursion logic <span class="rfc2119">SHOULD</span> be countered with hard limits on payload ingestion:</p>
+            <ul>
+                <li>Maximum memory serialization threshold: 1 MB</li>
+                <li>Maximum recursion/nesting depth: 10 layers</li>
+                <li>Array length maximums: 1,000 bounds</li>
+            </ul>
+        </section>
+
+        <section id="identity-binding-claim-authenticity">
+            <h3><span class="secno">6.4. </span>Identity Binding and Claim Authenticity</h3>
+
+            <h4 id="bag-of-claims">6.4.1. Bag of Claims Limitation</h4>
+            <p>A Universal Manifest may contain claims from multiple issuers and references to multiple DIDs under a single <code>subject</code>. The v0.2 signature proves that the signer produced the manifest. It does <strong>not</strong> prove:</p>
+            <ul>
+                <li>That the signer controls the <code>subject</code> DID (subject-signer binding).</li>
+                <li>That the <code>subject</code> controls all DIDs mentioned in claims or facets (cross-DID control).</li>
+                <li>That an issuer actually issued a claim listed in the manifest (claim authenticity). The <code>claims[].issuer</code> field is a string assertion, not a verified provenance chain.</li>
+            </ul>
+            <p>Relying parties <span class="rfc2119">MUST NOT</span> treat the presence of claims in a signed manifest as proof that those claims are authentic or that multiple DIDs are controlled by the same entity.</p>
+
+            <h4 id="tiered-trust">6.4.2. Tiered Trust Model</h4>
+            <p>The specification defines four trust tiers for claim verification. Each tier is strictly additive &mdash; a higher-tier manifest also satisfies all lower-tier requirements. Higher tiers provide stronger guarantees but impose more user ceremony. The specification does <span class="rfc2119">NOT</span> mandate a minimum tier; relying parties choose based on their threat model and acceptable user friction.</p>
+
+            <p><strong>Tier 0 &mdash; Signature-only.</strong> Zero friction. Claims are self-asserted by the manifest signer. No external <code>claimProof</code> material is present. Suitable for low-stakes use cases where the relying party has an out-of-band trust relationship with the signer. Consumers claiming Tier 0 acceptance <span class="rfc2119">MUST</span> verify the manifest signature per the declared profile. Tier 0 <span class="rfc2119">MUST NOT</span> be used as sufficient assurance for Sybil-critical decisions.</p>
+
+            <p><strong>Tier 1 &mdash; Attested or claimProof-backed.</strong> Low friction. Some or all claims carry external <code>claimProof</code> material (Verifiable Presentations) or an attested cross-DID binding claim (<code>identity.crossDidBinding</code>). Relying parties can verify specific claims against their issuers or evaluate attester trust. Consumers claiming Tier 1 assurance <span class="rfc2119">MUST</span> enforce attester trust policy and freshness/expiry checks on the proof material used for Tier 1 acceptance. Consumers <span class="rfc2119">MUST</span> validate the <code>claimProof</code> proof chain or the attester's cross-DID binding attestation before granting Tier 1 trust. Suitable for medium-stakes use cases (social identity, reputation, basic access control).</p>
+
+            <p><strong>Tier 2 &mdash; Cryptographic binding.</strong> Medium friction. Cross-DID control is cryptographically proven via zero-knowledge proof of cross-DID control. The subject demonstrates control of multiple DIDs without revealing private key material, using a ZK proof that the same entity controls the keys behind each DID. Consumers claiming Tier 2 assurance <span class="rfc2119">MUST</span> verify the ZK proof before granting Tier 2 trust. Suitable for high-stakes Sybil-resistance use cases. <span class="note">At risk: this feature may be removed if implementations do not materialize before v0.4.</span></p>
+
+            <p><strong>Tier 3 &mdash; Multi-party ceremony.</strong> High friction. Multiple keyholders (potentially different people, different locations) must co-sign. Analogous to multi-sig wallets. Suitable for the highest-stakes organizational and financial contexts. (Future: v0.4+.)</p>
+
+            <p>Relying parties <span class="rfc2119">MUST</span> define their required trust tier based on their threat model. Relying parties <span class="rfc2119">MUST NOT</span> extend trust from one DID in a manifest to another DID in the same manifest unless binding proof material (Tier 1 or Tier 2) is present for that specific DID pair.</p>
+
+            <h4 id="claim-proof">6.4.3. <code>claims[].claimProof</code> Field</h4>
+            <p>The <code>claimProof</code> field is an <span class="rfc2119">OPTIONAL</span> property on any claim object. It carries a Verifiable Presentation or attestation proof demonstrating claim issuance to the manifest subject. This field enables Tier 1 verification.</p>
+            <p>The field is named <code>claimProof</code> rather than <code>evidence</code> to avoid collision with the W3C Verifiable Credentials Data Model v2.0 <code>evidence</code> property (VCDM section 9.2), which has overlapping but distinct semantics.</p>
+            <p><code>claimProof</code> <span class="rfc2119">MAY</span> be an embedded object (a VP or attestation proof) or a string (URI reference to a VP or attestation endpoint).</p>
+            <p>When present as an embedded object, the consumer <span class="rfc2119">SHOULD</span> verify the VP proof chain: (a) VC signature validates to the stated issuer, (b) VP signature validates to the holder, (c) holder DID matches the manifest subject.</p>
+            <p>When present as a URI string, the consumer <span class="rfc2119">MAY</span> fetch the VP for verification when network access is available. Consumers that cannot resolve the URI <span class="rfc2119">SHOULD</span> report the claim as <code>claimProof-unresolved</code> rather than <code>verified</code>.</p>
+            <p>VPs used as <code>claimProof</code> <span class="rfc2119">SHOULD</span> include domain (audience binding) and challenge (nonce) parameters to prevent cross-manifest replay.</p>
+            <p>Size limits: maximum 50 KB per embedded VP; maximum 500 KB total VP payload across all claims in one manifest.</p>
+
+            <h4 id="cross-did-binding">6.4.4. <code>identity.crossDidBinding</code> Claim</h4>
+            <p>The <code>identity.crossDidBinding</code> claim type provides a pragmatic, trust-delegated mechanism for asserting that multiple DIDs are controlled by the same entity. It works within the existing <code>claims[]</code> array and requires no schema changes.</p>
+
+            <div class="example">
+                <div class="example-title">Example 5: Cross-DID binding claim</div>
+<pre class="json"><code>{
+  "@type": "identity.crossDidBinding",
+  "boundDids": ["did:key:z6MkAlice", "did:plc:alice-bsky"],
+  "attester": "did:web:verify.example",
+  "attestationMethod": "AT Protocol handle resolution",
+  "attestedAt": "2026-03-15T10:30:00Z",
+  "expiresAt": "2026-06-15T10:30:00Z"
+}</code></pre>
+            </div>
+
+            <p>Required fields:</p>
+            <ul>
+                <li><code>@type</code> &mdash; <span class="rfc2119">MUST</span> be <code>"identity.crossDidBinding"</code>.</li>
+                <li><code>boundDids</code> &mdash; Array of DID strings asserted as controlled by the same entity. <span class="rfc2119">MUST</span> contain at least 2 DIDs. One <span class="rfc2119">MUST</span> match the manifest <code>subject</code>.</li>
+                <li><code>attester</code> &mdash; DID or URI of the entity attesting the binding.</li>
+                <li><code>attestationMethod</code> &mdash; Human-readable description of the verification method used.</li>
+                <li><code>attestedAt</code> &mdash; ISO 8601 timestamp of when the attestation was produced.</li>
+            </ul>
+            <p>Optional fields:</p>
+            <ul>
+                <li><code>claimProof</code> &mdash; URI or structured object pointing to the attestation proof.</li>
+                <li><code>expiresAt</code> &mdash; Attestation expiry. Relying parties <span class="rfc2119">SHOULD</span> reject expired attestations.</li>
+            </ul>
+            <p>Relying parties <span class="rfc2119">MUST NOT</span> treat the presence of a binding claim as proof of common control unless they trust the attester. Relying parties <span class="rfc2119">SHOULD</span> maintain a configurable attester trust list. Multiple binding claims for overlapping DID sets are independent assertions, not cumulative proof.</p>
+
+            <h4 id="required-trust-tier">6.4.5. <code>requiredTrustTier</code> Declaration</h4>
+            <p>A manifest <span class="rfc2119">MAY</span> declare the minimum trust tier required for specific claims, facets, or the manifest as a whole via the <code>requiredTrustTier</code> field. This field is an integer (0&ndash;3) indicating the minimum verification tier a relying party <span class="rfc2119">MUST</span> satisfy before acting on the associated data.</p>
+            <ul>
+                <li><strong>Manifest-level:</strong> a top-level <code>requiredTrustTier</code> sets the floor for the entire manifest.</li>
+                <li><strong>Claim-level:</strong> a <code>requiredTrustTier</code> on an individual claim applies to that claim only.</li>
+                <li><strong>Facet-level:</strong> a <code>requiredTrustTier</code> on a facet applies to that facet only.</li>
+            </ul>
+            <p>If a claim carries <code>requiredTrustTier: 2</code> but the relying party can only verify at Tier 1, the relying party <span class="rfc2119">MUST</span> treat that claim as unverified. If absent, the default is 0 (no minimum required). The manifest-level value sets the floor; claim/facet-level values can only raise it, not lower it.</p>
+
+            <div class="example">
+                <div class="example-title">Example 6: Manifest with requiredTrustTier</div>
+<pre class="json"><code>{
+  "requiredTrustTier": 1,
+  "claims": [
+    {
+      "@type": "personhood.worldId.verification",
+      "issuer": "did:web:worldcoin.org",
+      "requiredTrustTier": 2
+    }
+  ]
+}</code></pre>
+            </div>
+
+            <h4 id="bilateral-exchange">6.4.6. Bilateral Exchange</h4>
+            <p>In any transaction or interaction, both parties present a Universal Manifest to each other. Trust verification is inherently bilateral:</p>
+            <ul>
+                <li>Alice presents her UM to a venue; the venue verifies Alice's claims at the trust tier the venue requires.</li>
+                <li>The venue presents its UM to Alice; Alice verifies the venue's claims at the trust tier Alice requires.</li>
+                <li>A peer-to-peer exchange has both sides presenting and verifying simultaneously.</li>
+            </ul>
+            <p>The effective trust tier for an interaction is the maximum of what either party demands. Asymmetric requirements are valid &mdash; each party sets its own <code>requiredTrustTier</code> independently. Two devices <span class="rfc2119">MAY</span> exchange manifests via local transport (NFC, BLE, QR) and each independently verify the other's claims at the declared tier without a server.</p>
+            <p>When asymmetric verification outcomes occur (for example, one party cannot satisfy the other party's required tier), each party <span class="rfc2119">MUST</span> evaluate policy independently. For Sybil-critical or otherwise high-risk actions, parties <span class="rfc2119">MUST</span> fail closed (deny the action) when required tier checks are not satisfied. For lower-risk actions, parties <span class="rfc2119">MAY</span> degrade to a restricted mode that excludes trust-transitive or high-impact operations.</p>
+        </section>
+
+        <section id="agent-delegation">
+            <h3><span class="secno">6.5. </span>Agent Delegation</h3>
+            <p>The <code>um:agentDelegation</code> pointer type declares when a manifest subject has delegated session authority to an AI agent, bot, or proxy. This enables platforms to distinguish human-controlled sessions from delegated ones.</p>
+            <p>The <code>um:agentDelegation</code> pointer is placed in the manifest's <code>pointers</code> array.</p>
+
+            <h4 id="agent-delegation-structure">6.5.1. Structure</h4>
+            <p>Required fields:</p>
+            <ul>
+                <li><code>@type</code> &mdash; <span class="rfc2119">MUST</span> be <code>"um:agentDelegation"</code>.</li>
+                <li><code>delegateType</code> &mdash; One of <code>"ai-agent"</code>, <code>"bot"</code>, <code>"proxy"</code>, or <code>"human-delegate"</code>.</li>
+                <li><code>delegatedBy</code> &mdash; DID of the delegating subject. <span class="rfc2119">MUST</span> match the manifest <code>subject</code>.</li>
+                <li><code>delegatedAt</code> &mdash; ISO 8601 date-time when delegation was granted.</li>
+                <li><code>expiresAt</code> &mdash; ISO 8601 date-time when delegation expires. Platforms <span class="rfc2119">MUST</span> reject expired delegations.</li>
+            </ul>
+            <p>Optional fields:</p>
+            <ul>
+                <li><code>delegateId</code> &mdash; DID or identifier of the delegate entity.</li>
+                <li><code>scope</code> &mdash; Array of capability strings the delegate may exercise.</li>
+                <li><code>livenessEndpoint</code> &mdash; URI for real-time liveness/delegation status queries.</li>
+            </ul>
+
+            <div class="example">
+                <div class="example-title">Example 7: Agent delegation pointer</div>
+<pre class="json"><code>{
+  "@type": "um:agentDelegation",
+  "delegateType": "ai-agent",
+  "delegateId": "did:key:z6MkAgentBot",
+  "delegatedBy": "did:key:z6MkAlice",
+  "delegatedAt": "2026-04-01T10:00:00Z",
+  "expiresAt": "2026-04-01T11:00:00Z",
+  "scope": ["spatial.session", "social.messaging"]
+}</code></pre>
+            </div>
+
+            <h4 id="agent-platform-guidance">6.5.2. Platform Guidance</h4>
+            <p>Platforms <span class="rfc2119">SHOULD</span> display delegation status to other users when present. Platforms <span class="rfc2119">MAY</span> require human-only sessions for high-stakes actions (financial, governance). Platforms <span class="rfc2119">MAY</span> query the <code>livenessEndpoint</code> for real-time status when available. Platforms <span class="rfc2119">MUST</span> treat the delegation pointer as static for the manifest's TTL if <code>livenessEndpoint</code> is absent.</p>
+        </section>
+    </section>
+
+    <section id="privacy-considerations">
+        <h2><span class="secno">7. </span>Privacy Considerations</h2>
+        <ul>
+            <li><strong>Opaque Identifiers</strong>: Generating the <code>@id</code> via random-distribution UUIDv4 shields session metadata from enumerability.</li>
+            <li><strong>Minimal Disclosure</strong>: Universal Manifest acts as the fundamental passport. Issuers are strongly advised against over-bundling capabilities. Only embed contextually relevant facets.</li>
+            <li><strong>Subject Privacy</strong>: Static DID correlations across disparate endpoints create persistent observation footprints. The use of pairwise / pseudonymous DIDs can significantly improve ecosystem privacy.</li>
+        </ul>
+
+        <p><strong>Privacy-Binding Tension.</strong> Universal Manifest supports both privacy-preserving pairwise DIDs and cross-DID binding mechanisms. These goals are in fundamental tension: stronger binding enables correlation, while stronger privacy prevents binding verification. The specification does not fully address this tension at the protocol level. Instead, it provides mechanisms for both and requires relying parties to define their trust tier based on their specific threat model. Relying parties <span class="rfc2119">MUST NOT</span> require cross-DID binding unless their use case demands Sybil resistance or trust transitivity. Subjects <span class="rfc2119">SHOULD</span> use the minimum binding tier that satisfies their relying parties' requirements.</p>
+
+        <p><strong>Opacity and Projection.</strong> Encrypted facets (see <a href="#encrypted-facets">Section 2.3</a>) provide data minimization at the envelope level. Sensitive data is encrypted inline; consumers without the appropriate decryption key observe the facet as opaque &mdash; present but unreadable. Combined with sender-controlled projection (<a href="#pipeline-project">Section 3.1.3</a>), issuers control both which facets are included in a given manifest instance and which parties can decrypt specific facets. This two-layer model (projection controls visibility; encryption controls readability) enables selective disclosure without requiring separate credential presentations for each relying party. Issuers <span class="rfc2119">SHOULD</span> encrypt facets containing personal data or sensitive attributes. Consumers <span class="rfc2119">MUST NOT</span> infer information about the content of opaque facets from their presence, size, or metadata.</p>
+
+        <p><strong>Data Protection.</strong> The privacy considerations in this specification identify relevant data protection provisions but do not constitute a Data Protection Impact Assessment. Deployers operating under GDPR or equivalent frameworks <span class="rfc2119">MUST</span> conduct their own assessment for cross-DID binding operations, cross-border attester data flows, and mandatory binding requirements.</p>
+    </section>
+
+    <section id="references">
+        <h2><span class="secno">8. </span>References</h2>
+        <section id="normative-references">
+            <h3><span class="secno">8.1. </span>Normative References</h3>
+            <p>The following project governance documents control how published Universal Manifest specification changes, deprecations, incidents, releases, and RFC intake are handled.</p>
+            <ol>
+                <li>Breaking-Change Policy</li>
+                <li>Deprecation Policy</li>
+                <li>Incident Response and Rollback</li>
+                <li>Release Cadence</li>
+                <li>Spec Improvement Queue</li>
+            </ol>
+        </section>
+        <section id="informative-references">
+            <h3><span class="secno">8.2. </span>Informative References</h3>
+        <p>The following standards and prior art inform the identity binding, tiered trust model, and signature profile design in this specification.</p>
+        <ol>
+            <li><strong>NIST SP 800-63-3</strong> &mdash; Digital Identity Guidelines. NIST Special Publication 800-63-3 (June 2017, updated 2024 supplement). Defines Identity Assurance Levels (IAL 1&ndash;3) and Authenticator Assurance Levels (AAL 1&ndash;3). The UM tiered trust model adapts NIST's tiered assurance framework to a local-first, portable document context. URL: <a href="https://pages.nist.gov/800-63-3/">https://pages.nist.gov/800-63-3/</a></li>
+            <li><strong>eIDAS 2.0</strong> &mdash; European Digital Identity Framework. Regulation (EU) 2024/1183. Defines assurance levels (Low, Substantial, High) for electronic identification. Relevant for GDPR alignment and European adopters. URL: <a href="https://eur-lex.europa.eu/eli/reg/2024/1183/oj">https://eur-lex.europa.eu/eli/reg/2024/1183/oj</a></li>
+            <li><strong>OpenID for Verifiable Presentations (OID4VP)</strong> &mdash; Draft specification, OpenID Foundation (2024). Defines VP presentation with audience binding and nonce parameters. The <code>claims[].claimProof</code> VP recommendations (domain + challenge) align with OID4VP patterns. URL: <a href="https://openid.net/specs/openid-4-verifiable-presentations-1_0.html">https://openid.net/specs/openid-4-verifiable-presentations-1_0.html</a></li>
+            <li><strong>DIF Presentation Exchange 2.0</strong> &mdash; Decentralized Identity Foundation, v2.0.0 (2023). Defines how relying parties express credential/claim requirements. The <code>requiredTrustTier</code> field is a simplified analog. URL: <a href="https://identity.foundation/presentation-exchange/spec/v2.0.0/">https://identity.foundation/presentation-exchange/spec/v2.0.0/</a></li>
+            <li><strong>DIF Well-Known DID Configuration</strong> &mdash; Decentralized Identity Foundation, v0.2 (2023). Prior art for cross-DID linking via <code>/.well-known/did-configuration.json</code> Domain Linkage Credentials. The <code>identity.crossDidBinding</code> convention is analogous but manifest-embedded rather than domain-hosted. URL: <a href="https://identity.foundation/.well-known/did-configuration/">https://identity.foundation/.well-known/did-configuration/</a></li>
+            <li><strong>RFC 9449 (DPoP)</strong> &mdash; "OAuth 2.0 Demonstrating Proof of Possession," IETF (September 2023). Defines proof-of-possession binding for OAuth2 tokens. Directly analogous to the subject-signer binding problem addressed by the tiered trust model. URL: <a href="https://www.rfc-editor.org/rfc/rfc9449">https://www.rfc-editor.org/rfc/rfc9449</a></li>
+            <li><strong>W3C VC Status List v2021</strong> &mdash; W3C CCG (2022); superseded by Bitstring Status List v1.0 (W3C, 2024). Privacy-preserving credential revocation and freshness checking. Target mechanism for <code>claims[].claimProof</code> credential status verification. URL: <a href="https://www.w3.org/TR/2023/WD-vc-status-list-20230427/">https://www.w3.org/TR/2023/WD-vc-status-list-20230427/</a></li>
+            <li><strong>W3C Verifiable Credentials Data Model v2.0</strong> &mdash; W3C Recommendation (March 2025). Core data model for VCs and VPs. The <code>claims[].claimProof</code> field is inspired by but distinct from VCDM's <code>evidence</code> property (Section 9.2) &mdash; deliberately renamed to avoid semantic collision. URL: <a href="https://www.w3.org/TR/vc-data-model-2.0/">https://www.w3.org/TR/vc-data-model-2.0/</a></li>
+            <li><strong>ISO/IEC 29115</strong> &mdash; "Information technology &mdash; Security techniques &mdash; Entity authentication assurance framework" (2013). International standard defining four entity authentication assurance levels (LoA 1&ndash;4). Additional prior art for the tiered trust model. URL: <a href="https://www.iso.org/standard/45138.html">https://www.iso.org/standard/45138.html</a></li>
+            <li><strong>RFC 8785</strong> &mdash; "JSON Canonicalization Scheme (JCS)," IETF (June 2020). Defines the deterministic JSON serialization used as the canonicalization step in the v0.2 signature profile. URL: <a href="https://www.rfc-editor.org/rfc/rfc8785">https://www.rfc-editor.org/rfc/rfc8785</a></li>
+        </ol>
+        </section>
+    </section>
+
+    <script src="https://www.w3.org/scripts/TR/2021/fixup.js"></script>
+    <script>
+        (() => {
+            const tocRoot = document.getElementById('toc');
+            if (!tocRoot) {
+                return;
+            }
+            const tocLinks = Array.from(tocRoot.querySelectorAll('a[href^="#"]'));
+            const linksById = new Map();
+            const targetElements = [];
+            for (const link of tocLinks) {
+                const href = link.getAttribute('href');
+                if (!href || href.length < 2) {
+                    continue;
+                }
+                const id = decodeURIComponent(href.slice(1));
+                const target = document.getElementById(id);
+                if (!target) {
+                    continue;
+                }
+                const linksForId = linksById.get(id) || [];
+                linksForId.push(link);
+                linksById.set(id, linksForId);
+                if (!targetElements.includes(target)) {
+                    targetElements.push(target);
+                }
+            }
+            if (!targetElements.length) {
+                return;
+            }
+
+            const setActive = (id) => {
+                for (const link of tocLinks) {
+                    link.classList.remove('toc-active');
+                    link.removeAttribute('aria-current');
+                }
+                const linksForId = linksById.get(id);
+                if (linksForId) {
+                    for (const link of linksForId) {
+                        link.classList.add('toc-active');
+                        link.setAttribute('aria-current', 'location');
+                    }
+                }
+            };
+
+            const getActiveByScrollPosition = () => {
+                const topOffset = 170;
+                const scrollTop = window.scrollY + topOffset;
+                let currentId = targetElements[0].id;
+                for (const element of targetElements) {
+                    const absoluteTop = element.getBoundingClientRect().top + window.scrollY;
+                    if (absoluteTop <= scrollTop) {
+                        currentId = element.id;
+                    } else {
+                        break;
+                    }
+                }
+                return currentId;
+            };
+
+            let scheduled = false;
+            const updateFromScroll = () => {
+                if (scheduled) {
+                    return;
+                }
+                scheduled = true;
+                requestAnimationFrame(() => {
+                    scheduled = false;
+                    setActive(getActiveByScrollPosition());
+                });
+            };
+
+            window.addEventListener('scroll', updateFromScroll, { passive: true });
+            window.addEventListener('resize', updateFromScroll);
+            window.addEventListener('hashchange', () => {
+                const id = decodeURIComponent(window.location.hash.slice(1));
+                if (linksById.has(id)) {
+                    setActive(id);
+                }
+            });
+            const bindNavControls = () => {
+                const controlNav = document.getElementById('toc-nav');
+                if (controlNav) {
+                    controlNav.style.setProperty('position', 'fixed', 'important');
+                    controlNav.style.setProperty('left', '0px', 'important');
+                    controlNav.style.setProperty('right', 'auto', 'important');
+                    controlNav.style.setProperty('bottom', '0px', 'important');
+                    controlNav.style.setProperty('top', 'auto', 'important');
+                    controlNav.style.setProperty('margin', '0', 'important');
+                    controlNav.style.setProperty('padding', '8px 8px 8px 16px', 'important');
+                    controlNav.style.setProperty('display', 'flex', 'important');
+                    controlNav.style.setProperty('gap', '12px', 'important');
+                    controlNav.style.setProperty('align-items', 'center', 'important');
+                    controlNav.style.setProperty('justify-content', 'flex-start', 'important');
+                    controlNav.style.setProperty('width', 'auto', 'important');
+                    controlNav.style.setProperty('max-width', '100vw', 'important');
+                    controlNav.style.setProperty('z-index', '1002', 'important');
+                }
+                const jumpControl = document.getElementById('toc-jump');
+                const toggleControl = document.getElementById('toc-toggle');
+                
+                const normalizeControl = (control) => {
+                    if (!control) return;
+                    control.style.setProperty('position', 'static', 'important');
+                    control.style.setProperty('left', 'auto', 'important');
+                    control.style.setProperty('right', 'auto', 'important');
+                    control.style.setProperty('top', 'auto', 'important');
+                    control.style.setProperty('bottom', 'auto', 'important');
+                    control.style.setProperty('margin', '0', 'important');
+                    control.style.setProperty('padding', '7px 10px', 'important');
+                    control.style.setProperty('width', 'auto', 'important');
+                    control.style.setProperty('height', 'auto', 'important');
+                    control.style.setProperty('display', 'inline-flex', 'important');
+                    control.style.setProperty('align-items', 'center', 'important');
+                    control.style.setProperty('gap', '6px', 'important');
+                    control.style.setProperty('white-space', 'nowrap', 'important');
+                };
+                normalizeControl(jumpControl);
+                normalizeControl(toggleControl);
+
+                if (!jumpControl || jumpControl.dataset.umBound === 'true') {
+                    return;
+                }
+                jumpControl.dataset.umBound = 'true';
+                jumpControl.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    history.replaceState(null, '', '#toc');
+                    history.replaceState(null, '', '#');
+                    const inlineMode = document.body.classList.contains('toc-inline') || window.matchMedia('(max-width: 1100px)').matches;
+                    if (inlineMode) {
+                        const tocElement = document.getElementById('toc');
+                        if (tocElement) {
+                            tocElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    } else {
+                        window.scrollTo({ top: 0, behavior: 'instant' });
+                    }
+                    updateFromScroll();
+                });
+            };
+            bindNavControls();
+            const navObserver = new MutationObserver(() => bindNavControls());
+            navObserver.observe(document.body, { childList: true, subtree: true });
+            window.addEventListener('resize', bindNavControls);
+
+            const initialHash = decodeURIComponent(window.location.hash.slice(1));
+            if (initialHash && linksById.has(initialHash)) {
+                setActive(initialHash);
+            } else {
+                setActive(getActiveByScrollPosition());
+            }
+        })();
+    </script>
+</body>
+</html>

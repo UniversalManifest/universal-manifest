@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universalmanifest.net/ns/universal-manifest/v0.2/schema.json",
+  "title": "Universal Manifest (v0.2)",
+  "type": "object",
+  "required": [
+    "@context",
+    "@id",
+    "@type",
+    "manifestVersion",
+    "subject",
+    "issuedAt",
+    "expiresAt",
+    "signature"
+  ],
+  "properties": {
+    "@context": {
+      "description": "JSON-LD context URL/object/array. Use spec/v0.2/schema.jsonld or an equivalent hosted context.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "@id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "@type": {
+      "description": "Must include um:Manifest (string or array).",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      ]
+    },
+    "manifestVersion": {
+      "const": "0.2"
+    },
+    "subject": {
+      "type": "string",
+      "minLength": 1
+    },
+    "issuedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "facets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/facet"
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "claimProof": {
+            "description": "VP or attestation proof for this claim.",
+            "oneOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "string",
+                "format": "uri"
+              }
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "consents": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "devices": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "pointers": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "signature": {
+      "$ref": "#/$defs/signatureV02"
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "facet": {
+      "type": "object",
+      "required": [
+        "@type"
+      ],
+      "properties": {
+        "@id": {
+          "type": "string"
+        },
+        "@type": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            }
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "ref": {
+          "type": "string"
+        },
+        "entity": {
+          "type": [
+            "object",
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "signatureV02": {
+      "type": "object",
+      "description": "v0.2 interoperable signature profile (JCS + Ed25519).",
+      "required": [
+        "algorithm",
+        "canonicalization",
+        "value"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "Ed25519"
+        },
+        "canonicalization": {
+          "const": "JCS-RFC8785"
+        },
+        "keyRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "publicKeySpkiB64": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "keyRef"
+          ]
+        },
+        {
+          "required": [
+            "publicKeySpkiB64"
+          ]
+        }
+      ],
+      "additionalProperties": true
+    }
+  }
+}
