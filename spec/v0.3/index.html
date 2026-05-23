@@ -80,7 +80,7 @@
             margin: 0;
             min-height: 100vh;
             overflow-y: auto;
-            padding: 1rem 1.25rem 1.5rem;
+            padding: 1rem 1.25rem 3.5rem;
             padding-left: 1rem;
             position: fixed;
             right: auto;
@@ -230,6 +230,7 @@
         body.toc-inline #toc {
             clear: both;
             margin-bottom: 2rem;
+            padding-bottom: 3.5rem;
         }
         body.toc-inline #toc + section {
             clear: both;
@@ -252,9 +253,13 @@
         code { font-family: Inconsolata, Consolas, "Liberation Mono", monospace; color: #c83232; }
         .rfc2119 { text-transform: lowercase; font-variant: small-caps; font-style: normal; font-weight: bold; color: #900; }
         @media (max-width: 1100px) {
+            body:not(.toc-inline) #toc,
+            body.toc-sidebar #toc,
             .toc {
+                border-right: none;
                 height: auto;
-                max-height: 45vh;
+                min-height: auto;
+                overflow-y: visible;
                 position: static;
                 width: auto;
             }
@@ -266,6 +271,7 @@
             html body #toc-nav a#toc-jump span#toc-jump-text {
                 display: none;
             }
+            body:not(.toc-inline) > :not(#toc):not(script),
             body > :not(#toc):not(script) {
                 margin-left: auto;
                 margin-right: auto;
@@ -303,62 +309,38 @@
     </div>
 
     <aside class="migration-callout" aria-label="v0.1 migration guide">
-        <p><strong>Coming from v0.1?</strong> See the Migration Guide before upgrading to v0.2.</p>
+        <p><strong>Coming from v0.1?</strong> See the v0.1-to-v0.2 and v0.2-to-v0.3 migration paths in <a href="#changes-from-v02">Changes from v0.2</a>.</p>
     </aside>
 
     <aside class="migration-callout" aria-label="v0.2 to v0.3 changes">
-        <p><strong>Coming from v0.2?</strong> See <a href="#changes-from-v02">Changes from v0.2</a> for a summary of additions in v0.3: receiver pipeline, encrypted facets, structured receipts, and normative promotions.</p>
+        <p><strong>Coming from v0.2?</strong> See <a href="#changes-from-v02">Changes from v0.2</a> for a summary of additions in v0.3: evaluation sequence, encrypted facets, structured receipts, and normative promotions.</p>
     </aside>
-
-    <!-- Abstract -->
-    <section id="abstract" class="introductory">
-        <h2>Abstract</h2>
-        <p>This specification defines a JSON-LD-based file format known as the <strong>Universal Manifest</strong>, a portable state capsule. Formulated as a hybrid synthesis of web publication metadata and web application parameters, this format provides developers and issuers with a standardized envelope to convey linked-data identity references, role permissions, device registrations, and pointers to canonical data sources.</p>
-        <p>The Universal Manifest is specifically designed for local-first environments (e.g., venue edges, public displays) where consumers must tolerate partial connectivity and rely on cached, verifiable state. Using this standard, user agents, smart displays, and network edges can securely interoperate without requiring a continuous cloud connection, facilitating seamless cross-context experiences.</p>
-    </section>
-
-    <!-- Status of This Document -->
-    <section id="sotd" class="introductory">
-        <h2>Status of This Document</h2>
-        <p><em>This section describes the status of this document at the time of its publication.</em></p>
-        <p>Universal Manifest v0.3 is the current published version of the Universal Manifest specification. It builds on the v0.1 base format (core JSON-LD envelope, lifecycle, caching) and v0.2 extensions (normative signature profile, identity binding framework, tiered trust model, <code>claims[].claimProof</code>). Version 0.3 introduces a normative receiver-behavior contract (the six-stage receiver pipeline), encrypted inline facets (JWE profile), structured receipts, and promotes cross-DID binding, <code>requiredTrustTier</code>, and agent delegation from non-normative conventions to normative requirements.</p>
-        <p>Because Universal Manifest is still in the v0.x line, minor-version bumps may still include breaking changes when those changes are reflected by a new version folder. Implementors should review the v0.1 to v0.2 migration guide and the <a href="#changes-from-v02">Changes from v0.2</a> section before upgrading.</p>
-        <p>Future changes are managed through the RFC mechanism and the breaking-change policy. This document uses layout formats established by major web standard groups to present normative requirements cleanly, and may be cited as the published Universal Manifest v0.3 specification.</p>
-        <p><strong>For implementers:</strong> use the Implementation Guide, run the Standalone Conformance Suite, review <a href="https://universalmanifest.net/conformance/v0.2/">Conformance v0.2</a>, and compare against the <a href="https://github.com/grigb/um-typescript">TypeScript reference implementation</a>.</p>
-    </section>
-
-    <!-- Changes from v0.2 -->
-    <section id="changes-from-v02" class="introductory">
-        <h2>Changes from v0.2</h2>
-        <p>The following substantive changes were made between v0.2 and v0.3:</p>
-        <ul>
-            <li><strong>Receiver pipeline</strong> (<a href="#receiver-pipeline">Section 3.1</a>): Replaced the three-step manifest processing model with a normative six-stage receiver pipeline (Arrive, Verify, Project, Consent, Compose, Receipt).</li>
-            <li><strong>Structured receipts</strong> (<a href="#structured-receipts">Section 3.3</a>): Defined a normative receipt schema as the output of the receiver pipeline, with four outcome categories.</li>
-            <li><strong>Encrypted inline facets</strong> (<a href="#encrypted-facets">Section 2.3</a>): Added a JWE inline encryption profile for facets, including key rotation and recipient revocation.</li>
-            <li><strong>Cross-DID binding promoted</strong> (<a href="#cross-did-binding">Section 6.4.4</a>): Promoted from non-normative convention to normative requirement.</li>
-            <li><strong><code>requiredTrustTier</code> promoted</strong> (<a href="#required-trust-tier">Section 6.4.5</a>): Promoted from non-normative convention to normative requirement.</li>
-            <li><strong>Agent delegation promoted</strong> (<a href="#agent-delegation">Section 6.5</a>): Promoted from non-normative convention to normative requirement.</li>
-            <li><strong>Tier 2 defined</strong> (<a href="#tiered-trust">Section 6.4.2</a>): Tier 2 (cryptographic binding via zero-knowledge proof of cross-DID control) is now normatively defined. Marked at risk.</li>
-            <li><strong>Consumer behavior expanded</strong> (<a href="#required-behavior-consumer">Section 4.1</a>): Added receiver contract obligations referencing the pipeline.</li>
-            <li><strong>Privacy model expanded</strong> (<a href="#privacy-considerations">Section 7</a>): Added opacity and projection privacy considerations for encrypted facets.</li>
-            <li><strong>Signature limitations softened</strong> (<a href="#signature-limitations">Section 6.1</a>): Reduced v0.1 caveat language to reflect v0.2 signature profile delivery.</li>
-            <li><strong>Signature integrity updated</strong> (<a href="#signature-integrity">Section 1.5</a>): Removed "reserved for subsequent iterations" language.</li>
-            <li><strong>Informative references</strong> (<a href="#informative-references">Section 8.2</a>): Added URLs to all citations.</li>
-        </ul>
-    </section>
 
     <!-- Table of Contents -->
     <nav id="toc" class="toc">
         <h2>Table of Contents</h2>
         <ol>
+            <li><a href="#abstract">Abstract</a></li>
+            <li><a href="#conformance-requirements">Conformance Requirements</a></li>
+            <li><a href="#sotd">Status of This Document</a></li>
+            <li><a href="#changes-from-v02">Changes from v0.2</a></li>
             <li><a href="#universal-manifest">Universal Manifest</a>
                 <ol>
                     <li><a href="#examples">Examples</a></li>
                     <li><a href="#json-ld-core-members">JSON-LD Core Members</a></li>
                     <li><a href="#identities-lifespans">Identities &amp; Lifespans</a></li>
-                    <li><a href="#structural-state-members">Structural State Members</a></li>
+                    <li><a href="#structural-state-members">Structural State Members</a>
+                        <ol>
+                            <li><a href="#facets-member"><code>facets</code> member</a></li>
+                            <li><a href="#arrays"><code>claims</code>, <code>consents</code>, <code>devices</code>, and <code>pointers</code></a></li>
+                            <li><a href="#claims-schema"><code>claims</code> Array Schema</a></li>
+                            <li><a href="#consents-schema"><code>consents</code> Array Schema</a></li>
+                            <li><a href="#pointers-schema"><code>pointers</code> Array Schema</a></li>
+                            <li><a href="#devices-schema"><code>devices</code> Array Schema</a></li>
+                        </ol>
+                    </li>
                     <li><a href="#signature-integrity">Signature Integrity</a></li>
-                    <li><a href="#signature-profile-v02">v0.2 Signature Profile: JCS + Ed25519</a></li>
+                    <li><a href="#signature-profile-a">Signature Profile A: JCS + Ed25519</a></li>
                 </ol>
             </li>
             <li><a href="#entities-and-facets">Entities and Facets</a>
@@ -370,15 +352,16 @@
             </li>
             <li><a href="#manifest-lifecycle-and-caching">Manifest Lifecycle and Caching</a>
                 <ol>
-                    <li><a href="#receiver-pipeline">Receiver Pipeline</a></li>
+                    <li><a href="#receiver-pipeline">Evaluation Sequence</a></li>
                     <li><a href="#caching-formulation">Caching Formulation</a></li>
                     <li><a href="#structured-receipts">Structured Receipts</a></li>
                 </ol>
             </li>
             <li><a href="#conformance">Conformance</a>
                 <ol>
-                    <li><a href="#required-behavior-consumer">Consumer Behavior</a></li>
+                    <li><a href="#required-behavior-consumer">Evaluator Behavior</a></li>
                     <li><a href="#required-behavior-issuer">Issuer Behavior</a></li>
+                    <li><a href="#bilateral-participant-behavior">Bilateral Participant Behavior</a></li>
                     <li><a href="#standalone-conformance-suite">Standalone Conformance Suite</a></li>
                 </ol>
             </li>
@@ -388,7 +371,16 @@
                     <li><a href="#signature-limitations">Signature Limitations</a></li>
                     <li><a href="#ttl-enforcement">TTL Enforcement</a></li>
                     <li><a href="#resource-limits">Resource Limits</a></li>
-                    <li><a href="#identity-binding-claim-authenticity">Identity Binding and Claim Authenticity</a></li>
+                    <li><a href="#identity-binding-claim-authenticity">Identity Binding and Claim Authenticity</a>
+                        <ol>
+                            <li><a href="#bag-of-claims">Bag of Claims Limitation</a></li>
+                            <li><a href="#tiered-trust">Tiered Trust Model</a></li>
+                            <li><a href="#claim-proof"><code>claims[].claimProof</code> Field</a></li>
+                            <li><a href="#cross-did-binding"><code>identity.crossDidBinding</code> Claim</a></li>
+                            <li><a href="#required-trust-tier"><code>requiredTrustTier</code> Declaration</a></li>
+                            <li><a href="#bilateral-exchange">Bilateral Exchange</a></li>
+                        </ol>
+                    </li>
                     <li><a href="#agent-delegation">Agent Delegation</a></li>
                 </ol>
             </li>
@@ -402,6 +394,49 @@
         </ol>
     </nav>
 
+    <!-- Abstract -->
+    <section id="abstract" class="introductory">
+        <h2>Abstract</h2>
+        <p>This specification defines a JSON-LD-based file format known as the <strong>Universal Manifest</strong>, a portable state capsule. Formulated as a hybrid synthesis of web publication metadata and web application parameters, this format provides developers and issuers with a standardized envelope to convey linked-data identity references, role permissions, device registrations, and pointers to canonical data sources.</p>
+        <p>The Universal Manifest is specifically designed for local-first environments (e.g., venue edges, public displays) where evaluators must tolerate partial connectivity and rely on cached, verifiable state. Using this standard, user agents, smart displays, and network edges can securely interoperate without requiring a continuous cloud connection, facilitating seamless cross-context experiences.</p>
+    </section>
+
+    <!-- Conformance Requirements (RFC 2119) -->
+    <section id="conformance-requirements" class="introductory">
+        <h2>Conformance Requirements</h2>
+        <p>The key words "<span class="rfc2119">MUST</span>", "<span class="rfc2119">MUST NOT</span>", "<span class="rfc2119">REQUIRED</span>", "<span class="rfc2119">SHALL</span>", "<span class="rfc2119">SHALL NOT</span>", "<span class="rfc2119">SHOULD</span>", "<span class="rfc2119">SHOULD NOT</span>", "<span class="rfc2119">RECOMMENDED</span>", "<span class="rfc2119">NOT RECOMMENDED</span>", "<span class="rfc2119">MAY</span>", and "<span class="rfc2119">OPTIONAL</span>" in this document are to be interpreted as described in BCP 14 [<a href="https://www.rfc-editor.org/rfc/rfc2119">RFC 2119</a>] [<a href="https://www.rfc-editor.org/rfc/rfc8174">RFC 8174</a>] when, and only when, they appear in ALL CAPITALS, as shown here.</p>
+    </section>
+
+    <!-- Status of This Document -->
+    <section id="sotd" class="introductory">
+        <h2>Status of This Document</h2>
+        <p><em>This section describes the status of this document at the time of its publication.</em></p>
+        <p>Universal Manifest v0.3 is the current published version of the Universal Manifest specification. It builds on the v0.1 base format (core JSON-LD envelope, lifecycle, caching) and v0.2 extensions (normative signature profile, identity binding framework, tiered trust model, <code>claims[].claimProof</code>). Version 0.3 introduces a normative evaluation contract (the six-stage evaluation sequence), encrypted inline facets (JWE profile), structured receipts, and promotes cross-DID binding, <code>requiredTrustTier</code>, and agent delegation from non-normative conventions to normative requirements.</p>
+        <p>Because Universal Manifest is still in the v0.x line, minor-version bumps may still include breaking changes when those changes are reflected by a new version folder. Implementors should review the v0.1 to v0.2 migration guide and the <a href="#changes-from-v02">Changes from v0.2</a> section before upgrading.</p>
+        <p>Future changes are managed through the RFC mechanism and the breaking-change policy. This document uses layout formats established by major web standard groups to present normative requirements cleanly, and may be cited as the published Universal Manifest v0.3 specification.</p>
+        <p><strong>For implementers:</strong> use the Implementation Guide, run the Standalone Conformance Suite, review <a href="https://universalmanifest.net/conformance/v0.3/">Conformance v0.3</a>, and compare against the <a href="https://github.com/grigb/um-typescript">TypeScript reference implementation</a>.</p>
+    </section>
+
+    <!-- Changes from v0.2 -->
+    <section id="changes-from-v02" class="introductory">
+        <h2>Changes from v0.2</h2>
+        <p>The following substantive changes were made between v0.2 and v0.3:</p>
+        <ul>
+            <li><strong>Evaluation sequence</strong> (<a href="#receiver-pipeline">Section 3.1</a>): Replaced the three-step manifest processing model with a normative six-stage evaluation sequence (Arrive, Verify, Project, Consent, Compose, Receipt).</li>
+            <li><strong>Structured receipts</strong> (<a href="#structured-receipts">Section 3.3</a>): Defined a normative receipt schema as the output of the evaluation sequence, with four outcome categories.</li>
+            <li><strong>Encrypted inline facets</strong> (<a href="#encrypted-facets">Section 2.3</a>): Added a JWE inline encryption profile for facets, including key rotation and recipient revocation.</li>
+            <li><strong>Cross-DID binding promoted</strong> (<a href="#cross-did-binding">Section 6.4.4</a>): Promoted from non-normative convention to normative requirement.</li>
+            <li><strong><code>requiredTrustTier</code> promoted</strong> (<a href="#required-trust-tier">Section 6.4.5</a>): Promoted from non-normative convention to normative requirement.</li>
+            <li><strong>Agent delegation promoted</strong> (<a href="#agent-delegation">Section 6.5</a>): Promoted from non-normative convention to normative requirement.</li>
+            <li><strong>Tier 2 defined</strong> (<a href="#tiered-trust">Section 6.4.2</a>): Tier 2 (cryptographic binding via zero-knowledge proof of cross-DID control) is now normatively defined. Marked at risk.</li>
+            <li><strong>Evaluator behavior expanded</strong> (<a href="#required-behavior-consumer">Section 4.1</a>): Added evaluation contract obligations referencing the pipeline.</li>
+            <li><strong>Privacy model expanded</strong> (<a href="#privacy-considerations">Section 7</a>): Added sealed-entry and selective-disclosure privacy considerations for encrypted facets.</li>
+            <li><strong>Signature limitations softened</strong> (<a href="#signature-limitations">Section 6.1</a>): Reduced v0.1 caveat language to reflect Signature Profile A delivery.</li>
+            <li><strong>Signature integrity updated</strong> (<a href="#signature-integrity">Section 1.5</a>): Removed "reserved for subsequent iterations" language.</li>
+            <li><strong>Informative references</strong> (<a href="#informative-references">Section 8.2</a>): Added URLs to all citations.</li>
+        </ul>
+    </section>
+
     <!-- Content Sections -->
     <section id="universal-manifest">
         <h2><span class="secno">1. </span>Universal Manifest</h2>
@@ -414,25 +449,35 @@
                 <div class="example-title">Example 1: Minimal Universal Manifest payload</div>
 <pre class="json"><code>{
   "@context": [
-    "https://universalmanifest.net/ns/v0.1"
+    "https://universalmanifest.net/ns/v0.3"
   ],
   "@id": "urn:uuid:123e4567-e89b-12d3-a456-426614174000",
   "@type": ["um:Manifest"],
-  "manifestVersion": "0.1",
+  "manifestVersion": "0.3",
   "subject": "did:example:123",
   "issuedAt": "2026-03-01T00:00:00Z",
-  "expiresAt": "2026-03-02T00:00:00Z"
+  "expiresAt": "2026-03-02T00:00:00Z",
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:key:z6MkExample#keys-1",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEA...",
+    "created": "2026-03-01T00:00:00Z",
+    "value": "base64url-encoded-signature-bytes"
+  }
 }</code></pre>
+            <p class="note"><strong>Note:</strong> The <code>signature</code> values above are illustrative. See <a href="#sig-shape">Section 1.6.2</a> for the full signature shape definition and <a href="#sig-input">Section 1.6.3</a> for the signing input procedure.</p>
             </div>
         </section>
 
         <section id="json-ld-core-members">
             <h3><span class="secno">1.2. </span>JSON-LD Core Members</h3>
             <h4 id="context-member">1.2.1. <code>@context</code> member</h4>
-            <p>The <code>@context</code> member establishes the semantic definitions of terms used within the manifest. It <span class="rfc2119">MUST</span> include the Universal Manifest namespace (e.g., <code>https://universalmanifest.net/ns/v0.1</code>).</p>
+            <p>The <code>@context</code> member establishes the semantic definitions of terms used within the manifest. It <span class="rfc2119">MUST</span> include the Universal Manifest namespace for the specification version being implemented (e.g., <code>https://universalmanifest.net/ns/v0.3</code> for this version).</p>
+            <p class="note"><strong>Note:</strong> The namespace URI is versioned. Manifests conforming to this specification <span class="rfc2119">MUST</span> use <code>https://universalmanifest.net/ns/v0.3</code>. Evaluators encountering earlier namespace versions (e.g., <code>v0.1</code>, <code>v0.2</code>) <span class="rfc2119">SHOULD</span> process them according to the referenced version's rules.</p>
 
             <h4 id="id-member">1.2.2. <code>@id</code> member</h4>
-            <p>The <code>@id</code> member provides a primary identifier. Issuers <span class="rfc2119">SHOULD</span> generate <code>@id</code> as an opaque, offline-safe identifier (e.g., <code>urn:uuid:&lt;uuidv4&gt;</code>).</p>
+            <p>Issuers <span class="rfc2119">MUST</span> generate an <code>@id</code> member as a globally unique opaque identifier (e.g., <code>urn:uuid:&lt;uuidv4&gt;</code>). The <code>@id</code> value <span class="rfc2119">MUST NOT</span> contain personally identifiable information.</p>
 
             <h4 id="type-member">1.2.3. <code>@type</code> member</h4>
             <p>The <code>@type</code> member indicates the document type classifying the resource. It <span class="rfc2119">MUST</span> include the value <code>um:Manifest</code>.</p>
@@ -440,11 +485,14 @@
 
         <section id="identities-lifespans">
             <h3><span class="secno">1.3. </span>Identities &amp; Lifespans</h3>
-            <h4 id="subject-member">1.3.1. <code>subject</code> member</h4>
-            <p>The <code>subject</code> member specifies the primary entity (user, app, venue) the manifest describes. It <span class="rfc2119">MUST</span> contain a stable identifier URI (e.g., a Decentralized Identifier / DID).</p>
+            <h4 id="manifest-version-member">1.3.1. <code>manifestVersion</code> member</h4>
+            <p><code>manifestVersion</code> (string, <span class="rfc2119">REQUIRED</span>): The version of the Universal Manifest specification this manifest conforms to. For v0.3 conformant manifests, the value <span class="rfc2119">MUST</span> be <code>"0.3"</code>. Evaluators <span class="rfc2119">MUST</span> check that they support the declared version before processing the manifest through the evaluation sequence.</p>
 
-            <h4 id="lifetime">1.3.2. <code>issuedAt</code> and <code>expiresAt</code> members</h4>
-            <p>The <code>issuedAt</code> and <code>expiresAt</code> members formulate the bounding constraints (TTL) for the manifest's validity. Both parameters are formatted as ISO 8601 / RFC 3339 date-time strings.</p>
+            <h4 id="subject-member">1.3.2. <code>subject</code> member</h4>
+            <p>The <code>subject</code> member is <span class="rfc2119">REQUIRED</span>. It specifies the primary entity (user, app, venue) the manifest describes. It <span class="rfc2119">MUST</span> contain a stable identifier URI (e.g., a Decentralized Identifier / DID).</p>
+
+            <h4 id="lifetime">1.3.3. <code>issuedAt</code> and <code>expiresAt</code> members</h4>
+            <p>Both <code>issuedAt</code> and <code>expiresAt</code> are <span class="rfc2119">REQUIRED</span>. They formulate the bounding constraints (TTL) for the manifest's validity. Both parameters are formatted as ISO 8601 / RFC 3339 date-time strings.</p>
         </section>
 
         <section id="structural-state-members">
@@ -452,25 +500,148 @@
             <p>The manifest structure relies on domain-specific members akin to Web Publication linkages.</p>
 
             <h4 id="facets-member">1.4.1. <code>facets</code> member</h4>
-            <p>The <code>facets</code> member organizes extended functional blocks (<code>um:Facet</code>), packaging specific verifiable capabilities, metadata subsets, or configuration modules.</p>
+            <p>The <code>facets</code> member organizes extended functional blocks (<code>um:Facet</code>), packaging specific verifiable capabilities, metadata subsets, or configuration modules. The <code>facets</code> member, when present, <span class="rfc2119">MUST</span> be a JSON array of facet objects.</p>
 
             <h4 id="arrays">1.4.2. <code>claims</code>, <code>consents</code>, <code>devices</code>, and <code>pointers</code></h4>
-            <p>These arrays group specific operational contexts representing permissions, deployed hardware targets, and external data reference pointers connected to the <code>subject</code>.</p>
+            <p>These arrays group specific operational contexts representing permissions, deployed hardware targets, and external data reference pointers connected to the <code>subject</code>. Each array is a top-level structural member of the manifest. The following subsections define the base schema for each array's entries.</p>
+            <p>All structural state members (<code>facets</code>, <code>claims</code>, <code>consents</code>, <code>devices</code>, <code>pointers</code>) are <span class="rfc2119">OPTIONAL</span>. When absent, evaluators <span class="rfc2119">MUST</span> treat them as empty arrays.</p>
+            <p>The manifest <span class="rfc2119">MAY</span> also include the following top-level member:</p>
+            <ul>
+                <li><code>requiredTrustTier</code> &mdash; An integer (0&ndash;3) specifying the minimum trust tier an evaluator <span class="rfc2119">MUST</span> satisfy before acting on this manifest. This field is <span class="rfc2119">OPTIONAL</span>; when absent, the default is 0 (no minimum required). See <a href="#required-trust-tier">Section 6.4.5</a> for the trust-tier evaluation algorithm.</li>
+            </ul>
+
+            <h4 id="claims-schema">1.4.3. <code>claims</code> Array Schema</h4>
+            <p>The <code>claims</code> array contains zero or more claim objects. Each claim object represents a statement about the manifest <code>subject</code>, issued by the manifest signer or by an external party. Evaluators process claims according to the <a href="#tiered-trust">tiered trust model</a> (Section 6.4.2) and the <a href="#receiver-pipeline">evaluation sequence</a> (Section 3.1).</p>
+            <p>A base claim object <span class="rfc2119">MUST</span> contain the following fields:</p>
+            <ul>
+                <li><code>@type</code> &mdash; A string identifying the claim type. <span class="rfc2119">MUST</span> be present. Specialized claim types (e.g., <code>"identity.crossDidBinding"</code>) use this field to declare their schema.</li>
+                <li><code>issuer</code> &mdash; A DID or URI identifying the entity that asserts the claim. <span class="rfc2119">MUST</span> be present. When the manifest signer is the issuer, this field <span class="rfc2119">MUST</span> match the manifest <code>subject</code> or the signing key's controller.</li>
+            </ul>
+            <p>A base claim object <span class="rfc2119">MAY</span> contain the following fields:</p>
+            <ul>
+                <li><code>subject</code> &mdash; DID or URI of the entity the claim is about. When absent, the manifest-level <code>subject</code> is implied.</li>
+                <li><code>issuedAt</code> &mdash; ISO 8601 date-time when the claim was issued.</li>
+                <li><code>expiresAt</code> &mdash; ISO 8601 date-time when the claim expires. Evaluators <span class="rfc2119">SHOULD</span> reject expired claims.</li>
+                <li><code>claimProof</code> &mdash; A Verifiable Presentation, attestation proof object, or URI reference enabling Tier 1 verification (see <a href="#claim-proof">Section 6.4.3</a>).</li>
+                <li><code>requiredTrustTier</code> &mdash; Integer (0&ndash;3) declaring the minimum trust tier for this claim (see <a href="#required-trust-tier">Section 6.4.5</a>).</li>
+            </ul>
+            <p>Specialized claim types extend the base schema by adding type-specific fields. The <code>@type</code> field determines which additional fields are expected. Evaluators encountering an unrecognized <code>@type</code> <span class="rfc2119">MUST</span> treat the claim as unprocessable (present but unverifiable at any tier above Tier 0). The <code>identity.crossDidBinding</code> claim type is fully defined in <a href="#cross-did-binding">Section 6.4.4</a>.</p>
+
+            <div class="example">
+                <div class="example-title">Example 8: Base claim object</div>
+<pre class="json"><code>{
+  "claims": [
+    {
+      "@type": "membership.organization",
+      "issuer": "did:web:example-org.com",
+      "subject": "did:key:z6MkAlice",
+      "issuedAt": "2026-03-01T00:00:00Z",
+      "expiresAt": "2027-03-01T00:00:00Z"
+    },
+    {
+      "@type": "identity.crossDidBinding",
+      "issuer": "did:web:verify.example",
+      "boundDids": ["did:key:z6MkAlice", "did:plc:alice-bsky"],
+      "attester": "did:web:verify.example",
+      "attestationMethod": "AT Protocol handle resolution",
+      "attestedAt": "2026-03-15T10:30:00Z",
+      "claimProof": "https://verify.example/attestations/abc123"
+    }
+  ]
+}</code></pre>
+            </div>
+
+            <h4 id="consents-schema">1.4.4. <code>consents</code> Array Schema</h4>
+            <p>The <code>consents</code> array contains zero or more consent entry objects. Each consent entry records a permission grant governing how an evaluator may act on specific facets. The Consent stage of the <a href="#pipeline-consent">evaluation sequence</a> (Section 3.1.4) uses these entries to determine whether processing a facet is authorized.</p>
+            <p>A consent entry <span class="rfc2119">MUST</span> contain the following fields:</p>
+            <ul>
+                <li><code>@id</code> &mdash; A URI uniquely identifying this consent entry. <span class="rfc2119">MUST</span> be present. Consent entries are identified by <code>@id</code> for receipt recording.</li>
+                <li><code>@type</code> &mdash; <span class="rfc2119">MUST</span> be <code>"um:Consent"</code>.</li>
+                <li><code>facetRef</code> &mdash; A string matching the <code>@id</code> of the facet this consent governs. This is the linking mechanism between a consent entry and its target facet. An evaluator determines which consent entry governs a facet by matching <code>facetRef</code> to the facet's <code>@id</code>.</li>
+                <li><code>scope</code> &mdash; An array of scope strings defining what operations are authorized (e.g., <code>"read"</code>, <code>"display"</code>, <code>"cache"</code>, <code>"process"</code>, <code>"forward"</code>). Evaluators <span class="rfc2119">MUST NOT</span> perform operations outside the declared scope.</li>
+                <li><code>purpose</code> &mdash; A string declaring the stated purpose for the data use (e.g., <code>"session-personalization"</code>, <code>"age-verification"</code>, <code>"access-control"</code>). Evaluators <span class="rfc2119">SHOULD</span> verify that their intended use falls within the declared purpose before processing the facet. Purpose matching semantics are deployment-specific; this specification does not define a purpose vocabulary or matching algorithm.</li>
+                <li><code>grantedAt</code> &mdash; ISO 8601 date-time when the consent was granted.</li>
+                <li><code>expiresAt</code> &mdash; ISO 8601 date-time when the consent expires. Evaluators <span class="rfc2119">MUST</span> treat expired consent as absent consent.</li>
+            </ul>
+            <p>A consent entry <span class="rfc2119">MAY</span> contain the following fields:</p>
+            <ul>
+                <li><code>grantor</code> &mdash; DID or URI of the entity who granted consent. When absent, the manifest <code>subject</code> is implied.</li>
+                <li><code>withdrawnAt</code> &mdash; ISO 8601 date-time when consent was withdrawn. When this field is present, the consent is no longer active regardless of <code>expiresAt</code>. Evaluators <span class="rfc2119">MUST</span> treat a consent entry with a <code>withdrawnAt</code> value as absent consent.</li>
+                <li><code>conditions</code> &mdash; An array of condition strings imposing additional constraints (e.g., <code>"offline-only"</code>, <code>"no-third-party-sharing"</code>).</li>
+            </ul>
+            <p>At most one consent entry <span class="rfc2119">SHOULD</span> reference a given facet <code>@id</code> via <code>facetRef</code>. If multiple consent entries reference the same facet, evaluators <span class="rfc2119">MUST</span> treat them as conjunctive &mdash; all matching consent entries must individually pass validation (not expired, not withdrawn, scope and purpose satisfied) for the facet to be considered consented.</p>
+            <p>When a facet has no matching consent entry in the <code>consents</code> array (i.e., no entry whose <code>facetRef</code> matches the facet's <code>@id</code>), the evaluator <span class="rfc2119">MUST</span> record the facet status as <code>"consent-missing"</code> in the receipt and <span class="rfc2119">MUST NOT</span> process the facet's data.</p>
+            <p>When the <code>consents</code> array is empty or absent, no facets carry consent records. Evaluators <span class="rfc2119">MUST</span> treat all facets as lacking consent in this case, unless the manifest's deployment context operates under a consent model external to the manifest (e.g., a pre-negotiated bilateral agreement). Such external consent models are outside the scope of this specification.</p>
+
+            <div class="example">
+                <div class="example-title">Example 9: Consent entry</div>
+<pre class="json"><code>{
+  "consents": [
+    {
+      "@id": "urn:um:consent:public-profile-001",
+      "@type": "um:Consent",
+      "facetRef": "urn:uuid:facet-public-profile-001",
+      "scope": ["read", "display", "cache"],
+      "purpose": "session-personalization",
+      "grantedAt": "2026-04-01T09:00:00Z",
+      "expiresAt": "2026-04-01T18:00:00Z"
+    },
+    {
+      "@id": "urn:um:consent:health-data-002",
+      "@type": "um:Consent",
+      "facetRef": "urn:uuid:facet-health-data-002",
+      "scope": ["read"],
+      "purpose": "age-verification",
+      "grantor": "did:key:z6MkAlice",
+      "grantedAt": "2026-04-01T09:00:00Z",
+      "expiresAt": "2026-04-01T12:00:00Z",
+      "conditions": ["no-third-party-sharing"]
+    }
+  ]
+}</code></pre>
+            </div>
+
+            <h4 id="pointers-schema">1.4.5. <code>pointers</code> Array Schema</h4>
+            <p>The <code>pointers</code> array contains zero or more pointer objects. Each pointer references an external data source, delegation relationship, or canonical resource connected to the manifest <code>subject</code>. Pointers are typed; the <code>@type</code> field determines the pointer's semantics and expected fields.</p>
+            <p>A base pointer object <span class="rfc2119">MUST</span> contain the following fields:</p>
+            <ul>
+                <li><code>@type</code> &mdash; A string identifying the pointer type. <span class="rfc2119">MUST</span> be present. Defines which additional fields are expected and how the evaluator processes the pointer.</li>
+                <li><code>target</code> &mdash; A URI referencing the external resource, endpoint, or entity this pointer connects to. <span class="rfc2119">MUST</span> be present.</li>
+            </ul>
+            <p>Pointer types <span class="rfc2119">MAY</span> define type-specific fields that replace the base <code>target</code> requirement. When a pointer type declares such a replacement, its type-specific fields take precedence.</p>
+            <p>A base pointer object <span class="rfc2119">MAY</span> contain the following fields:</p>
+            <ul>
+                <li><code>@id</code> &mdash; An opaque identifier for this pointer entry.</li>
+                <li><code>label</code> &mdash; A human-readable label describing the pointer's purpose.</li>
+                <li><code>createdAt</code> &mdash; ISO 8601 date-time when the pointer was created.</li>
+                <li><code>expiresAt</code> &mdash; ISO 8601 date-time when the pointer expires. Evaluators <span class="rfc2119">SHOULD</span> ignore expired pointers.</li>
+            </ul>
+            <p>The following pointer types are defined in this specification:</p>
+            <ul>
+                <li><code>um:agentDelegation</code> &mdash; Declares delegated session authority. See <a href="#agent-delegation-structure">Section 6.5.1</a> for the complete field specification. The <code>um:agentDelegation</code> type replaces the base <code>target</code> field with type-specific required fields (<code>delegatedBy</code>, <code>delegateType</code>, <code>delegatedAt</code>, <code>expiresAt</code>) and optional fields (<code>delegateId</code>, <code>scope</code>).</li>
+            </ul>
+            <p>Evaluators encountering an unrecognized pointer <code>@type</code> <span class="rfc2119">MUST</span> record the pointer as present in the receipt but <span class="rfc2119">MUST NOT</span> act on it. Future versions of this specification or extension profiles <span class="rfc2119">MAY</span> define additional pointer types.</p>
+
+            <h4 id="devices-schema">1.4.6. <code>devices</code> Array Schema</h4>
+            <p class="note"><strong>Note (Reserved):</strong> The <code>devices</code> array is a reserved structural member. It is intended to register hardware endpoints (e.g., NFC readers, smart displays, wearable sensors) associated with the manifest <code>subject</code>. The base schema for device entries is not yet specified. Implementations <span class="rfc2119">MUST</span> accept and preserve a <code>devices</code> array if present but <span class="rfc2119">MUST NOT</span> assign semantic meaning to its contents until a future version of this specification defines the device entry schema.</p>
+            <p>When a <code>devices</code> array is present, evaluators <span class="rfc2119">MUST</span> include it in the signing input (it is part of the manifest payload) and <span class="rfc2119">MUST</span> carry it through the evaluation sequence without modification. Evaluators <span class="rfc2119">MUST NOT</span> discard the <code>devices</code> array during the Arrive stage's unknown-field handling, because it is a named structural member.</p>
         </section>
 
         <section id="signature-integrity">
             <h3><span class="secno">1.5. </span>Signature Integrity</h3>
             <h4 id="signature-member">1.5.1. <code>signature</code> member</h4>
-            <p>The <code>signature</code> member encapsulates cryptographic proofs of the manifest payload. In v0.1, its format is intentionally permissive. Version 0.2 introduces the first normative signature profile (see <a href="#signature-profile-v02">Section 1.6</a>).</p>
+            <p>The <code>signature</code> member carries cryptographic proof that the manifest payload has not been tampered with since issuance. Every v0.3 conformant manifest <span class="rfc2119">MUST</span> include a <code>signature</code> member conforming to the JCS + Ed25519 Signature Profile (Signature Profile A, <a href="#signature-profile-a">Section 1.6</a>). Future spec versions <span class="rfc2119">MAY</span> introduce additional normative profiles; evaluators <span class="rfc2119">MUST</span> reject manifests whose signature profile they do not support.</p>
+            <p class="note"><strong>Note:</strong> Unsigned manifests <span class="rfc2119">MAY</span> exist as development artifacts but are not v0.3 conformant and <span class="rfc2119">MUST</span> be rejected by conformant evaluators.</p>
         </section>
 
-        <section id="signature-profile-v02">
-            <h3><span class="secno">1.6. </span>v0.2 Signature Profile: JCS + Ed25519</h3>
-            <p>Version 0.2 introduces the first normative signature profile. This profile constrains the <code>signature</code> member to a deterministic, portable format suitable for local-first verification on constrained devices.</p>
-            <p>Signature profiles are additive. Future versions <span class="rfc2119">MAY</span> introduce additional profiles (e.g., post-quantum algorithms or W3C Data Integrity proofs). Consumers verify the profiles they support and safely ignore unknown profiles.</p>
+        <section id="signature-profile-a">
+            <h3><span class="secno">1.6. </span>Signature Profile A: JCS + Ed25519</h3>
+            <p>Signature Profile A is the baseline normative signature profile. This profile constrains the <code>signature</code> member to a deterministic, portable format suitable for local-first verification on constrained devices.</p>
+            <p class="note"><strong>Note:</strong> This profile was introduced in v0.2 and remains the required baseline in v0.3.</p>
+            <p>Signature profiles are additive. Future versions <span class="rfc2119">MAY</span> introduce additional profiles (e.g., post-quantum algorithms or W3C Data Integrity proofs). Evaluators verify the profiles they support and safely ignore unknown profiles.</p>
 
             <h4 id="sig-canonicalization">1.6.1. Canonicalization and Algorithm</h4>
-            <p>The v0.2 profile uses <strong>JSON Canonicalization Scheme</strong> (JCS, <a href="https://www.rfc-editor.org/rfc/rfc8785">RFC 8785</a>) for canonicalization and <strong>Ed25519</strong> for signing. Signature values are encoded as <strong>base64url</strong>.</p>
+            <p>Signature Profile A uses <strong>JSON Canonicalization Scheme</strong> (JCS, <a href="https://www.rfc-editor.org/rfc/rfc8785">RFC 8785</a>) for canonicalization and <strong>Ed25519</strong> for signing. Signature values are encoded as <strong>base64url</strong>.</p>
             <p>This combination provides deterministic signing input without requiring JSON-LD expansion or RDF canonicalization, matching the specification's "state capsule" usage where the JSON shape is the primary contract.</p>
 
             <h4 id="sig-shape">1.6.2. Signature Shape</h4>
@@ -478,7 +649,7 @@
             <ul>
                 <li><code>signature.algorithm</code> &mdash; <span class="rfc2119">MUST</span> be <code>"Ed25519"</code>.</li>
                 <li><code>signature.canonicalization</code> &mdash; <span class="rfc2119">MUST</span> be <code>"JCS-RFC8785"</code>.</li>
-                <li><code>signature.keyRef</code> &mdash; URI reference to verification key material (recommended: DID URL or HTTPS URL).</li>
+                <li><code>signature.keyRef</code> &mdash; URI reference to verification key material (recommended: DID URL or HTTPS URL). <span class="rfc2119">MUST</span> be present.</li>
                 <li><code>signature.value</code> &mdash; base64url-encoded Ed25519 signature over the canonical bytes.</li>
             </ul>
             <p>The following fields are <span class="rfc2119">OPTIONAL</span>:</p>
@@ -488,11 +659,11 @@
                 <li><code>signature.statusRef</code> &mdash; URI to revocation/status material for this signature.</li>
                 <li><code>signature.revocationCursor</code> &mdash; monotonic status cursor/version string for cache-aware revocation checks.</li>
             </ul>
-            <p>Additional fields <span class="rfc2119">MAY</span> exist for future profiles, but consumers <span class="rfc2119">SHOULD</span> rely on <code>algorithm</code> + <code>canonicalization</code> to decide whether they can verify a given signature.</p>
+            <p>Additional fields <span class="rfc2119">MAY</span> exist for future profiles, but evaluators <span class="rfc2119">SHOULD</span> rely on <code>algorithm</code> + <code>canonicalization</code> to decide whether they can verify a given signature.</p>
             <p>The <code>signature</code> property is <strong>not included</strong> in the signing input to avoid circularity. The fields <code>statusRef</code> and <code>revocationCursor</code>, when present, are metadata for revocation-aware policy checks and do not alter the signing input.</p>
 
             <div class="example">
-                <div class="example-title">Example 2: v0.2 signature object</div>
+                <div class="example-title">Example 2: Signature Profile A object</div>
 <pre class="json"><code>{
   "signature": {
     "algorithm": "Ed25519",
@@ -522,27 +693,28 @@
                 <li>Confirm the document is a v0.x Universal Manifest (required fields present and <code>@type</code> includes <code>um:Manifest</code>).</li>
                 <li>Enforce TTL: reject for use if <code>now &gt; expiresAt</code>; sanity-check <code>issuedAt &lt;= expiresAt</code>.</li>
                 <li>Determine signature profile support: require <code>signature.algorithm === "Ed25519"</code>, <code>signature.canonicalization === "JCS-RFC8785"</code>, and a non-empty <code>signature.value</code>.</li>
-                <li>Obtain a public key: if <code>signature.publicKeySpkiB64</code> exists, a consumer <span class="rfc2119">MAY</span> use it directly (SPKI DER bytes, base64); otherwise, resolve <code>signature.keyRef</code> to public key material (method-specific, e.g., DID resolution or HTTPS fetch).</li>
+                <li>Resolve the verification key. The evaluator <span class="rfc2119">MUST</span> resolve <code>keyRef</code> to obtain the public key material (method-specific, e.g., DID resolution or HTTPS fetch). If <code>signature.publicKeySpkiB64</code> is present, the evaluator <span class="rfc2119">MAY</span> use it for verification but <span class="rfc2119">MUST</span> confirm that it is consistent with the key resolved via <code>keyRef</code> &mdash; specifically, the resolved public key material <span class="rfc2119">MUST</span> be byte-identical to the decoded <code>publicKeySpkiB64</code> value. If the values do not match, the evaluator <span class="rfc2119">MUST</span> reject the manifest with outcome <code>rejected</code> and <code>signatureCheck: "invalid"</code>. If <code>publicKeySpkiB64</code> is absent, the evaluator resolves <code>keyRef</code> to obtain the public key material. In offline or local-first environments where <code>keyRef</code> cannot be resolved, the evaluator <span class="rfc2119">MAY</span> use <code>publicKeySpkiB64</code> as the sole key source; the consistency check is deferred until connectivity is available. Evaluators operating in this mode <span class="rfc2119">SHOULD</span> record <code>"keyResolution": "deferred"</code> in the receipt.</li>
                 <li>Recompute the signing input (remove <code>signature</code>, JCS canonicalize).</li>
                 <li>Verify the Ed25519 signature over the canonical bytes.</li>
             </ol>
             <p>If verification fails, the manifest <span class="rfc2119">MUST</span> be rejected for use (but <span class="rfc2119">MAY</span> be retained for debugging).</p>
+            <p class="note"><strong>Security Note:</strong> Without the key-matching check in step 4, a malicious issuer can bundle a <code>keyRef</code> pointing to a high-reputation DID while supplying their own key material in <code>publicKeySpkiB64</code>, enabling key substitution attacks. Evaluators that skip <code>keyRef</code> resolution when <code>publicKeySpkiB64</code> is present are vulnerable to this vector.</p>
 
             <h4 id="sig-profile-id">1.6.5. Profile Identification</h4>
-            <p>Consumers <span class="rfc2119">MUST</span> treat the pair <code>signature.algorithm</code> + <code>signature.canonicalization</code> as the explicit profile identity.</p>
+            <p>Evaluators <span class="rfc2119">MUST</span> treat the pair <code>signature.algorithm</code> + <code>signature.canonicalization</code> as the explicit profile identity.</p>
             <ul>
                 <li>If the pair is unsupported, the manifest <span class="rfc2119">MUST</span> be rejected when strict verification is required by policy.</li>
-                <li>Consumers <span class="rfc2119">MUST NOT</span> reinterpret unknown pairs as the baseline profile.</li>
+                <li>Evaluators <span class="rfc2119">MUST NOT</span> reinterpret unknown pairs as the baseline profile.</li>
             </ul>
 
             <h4 id="sig-revocation">1.6.6. Revocation-Aware Verification Extension</h4>
-            <p>For consumers claiming revocation-aware verification:</p>
+            <p>For evaluators claiming revocation-aware verification:</p>
             <ol>
                 <li>If <code>signature.statusRef</code> is present, resolve status from that URI (or a configured equivalent).</li>
                 <li>If <code>signature.revocationCursor</code> is present, use it to prevent stale-status acceptance and to drive cache revalidation policy.</li>
                 <li>If revocation status cannot be determined and policy requires active status, the manifest <span class="rfc2119">MUST</span> be rejected for use.</li>
             </ol>
-            <p>Consumers that do not implement revocation-aware verification <span class="rfc2119">MUST</span> report revocation status as <code>unchecked</code> and <span class="rfc2119">MUST NOT</span> claim revocation-aware conformance.</p>
+            <p>Evaluators that do not implement revocation-aware verification <span class="rfc2119">MUST</span> report revocation status as <code>unchecked</code> and <span class="rfc2119">MUST NOT</span> claim revocation-aware conformance.</p>
         </section>
     </section>
 
@@ -552,17 +724,65 @@
 
         <section id="umfacet-module">
             <h3><span class="secno">2.1. </span>um:Facet Module</h3>
-            <p>A facet is a composable part grouped within a manifest's envelope. A facet <span class="rfc2119">MUST</span> explicitly declare <code>@type: um:Facet</code>. It <span class="rfc2119">MAY</span> optionally declare a <code>name</code> for display purposes, a <code>ref</code> routing to its authoritative source, and an <code>entity</code> holding the payload parameters (<code>um:Entity</code>).</p>
+            <p>A facet is a composable part grouped within a manifest's envelope. A facet object <span class="rfc2119">MUST</span> contain the following fields:</p>
+            <ul>
+                <li><code>@id</code> &mdash; A URI uniquely identifying this facet within the manifest. <span class="rfc2119">MUST</span> be present. The consent mechanism (<a href="#consents-schema">Section 1.4.4</a>) uses <code>consents[].facetRef</code> to match against <code>facets[].@id</code>, and the receipt (<a href="#receipt-fields">Section 3.3.1</a>) records facet status by <code>@id</code>.</li>
+                <li><code>@type</code> &mdash; <span class="rfc2119">MUST</span> include <code>"um:Facet"</code>.</li>
+            </ul>
+            <p>A facet object <span class="rfc2119">SHOULD</span> contain the following field:</p>
+            <ul>
+                <li><code>entity</code> &mdash; A <code>um:Entity</code> object (<a href="#umentity-base">Section 2.2</a>) holding the facet's payload parameters. A facet without an <code>entity</code> is structurally valid but carries no payload.</li>
+            </ul>
+            <p>A facet object <span class="rfc2119">MAY</span> contain the following fields:</p>
+            <ul>
+                <li><code>name</code> &mdash; A human-readable display label for the facet.</li>
+                <li><code>ref</code> &mdash; URI routing to the facet's authoritative source.</li>
+                <li><code>requiredTrustTier</code> &mdash; Integer (0&ndash;3) overriding the manifest-level trust tier for this facet. Can only raise the floor, not lower it. See <a href="#required-trust-tier">Section 6.4.5</a>.</li>
+            </ul>
+            <p class="note"><strong>Note:</strong> Facets are identified by <code>@id</code> for consent matching and receipt recording. The <code>name</code> field is a display label and <span class="rfc2119">MUST NOT</span> be used as a unique identifier.</p>
+
+            <div class="example">
+                <div class="example-title">Example 9: Plaintext facet with all fields</div>
+<pre class="json"><code>{
+  "@id": "urn:um:facet:public-profile",
+  "@type": "um:Facet",
+  "name": "publicProfile",
+  "ref": "https://example.com/profiles/alice",
+  "entity": {
+    "@id": "urn:um:entity:alice-profile",
+    "@type": ["um:Entity", "um:IdentityProfile"],
+    "displayName": "Alice Example",
+    "avatarUrl": "https://example.com/avatars/alice.png"
+  }
+}</code></pre>
+            </div>
         </section>
 
         <section id="umentity-base">
             <h3><span class="secno">2.2. </span>um:Entity Base</h3>
-            <p>The <code>um:Entity</code> acts as the base classification for all embedded configurations, representations, or localized states. It <span class="rfc2119">MUST</span> be resolvable through an <code>@id</code> URI and typed accordingly (<code>@type</code> array).</p>
+            <p>The <code>um:Entity</code> acts as the base classification for all embedded configurations, representations, or localized states. An entity object <span class="rfc2119">MUST</span> contain the following fields:</p>
+            <ul>
+                <li><code>@id</code> &mdash; A URI uniquely identifying this entity. <span class="rfc2119">MUST</span> be present.</li>
+                <li><code>@type</code> &mdash; An array of type strings. <span class="rfc2119">MUST</span> be present and <span class="rfc2119">MUST</span> include at least one type value.</li>
+            </ul>
+            <p class="note"><strong>Note:</strong> The <code>um:Entity</code> base requires only <code>@id</code> and <code>@type</code>. Domain profiles extend the entity with additional fields specific to their use case.</p>
+            <p>All other fields on an entity are profile-extensible. Evaluators <span class="rfc2119">MUST</span> ignore unknown entity fields for processing purposes but <span class="rfc2119">MUST NOT</span> strip them before signature verification.</p>
+
+            <div class="example">
+                <div class="example-title">Example 10: Plaintext entity</div>
+<pre class="json"><code>{
+  "@id": "urn:um:entity:alice-profile",
+  "@type": ["um:Entity", "um:IdentityProfile"],
+  "displayName": "Alice Example",
+  "avatarUrl": "https://example.com/avatars/alice.png",
+  "preferredLanguage": "en"
+}</code></pre>
+            </div>
         </section>
 
         <section id="encrypted-facets">
             <h3><span class="secno">2.3. </span>Encrypted Facets (JWE Inline Profile)</h3>
-            <p>A facet <span class="rfc2119">MAY</span> carry an encrypted entity payload using the JWE inline encryption profile. This enables the issuer to include sensitive data that is readable only by designated recipients while remaining opaque to all other consumers. Encrypted facets support the opacity principle: consumers acknowledge encrypted facets as present but cannot read their contents without the appropriate decryption key.</p>
+            <p>A facet <span class="rfc2119">MAY</span> carry an encrypted entity payload using the JWE inline encryption profile. This enables the issuer to include sensitive data that is readable only by designated recipients while remaining a sealed entry to all other evaluators. Encrypted facets support the sealed-entry principle: evaluators acknowledge encrypted facets as present but cannot read their contents without the appropriate decryption key.</p>
 
             <h4 id="encrypted-facet-declaration">2.3.1. Declaration</h4>
             <p>To declare an encrypted facet, the facet <span class="rfc2119">MUST</span> include the field <code>encryptionProfile</code> with the value <code>"jwe-inline-v1"</code>. When <code>encryptionProfile</code> is present, the <code>entity</code> field <span class="rfc2119">MUST</span> contain a JWE JSON Serialization object instead of a plain <code>um:Entity</code>.</p>
@@ -576,11 +796,12 @@
                 <li><code>ciphertext</code> &mdash; base64url-encoded encrypted payload.</li>
                 <li><code>tag</code> &mdash; base64url-encoded authentication tag.</li>
             </ul>
-            <p>Consumers that do not possess a decryption key for any recipient entry <span class="rfc2119">MUST</span> treat the facet as opaque. Consumers <span class="rfc2119">MUST NOT</span> reject a manifest solely because it contains encrypted facets they cannot decrypt.</p>
+            <p>Evaluators that do not possess a decryption key for any recipient entry <span class="rfc2119">MUST</span> treat the facet as a sealed entry. Evaluators <span class="rfc2119">MUST NOT</span> reject a manifest solely because it contains encrypted facets they cannot decrypt.</p>
 
             <div class="example">
                 <div class="example-title">Example 3: Facet with JWE inline encryption</div>
 <pre class="json"><code>{
+  "@id": "urn:um:facet:medical-records",
   "@type": "um:Facet",
   "name": "privateHealth",
   "encryptionProfile": "jwe-inline-v1",
@@ -607,6 +828,7 @@
                 <li><code>previousKid</code> &mdash; the <code>kid</code> of the replaced key.</li>
                 <li><code>rotationReason</code> &mdash; human-readable description of the rotation cause.</li>
             </ul>
+            <p>Key rotation changes the manifest's signing input. The issuer <span class="rfc2119">MUST</span> re-sign the manifest after any key rotation operation.</p>
 
             <h4 id="encrypted-facet-revocation">2.3.4. Recipient Revocation</h4>
             <p>To revoke a recipient's access, the issuer <span class="rfc2119">MUST</span> remove the recipient from the <code>recipients</code> array, re-encrypt the payload with a new content encryption key, and re-issue the manifest. The JWE entity object <span class="rfc2119">MAY</span> include the following fields to signal revocation:</p>
@@ -623,44 +845,47 @@
         <p>Parallel to the Web Application Manifest lifecycle, the Universal Manifest must be systematically processed, applied, and occasionally evicted from client edges.</p>
 
         <section id="receiver-pipeline">
-            <h3><span class="secno">3.1. </span>Receiver Pipeline</h3>
-            <p>When a user agent, smart edge, or any consuming platform encounters a Universal Manifest, it <span class="rfc2119">MUST</span> process the manifest through a six-stage receiver pipeline. Each stage produces a defined output that feeds the next stage. Implementations <span class="rfc2119">MAY</span> short-circuit the pipeline at any stage by emitting a rejection receipt (see <a href="#structured-receipts">Section 3.3</a>).</p>
+            <h3><span class="secno">3.1. </span>Evaluation Sequence</h3>
+            <p>When a user agent, smart edge, or any evaluating platform encounters a Universal Manifest, it <span class="rfc2119">MUST</span> process the manifest through a six-stage evaluation sequence. Each stage produces a defined output that feeds the next stage. Implementations <span class="rfc2119">MAY</span> short-circuit the sequence at any stage by emitting a rejection receipt (see <a href="#structured-receipts">Section 3.3</a>).</p>
 
             <h4 id="pipeline-arrive">3.1.1. Stage 1: Arrive</h4>
-            <p>The manifest is received and its envelope structure becomes visible to the consumer. The consumer <span class="rfc2119">MUST</span> parse the JSON document, confirm the existence of required properties (<code>@context</code>, <code>@id</code>, <code>subject</code>, <code>issuedAt</code>, <code>expiresAt</code>), and discard any unknown fields to preserve forward compatibility. If parsing or structural validation fails, the pipeline terminates with a <code>rejected</code> receipt.</p>
+            <p>The manifest is received and its envelope structure becomes visible to the evaluator. The evaluator <span class="rfc2119">MUST</span> parse the JSON document, confirm the existence of required properties (<code>@context</code>, <code>@id</code>, <code>@type</code>, <code>manifestVersion</code>, <code>subject</code>, <code>issuedAt</code>, <code>expiresAt</code>, <code>signature</code>), and verify that <code>@type</code> includes <code>um:Manifest</code> (per <a href="#type-member">Section 1.2.3</a>). The evaluator <span class="rfc2119">MUST</span> ignore unknown fields for processing purposes but <span class="rfc2119">MUST NOT</span> remove them from the payload prior to signature verification. The full JSON object (minus only the <code>signature</code> property per <a href="#sig-input">Section 1.6.3</a>) is the input to JCS canonicalization in the Verify stage. After verification succeeds, unrecognized fields have no normative semantics and <span class="rfc2119">MUST NOT</span> affect evaluation sequence outcomes. If parsing or structural validation fails, the pipeline terminates with a <code>rejected</code> receipt.</p>
+            <p class="note"><strong>Note:</strong> This ensures extension fields survive the verification boundary while having no effect on pipeline behavior. Forward compatibility is preserved because evaluators do not act on unknown fields, but signature integrity is maintained because those fields remain in the signing input.</p>
 
             <h4 id="pipeline-verify">3.1.2. Stage 2: Verify</h4>
-            <p>The consumer <span class="rfc2119">MUST</span> verify the manifest's cryptographic integrity and freshness. This stage includes:</p>
+            <p>The evaluator <span class="rfc2119">MUST</span> verify the manifest's cryptographic integrity and freshness. This stage includes:</p>
             <ol>
-                <li>Signature verification against the JCS-canonicalized payload per the declared signature profile (see <a href="#signature-profile-v02">Section 1.6</a>).</li>
+                <li>Signature verification against the JCS-canonicalized payload per the declared signature profile (see <a href="#signature-profile-a">Section 1.6</a>).</li>
                 <li>Freshness enforcement: reject if <code>now &gt; expiresAt</code> or if <code>issuedAt &gt; expiresAt</code>.</li>
-                <li>Revocation status resolution, if <code>signature.statusRef</code> is present and the consumer implements revocation-aware verification.</li>
+                <li>Revocation status resolution, if <code>signature.statusRef</code> is present and the evaluator implements revocation-aware verification.</li>
             </ol>
-            <p>If signature verification fails, the manifest <span class="rfc2119">MUST</span> be rejected. The consumer <span class="rfc2119">MAY</span> retain the manifest for debugging purposes.</p>
+            <p>If signature verification fails, the manifest <span class="rfc2119">MUST</span> be rejected. The evaluator <span class="rfc2119">MAY</span> retain the manifest for debugging purposes.</p>
+            <p>Evaluators <span class="rfc2119">SHOULD</span> allow a clock-skew tolerance of no more than 60 seconds for <code>issuedAt</code> and <code>expiresAt</code> comparisons. Manifests with <code>issuedAt</code> more than 60 seconds in the future relative to the evaluator's clock <span class="rfc2119">SHOULD</span> be rejected with outcome <code>rejected</code> and <code>freshnessCheck: "stale"</code>. Deployments in environments without NTP (constrained devices, air-gapped venues) <span class="rfc2119">MAY</span> configure wider tolerances but <span class="rfc2119">MUST</span> document the tolerance in their conformance claim.</p>
 
             <h4 id="pipeline-project">3.1.3. Stage 3: Project</h4>
-            <p>The consumer <span class="rfc2119">MUST</span> extract only the facets, claims, and pointers relevant to its processing context. Projection is sender-controlled: the manifest issuer determines which facets are included in a given manifest instance. The consumer <span class="rfc2119">MUST NOT</span> assume that the manifest contains the complete set of the subject's facets. Facets not included in the manifest are not absent &mdash; they are not projected for this interaction.</p>
+            <p>The evaluator <span class="rfc2119">MUST</span> extract only the facets, claims, and pointers relevant to its processing context. Selective disclosure is issuer-controlled: the manifest issuer determines which facets are included in a given manifest instance. The evaluator <span class="rfc2119">MUST NOT</span> assume that the manifest contains the complete set of the subject's facets. Facets not included in the manifest are not absent &mdash; they are not projected for this interaction.</p>
 
             <h4 id="pipeline-consent">3.1.4. Stage 4: Consent</h4>
-            <p>The consumer <span class="rfc2119">MUST</span> evaluate per-facet consent records before acting on facet data. For each facet:</p>
+            <p>The evaluator <span class="rfc2119">MUST</span> evaluate per-facet consent records before acting on facet data. For each projected facet, the evaluator matches the facet's <code>@id</code> against <code>consents[].facetRef</code> values (see <a href="#consents-schema">Section 1.4.4</a>). For each facet:</p>
             <ul>
-                <li>If a <code>consents</code> entry governs the facet, the consumer <span class="rfc2119">MUST</span> verify that consent scope, purpose, and expiry are satisfied.</li>
-                <li>If a facet is encrypted (see <a href="#encrypted-facets">Section 2.3</a>), the consumer <span class="rfc2119">MUST</span> acknowledge the facet as opaque if it lacks a decryption key. Opaque facets are recorded as present but not read.</li>
+                <li>If a <code>consents</code> entry governs the facet (i.e., a consent entry exists whose <code>facetRef</code> matches the facet's <code>@id</code>), the evaluator <span class="rfc2119">MUST</span> verify that consent scope, purpose, and expiry are satisfied. Specifically: the evaluator's intended operation <span class="rfc2119">MUST</span> appear in the consent's <code>scope</code> array, the evaluator's intended use <span class="rfc2119">MUST</span> fall within the consent's declared <code>purpose</code>, and the current time <span class="rfc2119">MUST</span> be before the consent's <code>expiresAt</code>. If a <code>withdrawnAt</code> field is present, the consent is treated as absent.</li>
+                <li>If a facet is encrypted (see <a href="#encrypted-facets">Section 2.3</a>) and the evaluator lacks a decryption key, the evaluator <span class="rfc2119">MUST</span> acknowledge the facet as a sealed entry. Sealed entries are recorded as present but not read.</li>
+                <li>If no consent entry governs the facet and the facet is not a sealed entry, the evaluator <span class="rfc2119">MUST</span> record the facet status as <code>"consent-missing"</code>.</li>
             </ul>
-            <p>Consumers <span class="rfc2119">MUST NOT</span> process facet data when required consent is absent or expired.</p>
+            <p>Evaluators <span class="rfc2119">MUST NOT</span> process facet data when required consent is absent, expired, or withdrawn.</p>
 
             <h4 id="pipeline-compose">3.1.5. Stage 5: Compose</h4>
-            <p>The consumer composes the processing result into one of four outcome categories:</p>
+            <p>The evaluator composes the processing result into one of four outcome categories:</p>
             <ul>
                 <li><code>accepted</code> &mdash; all projected facets processed, all consent requirements satisfied, signature valid.</li>
                 <li><code>accepted-with-warnings</code> &mdash; manifest accepted but one or more non-critical conditions were noted (e.g., revocation status could not be checked).</li>
-                <li><code>accepted-partial</code> &mdash; some facets were processed; others were rejected, opaque, or lacked consent.</li>
-                <li><code>rejected</code> &mdash; the manifest failed a mandatory check (signature, freshness, structural validity, or required consent).</li>
+                <li><code>accepted-partial</code> &mdash; some facets were processed; others were rejected, sealed (encrypted and undecryptable), or lacked consent.</li>
+                <li><code>rejected</code> &mdash; the manifest failed a mandatory check (signature, freshness, structural validity, required consent, or a manifest-level <code>requiredTrustTier</code> that the evaluator cannot satisfy).</li>
             </ul>
             <p>The composed result <span class="rfc2119">MUST</span> be machine-readable and <span class="rfc2119">MUST</span> include per-facet status.</p>
 
             <h4 id="pipeline-receipt">3.1.6. Stage 6: Receipt</h4>
-            <p>The consumer <span class="rfc2119">MUST</span> produce a structured receipt (see <a href="#structured-receipts">Section 3.3</a>) that honestly records what the receiver actually did. The receipt captures the outcome of each preceding stage. Consumers <span class="rfc2119">MUST NOT</span> omit failed checks or suppress negative outcomes from the receipt.</p>
+            <p>The evaluator <span class="rfc2119">MUST</span> produce a structured receipt (see <a href="#structured-receipts">Section 3.3</a>) that honestly records what the evaluator actually did. The receipt captures the outcome of each preceding stage. Evaluators <span class="rfc2119">MUST NOT</span> omit failed checks or suppress negative outcomes from the receipt.</p>
         </section>
 
         <section id="caching-formulation">
@@ -675,38 +900,44 @@
 
         <section id="structured-receipts">
             <h3><span class="secno">3.3. </span>Structured Receipts</h3>
-            <p>A structured receipt is the terminal output of the receiver pipeline (<a href="#receiver-pipeline">Section 3.1</a>). It provides an honest, machine-readable record of what the receiver did with the manifest. Consumers <span class="rfc2119">MUST</span> produce a receipt for every manifest processed through the pipeline.</p>
+            <p>A structured receipt is the terminal output of the evaluation sequence (<a href="#receiver-pipeline">Section 3.1</a>). It provides an honest, machine-readable record of what the evaluator did with the manifest. Evaluators <span class="rfc2119">MUST</span> produce a receipt for every manifest processed through the evaluation sequence.</p>
 
             <h4 id="receipt-fields">3.3.1. Receipt Fields</h4>
             <p>A receipt <span class="rfc2119">MUST</span> include the following fields:</p>
             <ul>
+                <li><code>@type</code> &mdash; <span class="rfc2119">MUST</span> include <code>"um:Receipt"</code>.</li>
                 <li><code>manifestId</code> &mdash; the <code>@id</code> of the processed manifest.</li>
                 <li><code>outcome</code> &mdash; one of <code>"accepted"</code>, <code>"accepted-with-warnings"</code>, <code>"accepted-partial"</code>, or <code>"rejected"</code>.</li>
                 <li><code>signatureCheck</code> &mdash; result of signature verification: <code>"valid"</code>, <code>"invalid"</code>, or <code>"unsupported-profile"</code>.</li>
-                <li><code>freshnessCheck</code> &mdash; result of TTL enforcement: <code>"fresh"</code> or <code>"expired"</code>.</li>
+                <li><code>freshnessCheck</code> &mdash; result of TTL enforcement: <code>"fresh"</code>, <code>"expired"</code>, or <code>"stale"</code>. The <code>"stale"</code> value indicates that the manifest's <code>issuedAt</code> is in the future relative to the evaluator's clock (beyond the permitted clock-skew tolerance).</li>
             </ul>
+            <p>A receipt <span class="rfc2119">MUST</span> include a <code>facetStatuses</code> array when the manifest contains one or more facets. If the manifest contains zero facets, <code>facetStatuses</code> <span class="rfc2119">MUST</span> be an empty array. Each entry in the array is a per-facet status object containing a <code>facetId</code> (matching the facet's <code>@id</code>), <code>status</code> (<code>"processed"</code>, <code>"opaque"</code>, <code>"consent-denied"</code>, <code>"consent-missing"</code>, or <code>"not-projected"</code>), an <span class="rfc2119">OPTIONAL</span> <code>name</code> (the facet's display label, if present), and an optional <code>reason</code> string.</p>
+            <p>The <code>"not-projected"</code> status indicates that the evaluator's local policy expected a specific facet (identified by type or name) that is absent from the presented manifest. This status is <span class="rfc2119">OPTIONAL</span> and applies only when the evaluator has prior knowledge of the subject's manifest schema. Evaluators without such knowledge <span class="rfc2119">MUST NOT</span> produce <code>"not-projected"</code> entries.</p>
             <p>A receipt <span class="rfc2119">SHOULD</span> include the following fields when applicable:</p>
             <ul>
                 <li><code>revocationStatus</code> &mdash; <code>"active"</code>, <code>"revoked"</code>, or <code>"unchecked"</code>.</li>
-                <li><code>facetStatuses</code> &mdash; array of per-facet status objects, each containing a <code>name</code> (facet name), <code>status</code> (<code>"processed"</code>, <code>"opaque"</code>, <code>"consent-denied"</code>, <code>"consent-missing"</code>, or <code>"not-projected"</code>), and an optional <code>reason</code> string.</li>
-                <li><code>consentStatuses</code> &mdash; array of per-consent status objects indicating whether each consent requirement was satisfied.</li>
+                <li><code>consentStatuses</code> &mdash; array of per-consent status objects. Each entry <span class="rfc2119">MUST</span> contain: <code>facetId</code> (the <code>@id</code> of the governed facet), <code>consentRef</code> (reference to the consent entry), <code>status</code> (one of <code>"valid"</code>, <code>"expired"</code>, <code>"withdrawn"</code>, or <code>"missing"</code>), and <code>checkedAt</code> (ISO 8601 date-time when the consent status was evaluated).</li>
                 <li><code>processedAt</code> &mdash; ISO 8601 date-time when the receipt was produced.</li>
                 <li><code>warnings</code> &mdash; array of warning strings for the <code>accepted-with-warnings</code> outcome.</li>
+                <li><code>receiptId</code> &mdash; unique identifier for the receipt (<span class="rfc2119">SHOULD</span> be an opaque URI, e.g., <code>urn:uuid:...</code>).</li>
+                <li><code>evaluatorId</code> &mdash; DID or identifier of the evaluator that produced the receipt.</li>
+                <li><code>receiptSignature</code> &mdash; optional signature over the receipt using the evaluator's key, following the same profile as manifest signatures (Signature Profile A).</li>
             </ul>
+            <p class="note"><strong>Note:</strong> Receipt signing is <span class="rfc2119">RECOMMENDED</span> for accountability use cases but is not required for v0.3 conformance. Unsigned receipts are valid evaluation sequence outputs but provide weaker non-repudiation guarantees.</p>
 
-            <p class="note"><strong>Note:</strong> The receipt schema is preliminary. Conformance fixtures for receipt validation are forthcoming.</p>
 
             <div class="example">
                 <div class="example-title">Example 4: Structured receipt</div>
 <pre class="json"><code>{
+  "@type": "um:Receipt",
   "manifestId": "urn:uuid:123e4567-e89b-12d3-a456-426614174000",
   "outcome": "accepted-partial",
   "signatureCheck": "valid",
   "freshnessCheck": "fresh",
   "revocationStatus": "unchecked",
   "facetStatuses": [
-    { "name": "publicProfile", "status": "processed" },
-    { "name": "privateHealth", "status": "opaque", "reason": "no decryption key" }
+    { "facetId": "urn:um:facet:public-profile", "name": "publicProfile", "status": "processed" },
+    { "facetId": "urn:um:facet:private-health", "name": "privateHealth", "status": "opaque", "reason": "no decryption key" }
   ],
   "processedAt": "2026-05-19T12:00:00Z"
 }</code></pre>
@@ -717,41 +948,47 @@
     <section id="conformance">
         <h2><span class="secno">4. </span>Conformance</h2>
         <section id="required-behavior-consumer">
-            <h3><span class="secno">4.1. </span>Consumer Behavior</h3>
-            <p>A consumer platform parsing the manifest <span class="rfc2119">MUST</span> validate structural parameters and securely ignore unknown elements without raising fatal invocation errors. Freshness (via <code>expiresAt</code> TTL constraints) is an absolute rejection gateway. Implementers <span class="rfc2119">MUST</span> verify <code>issuedAt &lt;= expiresAt</code>.</p>
-            <p>Consumers claiming v0.3 conformance <span class="rfc2119">MUST</span> implement the six-stage receiver pipeline defined in <a href="#receiver-pipeline">Section 3.1</a>. Specifically, a conformant consumer <span class="rfc2119">MUST</span>:</p>
+            <h3><span class="secno">4.1. </span>Evaluator Behavior</h3>
+            <p>An evaluator parsing the manifest <span class="rfc2119">MUST</span> validate structural parameters and securely ignore unknown elements without raising fatal invocation errors. Freshness (via <code>expiresAt</code> TTL constraints) is an absolute rejection gateway. Implementers <span class="rfc2119">MUST</span> verify <code>issuedAt &lt;= expiresAt</code>.</p>
+            <p>Evaluators claiming v0.3 conformance <span class="rfc2119">MUST</span> implement the six-stage evaluation sequence defined in <a href="#receiver-pipeline">Section 3.1</a>. Specifically, a conformant evaluator <span class="rfc2119">MUST</span>:</p>
             <ol>
-                <li>Execute all six pipeline stages in order (Arrive, Verify, Project, Consent, Compose, Receipt).</li>
+                <li>Execute all six stages in order (Arrive, Verify, Project, Consent, Compose, Receipt).</li>
                 <li>Produce a structured receipt (<a href="#structured-receipts">Section 3.3</a>) for every processed manifest.</li>
-                <li>Treat encrypted facets as opaque when the consumer lacks a decryption key, recording them as present in the receipt.</li>
+                <li>Treat encrypted facets as sealed entries when the evaluator lacks a decryption key, recording them as present in the receipt.</li>
                 <li>Respect <code>requiredTrustTier</code> declarations at the manifest, claim, and facet levels.</li>
             </ol>
         </section>
 
         <section id="required-behavior-issuer">
             <h3><span class="secno">4.2. </span>Issuer Behavior</h3>
-            <p>Issuers generating the manifest <span class="rfc2119">MUST</span> assign a globally stable identifier URI for the <code>subject</code> (preferably an established DID) and a random URI for the manifest root (<code>@id</code>). To shield clients from unbounded trust windows, issuers <span class="rfc2119">MUST</span> strictly bound <code>expiresAt</code> to a sensible interaction lifetime (e.g., hours or days).</p>
+            <p>Issuers generating the manifest <span class="rfc2119">MUST</span> assign a globally stable identifier URI for the <code>subject</code> (preferably an established DID) and a random URI for the manifest root (<code>@id</code>). To shield clients from unbounded trust windows, issuers <span class="rfc2119">MUST</span> strictly bound <code>expiresAt</code> to a sensible interaction lifetime (e.g., hours or days). Issuers <span class="rfc2119">MUST</span> sign every manifest prior to distribution using Signature Profile A (<a href="#signature-profile-a">Section 1.6</a>) or a subsequent normative profile.</p>
+        </section>
+
+        <section id="bilateral-participant-behavior">
+            <h3><span class="secno">4.3. </span>Bilateral Participant Behavior</h3>
+            <p>A Conformant Bilateral Participant <span class="rfc2119">MUST</span> implement both Evaluator Behavior (<a href="#required-behavior-consumer">Section 4.1</a>) and Issuer Behavior (<a href="#required-behavior-issuer">Section 4.2</a>). In a bilateral exchange (see <a href="#bilateral-exchange">Section 6.4.6</a>), both parties independently evaluate the other's manifest. The effective trust tier for the interaction is the maximum of either party's <code>requiredTrustTier</code>.</p>
         </section>
 
         <section id="standalone-conformance-suite">
-            <h3><span class="secno">4.3. </span>Standalone Conformance Suite</h3>
+            <h3><span class="secno">4.4. </span>Standalone Conformance Suite</h3>
             <p>Implementations validate conformance claims natively by testing against the official <code>conformance/</code> suite&mdash;which includes fixture validation (accepting valid stubs and correctly isolating/flagging malformed artifacts like missing contexts or expired logic trees).</p>
-            <p>Implementations claiming v0.2 conformance <span class="rfc2119">MUST</span> pass the standalone conformance suite and should publish their claimed level using the guidance at <a href="https://universalmanifest.net/conformance/v0.2/">https://universalmanifest.net/conformance/v0.2/</a>.</p>
+            <p>Implementations claiming v0.3 conformance <span class="rfc2119">MUST</span> pass the standalone conformance suite and should publish their claimed level using the guidance at <a href="https://universalmanifest.net/conformance/v0.3/">https://universalmanifest.net/conformance/v0.3/</a>.</p>
+            <p class="note"><strong>Note:</strong> The v0.3 conformance suite extends v0.2 with evaluation sequence, encrypted facet, and receipt schema validation tests. Full receipt behavioral tests (verifying that receipts honestly reflect pipeline execution) require a test oracle and are planned for v0.3.1.</p>
         </section>
     </section>
 
     <section id="extensibility-profiles">
         <h2><span class="secno">5. </span>Extensibility &amp; Profiles</h2>
-        <p>Echoing the extensibility models of generic W3C recommendations, proprietary manifest members can be injected via fully qualified URIs inside the linked <code>@context</code>. Consumers ignoring unrecognized properties guarantees that domain-specific profiles won't shatter cross-system interoperability.</p>
+        <p>Echoing the extensibility models of generic W3C recommendations, proprietary manifest members can be injected via fully qualified URIs inside the linked <code>@context</code>. Evaluators ignoring unrecognized properties guarantees that domain-specific profiles do not compromise cross-system interoperability.</p>
     </section>
 
     <section id="security-considerations">
         <h2><span class="secno">6. </span>Security Considerations</h2>
-        <p><strong>Warning:</strong> Version 0.1 intentionally defers universal cryptographic standardization. Version 0.2 introduces a normative signature profile and an identity binding framework. Version 0.3 defines Tier 2 cryptographic binding via zero-knowledge proofs (at risk; see <a href="#tiered-trust">Section 6.4.2</a>). Multi-party ceremony mechanisms (Tier 3) are deferred to future versions.</p>
+        <p>Universal Manifest v0.3 defines a mandatory signature profile, an additive tiered trust model, and resource-limit guidance. This section specifies the security properties these mechanisms provide and the threats they mitigate.</p>
 
         <section id="signature-limitations">
             <h3><span class="secno">6.1. </span>Signature Limitations</h3>
-            <p>The v0.1 baseline format does not prescribe canonicalization or algorithm constraints. Version 0.2 addressed this gap by introducing the normative JCS + Ed25519 signature profile (see <a href="#signature-profile-v02">Section 1.6</a>). Implementers <span class="rfc2119">MUST</span> use the v0.2 signature profile or a subsequent normative profile for production deployments. The v0.1 permissive signature format <span class="rfc2119">MUST NOT</span> be relied upon for tamper protection.</p>
+            <p>Implementers <span class="rfc2119">MUST</span> use Signature Profile A (<a href="#signature-profile-a">Section 1.6</a>) or a subsequent normative profile for production deployments. The v0.1 permissive signature format <span class="rfc2119">MUST NOT</span> be relied upon for tamper protection.</p>
         </section>
 
         <section id="ttl-enforcement">
@@ -773,7 +1010,7 @@
             <h3><span class="secno">6.4. </span>Identity Binding and Claim Authenticity</h3>
 
             <h4 id="bag-of-claims">6.4.1. Bag of Claims Limitation</h4>
-            <p>A Universal Manifest may contain claims from multiple issuers and references to multiple DIDs under a single <code>subject</code>. The v0.2 signature proves that the signer produced the manifest. It does <strong>not</strong> prove:</p>
+            <p>A Universal Manifest may contain claims from multiple issuers and references to multiple DIDs under a single <code>subject</code>. The manifest signature proves that the signer produced the manifest. It does <strong>not</strong> prove:</p>
             <ul>
                 <li>That the signer controls the <code>subject</code> DID (subject-signer binding).</li>
                 <li>That the <code>subject</code> controls all DIDs mentioned in claims or facets (cross-DID control).</li>
@@ -784,11 +1021,11 @@
             <h4 id="tiered-trust">6.4.2. Tiered Trust Model</h4>
             <p>The specification defines four trust tiers for claim verification. Each tier is strictly additive &mdash; a higher-tier manifest also satisfies all lower-tier requirements. Higher tiers provide stronger guarantees but impose more user ceremony. The specification does <span class="rfc2119">NOT</span> mandate a minimum tier; relying parties choose based on their threat model and acceptable user friction.</p>
 
-            <p><strong>Tier 0 &mdash; Signature-only.</strong> Zero friction. Claims are self-asserted by the manifest signer. No external <code>claimProof</code> material is present. Suitable for low-stakes use cases where the relying party has an out-of-band trust relationship with the signer. Consumers claiming Tier 0 acceptance <span class="rfc2119">MUST</span> verify the manifest signature per the declared profile. Tier 0 <span class="rfc2119">MUST NOT</span> be used as sufficient assurance for Sybil-critical decisions.</p>
+            <p><strong>Tier 0 &mdash; Signature-only.</strong> Zero friction. Claims are self-asserted by the manifest signer. No external <code>claimProof</code> material is present. Suitable for low-stakes use cases where the relying party has an out-of-band trust relationship with the signer. Evaluators claiming Tier 0 acceptance <span class="rfc2119">MUST</span> verify the manifest signature per the declared profile. Tier 0 <span class="rfc2119">MUST NOT</span> be used as sufficient assurance for Sybil-critical decisions.</p>
 
-            <p><strong>Tier 1 &mdash; Attested or claimProof-backed.</strong> Low friction. Some or all claims carry external <code>claimProof</code> material (Verifiable Presentations) or an attested cross-DID binding claim (<code>identity.crossDidBinding</code>). Relying parties can verify specific claims against their issuers or evaluate attester trust. Consumers claiming Tier 1 assurance <span class="rfc2119">MUST</span> enforce attester trust policy and freshness/expiry checks on the proof material used for Tier 1 acceptance. Consumers <span class="rfc2119">MUST</span> validate the <code>claimProof</code> proof chain or the attester's cross-DID binding attestation before granting Tier 1 trust. Suitable for medium-stakes use cases (social identity, reputation, basic access control).</p>
+            <p><strong>Tier 1 &mdash; Attested or claimProof-backed.</strong> Low friction. Some or all claims carry external <code>claimProof</code> material (Verifiable Presentations) or an attested cross-DID binding claim (<code>identity.crossDidBinding</code>). Relying parties can verify specific claims against their issuers or evaluate attester trust. Evaluators claiming Tier 1 assurance <span class="rfc2119">MUST</span> enforce attester trust policy and freshness/expiry checks on the proof material used for Tier 1 acceptance. Evaluators <span class="rfc2119">MUST</span> validate the <code>claimProof</code> proof chain or the attester's cross-DID binding attestation before granting Tier 1 trust. Suitable for medium-stakes use cases (social identity, reputation, basic access control).</p>
 
-            <p><strong>Tier 2 &mdash; Cryptographic binding.</strong> Medium friction. Cross-DID control is cryptographically proven via zero-knowledge proof of cross-DID control. The subject demonstrates control of multiple DIDs without revealing private key material, using a ZK proof that the same entity controls the keys behind each DID. Consumers claiming Tier 2 assurance <span class="rfc2119">MUST</span> verify the ZK proof before granting Tier 2 trust. Suitable for high-stakes Sybil-resistance use cases. <span class="note">At risk: this feature may be removed if implementations do not materialize before v0.4.</span></p>
+            <p><strong>Tier 2 &mdash; Cryptographic binding.</strong> Medium friction. Cross-DID control is cryptographically proven via zero-knowledge proof of cross-DID control. The subject demonstrates control of multiple DIDs without revealing private key material, using a ZK proof that the same entity controls the keys behind each DID. Evaluators claiming Tier 2 assurance <span class="rfc2119">MUST</span> verify the ZK proof before granting Tier 2 trust. Suitable for high-stakes Sybil-resistance use cases. <span class="note">At risk: this feature may be removed if implementations do not materialize before v0.4.</span></p>
 
             <p><strong>Tier 3 &mdash; Multi-party ceremony.</strong> High friction. Multiple keyholders (potentially different people, different locations) must co-sign. Analogous to multi-sig wallets. Suitable for the highest-stakes organizational and financial contexts. (Future: v0.4+.)</p>
 
@@ -798,8 +1035,8 @@
             <p>The <code>claimProof</code> field is an <span class="rfc2119">OPTIONAL</span> property on any claim object. It carries a Verifiable Presentation or attestation proof demonstrating claim issuance to the manifest subject. This field enables Tier 1 verification.</p>
             <p>The field is named <code>claimProof</code> rather than <code>evidence</code> to avoid collision with the W3C Verifiable Credentials Data Model v2.0 <code>evidence</code> property (VCDM section 9.2), which has overlapping but distinct semantics.</p>
             <p><code>claimProof</code> <span class="rfc2119">MAY</span> be an embedded object (a VP or attestation proof) or a string (URI reference to a VP or attestation endpoint).</p>
-            <p>When present as an embedded object, the consumer <span class="rfc2119">SHOULD</span> verify the VP proof chain: (a) VC signature validates to the stated issuer, (b) VP signature validates to the holder, (c) holder DID matches the manifest subject.</p>
-            <p>When present as a URI string, the consumer <span class="rfc2119">MAY</span> fetch the VP for verification when network access is available. Consumers that cannot resolve the URI <span class="rfc2119">SHOULD</span> report the claim as <code>claimProof-unresolved</code> rather than <code>verified</code>.</p>
+            <p>When claiming Tier 1 assurance or higher, the evaluator <span class="rfc2119">MUST</span> perform the verification steps below. At Tier 0, these checks are <span class="rfc2119">OPTIONAL</span>. When present as an embedded object, the evaluator <span class="rfc2119">MUST</span> verify the VP proof chain: (a) VC signature validates to the stated issuer, (b) VP signature validates to the holder, (c) holder DID matches the manifest subject.</p>
+            <p>When present as a URI string, the evaluator <span class="rfc2119">MAY</span> fetch the VP for verification when network access is available. Evaluators that cannot resolve the URI <span class="rfc2119">SHOULD</span> report the claim as <code>claimProof-unresolved</code> rather than <code>verified</code>.</p>
             <p>VPs used as <code>claimProof</code> <span class="rfc2119">SHOULD</span> include domain (audience binding) and challenge (nonce) parameters to prevent cross-manifest replay.</p>
             <p>Size limits: maximum 50 KB per embedded VP; maximum 500 KB total VP payload across all claims in one manifest.</p>
 
@@ -810,6 +1047,7 @@
                 <div class="example-title">Example 5: Cross-DID binding claim</div>
 <pre class="json"><code>{
   "@type": "identity.crossDidBinding",
+  "issuer": "did:web:verify.example",
   "boundDids": ["did:key:z6MkAlice", "did:plc:alice-bsky"],
   "attester": "did:web:verify.example",
   "attestationMethod": "AT Protocol handle resolution",
@@ -818,20 +1056,21 @@
 }</code></pre>
             </div>
 
-            <p>Required fields:</p>
+            <p>A <code>crossDidBinding</code> claim <span class="rfc2119">MUST</span> contain the following fields:</p>
             <ul>
                 <li><code>@type</code> &mdash; <span class="rfc2119">MUST</span> be <code>"identity.crossDidBinding"</code>.</li>
+                <li><code>issuer</code> &mdash; DID or URI identifying the entity that asserts the claim. <span class="rfc2119">MUST</span> be present (inherited from the base claim schema, <a href="#claims-schema">Section 1.4.3</a>).</li>
                 <li><code>boundDids</code> &mdash; Array of DID strings asserted as controlled by the same entity. <span class="rfc2119">MUST</span> contain at least 2 DIDs. One <span class="rfc2119">MUST</span> match the manifest <code>subject</code>.</li>
-                <li><code>attester</code> &mdash; DID or URI of the entity attesting the binding.</li>
-                <li><code>attestationMethod</code> &mdash; Human-readable description of the verification method used.</li>
-                <li><code>attestedAt</code> &mdash; ISO 8601 timestamp of when the attestation was produced.</li>
+                <li><code>attester</code> &mdash; DID or URI of the entity attesting the binding. <span class="rfc2119">MUST</span> be present.</li>
+                <li><code>attestationMethod</code> &mdash; Human-readable description of the verification method used. <span class="rfc2119">MUST</span> be present.</li>
+                <li><code>attestedAt</code> &mdash; ISO 8601 timestamp of when the attestation was produced. <span class="rfc2119">MUST</span> be present.</li>
             </ul>
-            <p>Optional fields:</p>
+            <p>A <code>crossDidBinding</code> claim <span class="rfc2119">MAY</span> contain the following fields:</p>
             <ul>
                 <li><code>claimProof</code> &mdash; URI or structured object pointing to the attestation proof.</li>
-                <li><code>expiresAt</code> &mdash; Attestation expiry. Relying parties <span class="rfc2119">SHOULD</span> reject expired attestations.</li>
+                <li><code>expiresAt</code> &mdash; Attestation expiry. Evaluators <span class="rfc2119">SHOULD</span> reject expired attestations.</li>
             </ul>
-            <p>Relying parties <span class="rfc2119">MUST NOT</span> treat the presence of a binding claim as proof of common control unless they trust the attester. Relying parties <span class="rfc2119">SHOULD</span> maintain a configurable attester trust list. Multiple binding claims for overlapping DID sets are independent assertions, not cumulative proof.</p>
+            <p>Evaluators <span class="rfc2119">MUST NOT</span> treat the presence of a binding claim as proof of common control unless they trust the attester. Evaluators <span class="rfc2119">SHOULD</span> maintain a configurable attester trust list. Multiple binding claims for overlapping DID sets are independent assertions, not cumulative proof.</p>
 
             <h4 id="required-trust-tier">6.4.5. <code>requiredTrustTier</code> Declaration</h4>
             <p>A manifest <span class="rfc2119">MAY</span> declare the minimum trust tier required for specific claims, facets, or the manifest as a whole via the <code>requiredTrustTier</code> field. This field is an integer (0&ndash;3) indicating the minimum verification tier a relying party <span class="rfc2119">MUST</span> satisfy before acting on the associated data.</p>
@@ -841,6 +1080,7 @@
                 <li><strong>Facet-level:</strong> a <code>requiredTrustTier</code> on a facet applies to that facet only.</li>
             </ul>
             <p>If a claim carries <code>requiredTrustTier: 2</code> but the relying party can only verify at Tier 1, the relying party <span class="rfc2119">MUST</span> treat that claim as unverified. If absent, the default is 0 (no minimum required). The manifest-level value sets the floor; claim/facet-level values can only raise it, not lower it.</p>
+            <p>If a manifest or claim specifies a <code>requiredTrustTier</code> value for which the evaluator has no implemented verification profile (e.g., Tier 3 in v0.3, where no ceremony profile is defined), the evaluator <span class="rfc2119">MUST</span> treat the item as unverifiable and record it in the receipt as <code>"trustTierUnsupported"</code>. The evaluator <span class="rfc2119">MUST NOT</span> downgrade to a lower tier. The pipeline outcome for the overall manifest is <code>"accepted-partial"</code> if other items can still be processed, or <code>"rejected"</code> if the unsupported tier applies at the manifest level.</p>
 
             <div class="example">
                 <div class="example-title">Example 6: Manifest with requiredTrustTier</div>
@@ -916,7 +1156,7 @@
 
         <p><strong>Privacy-Binding Tension.</strong> Universal Manifest supports both privacy-preserving pairwise DIDs and cross-DID binding mechanisms. These goals are in fundamental tension: stronger binding enables correlation, while stronger privacy prevents binding verification. The specification does not fully address this tension at the protocol level. Instead, it provides mechanisms for both and requires relying parties to define their trust tier based on their specific threat model. Relying parties <span class="rfc2119">MUST NOT</span> require cross-DID binding unless their use case demands Sybil resistance or trust transitivity. Subjects <span class="rfc2119">SHOULD</span> use the minimum binding tier that satisfies their relying parties' requirements.</p>
 
-        <p><strong>Opacity and Projection.</strong> Encrypted facets (see <a href="#encrypted-facets">Section 2.3</a>) provide data minimization at the envelope level. Sensitive data is encrypted inline; consumers without the appropriate decryption key observe the facet as opaque &mdash; present but unreadable. Combined with sender-controlled projection (<a href="#pipeline-project">Section 3.1.3</a>), issuers control both which facets are included in a given manifest instance and which parties can decrypt specific facets. This two-layer model (projection controls visibility; encryption controls readability) enables selective disclosure without requiring separate credential presentations for each relying party. Issuers <span class="rfc2119">SHOULD</span> encrypt facets containing personal data or sensitive attributes. Consumers <span class="rfc2119">MUST NOT</span> infer information about the content of opaque facets from their presence, size, or metadata.</p>
+        <p><strong>Sealed Entries and Selective Disclosure.</strong> Encrypted facets (see <a href="#encrypted-facets">Section 2.3</a>) provide data minimization at the envelope level. Sensitive data is encrypted inline; evaluators without the appropriate decryption key observe the facet as a sealed entry &mdash; present but unreadable. Combined with issuer-controlled selective disclosure (<a href="#pipeline-project">Section 3.1.3</a>), issuers control both which facets are included in a given manifest instance and which parties can decrypt specific facets. This two-layer model (selective disclosure controls visibility; encryption controls readability) enables fine-grained data minimization without requiring separate credential presentations for each relying party. Issuers <span class="rfc2119">SHOULD</span> encrypt facets containing personal data or sensitive attributes. Evaluators <span class="rfc2119">MUST NOT</span> infer information about the content of sealed entries from their presence, size, or metadata.</p>
 
         <p><strong>Data Protection.</strong> The privacy considerations in this specification identify relevant data protection provisions but do not constitute a Data Protection Impact Assessment. Deployers operating under GDPR or equivalent frameworks <span class="rfc2119">MUST</span> conduct their own assessment for cross-DID binding operations, cross-border attester data flows, and mandatory binding requirements.</p>
     </section>
@@ -925,30 +1165,84 @@
         <h2><span class="secno">8. </span>References</h2>
         <section id="normative-references">
             <h3><span class="secno">8.1. </span>Normative References</h3>
-            <p>The following project governance documents control how published Universal Manifest specification changes, deprecations, incidents, releases, and RFC intake are handled.</p>
-            <ol>
-                <li>Breaking-Change Policy</li>
-                <li>Deprecation Policy</li>
-                <li>Incident Response and Rollback</li>
-                <li>Release Cadence</li>
-                <li>Spec Improvement Queue</li>
-            </ol>
+            <dl>
+                <dt id="ref-rfc2119">[RFC2119]</dt>
+                <dd>S. Bradner. <a href="https://www.rfc-editor.org/rfc/rfc2119"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. IETF BCP 14, RFC 2119, March 1997.</dd>
+
+                <dt id="ref-rfc8174">[RFC8174]</dt>
+                <dd>B. Leiba. <a href="https://www.rfc-editor.org/rfc/rfc8174"><cite>Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</cite></a>. IETF BCP 14, RFC 8174, May 2017.</dd>
+
+                <dt id="ref-rfc8785">[RFC8785]</dt>
+                <dd>A. Rundgren, B. Jordan, S. Erdtman. <a href="https://www.rfc-editor.org/rfc/rfc8785"><cite>JSON Canonicalization Scheme (JCS)</cite></a>. IETF RFC 8785, June 2020.</dd>
+
+                <dt id="ref-rfc8032">[RFC8032]</dt>
+                <dd>S. Josefsson, I. Liusvaara. <a href="https://www.rfc-editor.org/rfc/rfc8032"><cite>Edwards-Curve Digital Signature Algorithm (EdDSA)</cite></a>. IETF RFC 8032, January 2017.</dd>
+
+                <dt id="ref-rfc7516">[RFC7516]</dt>
+                <dd>M. Jones, J. Hildebrand. <a href="https://www.rfc-editor.org/rfc/rfc7516"><cite>JSON Web Encryption (JWE)</cite></a>. IETF RFC 7516, May 2015.</dd>
+
+                <dt id="ref-rfc7517">[RFC7517]</dt>
+                <dd>M. Jones. <a href="https://www.rfc-editor.org/rfc/rfc7517"><cite>JSON Web Key (JWK)</cite></a>. IETF RFC 7517, May 2015.</dd>
+
+                <dt id="ref-rfc4648">[RFC4648]</dt>
+                <dd>S. Josefsson. <a href="https://www.rfc-editor.org/rfc/rfc4648"><cite>The Base16, Base32, and Base64 Data Encodings</cite></a>. IETF RFC 4648, October 2006.</dd>
+
+                <dt id="ref-rfc3339">[RFC3339]</dt>
+                <dd>G. Klyne, C. Newman. <a href="https://www.rfc-editor.org/rfc/rfc3339"><cite>Date and Time on the Internet: Timestamps</cite></a>. IETF RFC 3339, July 2002.</dd>
+
+                <dt id="ref-json-ld">[JSON-LD]</dt>
+                <dd>M. Sporny, D. Longley, G. Kellogg, M. Lanthaler, N. Lindstrom. <a href="https://www.w3.org/TR/json-ld11/"><cite>JSON-LD 1.1</cite></a>. W3C Recommendation, July 2020.</dd>
+
+                <dt id="ref-did-core">[DID-CORE]</dt>
+                <dd>M. Sporny, D. Longley, M. Sabadello, D. Reed, O. Steele, C. Allen. <a href="https://www.w3.org/TR/did-core/"><cite>Decentralized Identifiers (DIDs) v1.0</cite></a>. W3C Recommendation, July 2022.</dd>
+            </dl>
         </section>
         <section id="informative-references">
             <h3><span class="secno">8.2. </span>Informative References</h3>
-        <p>The following standards and prior art inform the identity binding, tiered trust model, and signature profile design in this specification.</p>
-        <ol>
-            <li><a href="https://pages.nist.gov/800-63-3/"><strong>NIST Special Publication 800-63-3: Digital Identity Guidelines</strong></a> (June 2017, updated 2024 supplement). Defines Identity Assurance Levels (IAL 1&ndash;3) and Authenticator Assurance Levels (AAL 1&ndash;3). The UM tiered trust model adapts NIST's tiered assurance framework to a local-first, portable document context.</li>
-            <li><a href="https://eur-lex.europa.eu/eli/reg/2024/1183/oj"><strong>Regulation (EU) 2024/1183: European Digital Identity Framework (eIDAS 2.0)</strong></a>. Defines assurance levels (Low, Substantial, High) for electronic identification. Relevant for GDPR alignment and European adopters.</li>
-            <li><a href="https://openid.net/specs/openid-4-verifiable-presentations-1_0.html"><strong>OpenID for Verifiable Presentations (OID4VP)</strong></a> &mdash; Draft specification, OpenID Foundation (2024). Defines VP presentation with audience binding and nonce parameters. The <code>claims[].claimProof</code> VP recommendations (domain + challenge) align with OID4VP patterns.</li>
-            <li><a href="https://identity.foundation/presentation-exchange/spec/v2.0.0/"><strong>Presentation Exchange 2.0</strong></a> &mdash; Decentralized Identity Foundation, v2.0.0 (2023). Defines how relying parties express credential/claim requirements. The <code>requiredTrustTier</code> field is a simplified analog.</li>
-            <li><a href="https://identity.foundation/.well-known/did-configuration/"><strong>Well Known DID Configuration</strong></a> &mdash; Decentralized Identity Foundation, v0.2 (2023). Prior art for cross-DID linking via <code>/.well-known/did-configuration.json</code> Domain Linkage Credentials. The <code>identity.crossDidBinding</code> convention is analogous but manifest-embedded rather than domain-hosted.</li>
-            <li><a href="https://www.rfc-editor.org/rfc/rfc9449"><strong>RFC 9449: OAuth 2.0 Demonstrating Proof of Possession (DPoP)</strong></a> &mdash; IETF (September 2023). Defines proof-of-possession binding for OAuth2 tokens. Directly analogous to the subject-signer binding problem addressed by the tiered trust model.</li>
-            <li><a href="https://www.w3.org/TR/2023/WD-vc-status-list-20230427/"><strong>Verifiable Credential Status List v2021</strong></a> &mdash; W3C CCG (2022); superseded by Bitstring Status List v1.0 (W3C, 2024). Privacy-preserving credential revocation and freshness checking. Target mechanism for <code>claims[].claimProof</code> credential status verification.</li>
-            <li><a href="https://www.w3.org/TR/vc-data-model-2.0/"><strong>Verifiable Credentials Data Model v2.0</strong></a> &mdash; W3C Recommendation (March 2025). Core data model for VCs and VPs. The <code>claims[].claimProof</code> field is inspired by but distinct from VCDM's <code>evidence</code> property (Section 9.2) &mdash; deliberately renamed to avoid semantic collision.</li>
-            <li><a href="https://www.iso.org/standard/45138.html"><strong>ISO/IEC 29115:2013 &mdash; Information technology &mdash; Security techniques &mdash; Entity authentication assurance framework</strong></a> (2013). International standard defining four entity authentication assurance levels (LoA 1&ndash;4). Additional prior art for the tiered trust model.</li>
-            <li><a href="https://www.rfc-editor.org/rfc/rfc8785"><strong>RFC 8785: JSON Canonicalization Scheme (JCS)</strong></a> &mdash; IETF (June 2020). Defines the deterministic JSON serialization used as the canonicalization step in the v0.2 signature profile.</li>
-        </ol>
+            <p>The following standards, governance documents, and prior art inform the identity binding, tiered trust model, and signature profile design in this specification.</p>
+            <dl>
+                <dt>[NIST-800-63-3]</dt>
+                <dd><a href="https://pages.nist.gov/800-63-3/">NIST Special Publication 800-63-3: Digital Identity Guidelines</a>. June 2017, updated 2024 supplement. Defines Identity Assurance Levels (IAL 1&ndash;3) and Authenticator Assurance Levels (AAL 1&ndash;3).</dd>
+
+                <dt>[eIDAS2]</dt>
+                <dd><a href="https://eur-lex.europa.eu/eli/reg/2024/1183/oj">Regulation (EU) 2024/1183: European Digital Identity Framework (eIDAS 2.0)</a>. Defines assurance levels (Low, Substantial, High) for electronic identification.</dd>
+
+                <dt>[OID4VP]</dt>
+                <dd><a href="https://openid.net/specs/openid-4-verifiable-presentations-1_0.html">OpenID for Verifiable Presentations (OID4VP)</a>. Draft specification, OpenID Foundation (2024). Defines VP presentation with audience binding and nonce parameters.</dd>
+
+                <dt>[PE2]</dt>
+                <dd><a href="https://identity.foundation/presentation-exchange/spec/v2.0.0/">Presentation Exchange 2.0</a>. Decentralized Identity Foundation, v2.0.0 (2023). Defines how relying parties express credential/claim requirements.</dd>
+
+                <dt>[DID-CONFIG]</dt>
+                <dd><a href="https://identity.foundation/.well-known/did-configuration/">Well Known DID Configuration</a>. Decentralized Identity Foundation, v0.2 (2023). Prior art for cross-DID linking via Domain Linkage Credentials.</dd>
+
+                <dt>[RFC9449]</dt>
+                <dd><a href="https://www.rfc-editor.org/rfc/rfc9449">RFC 9449: OAuth 2.0 Demonstrating Proof of Possession (DPoP)</a>. IETF, September 2023. Proof-of-possession binding for OAuth2 tokens.</dd>
+
+                <dt>[VC-STATUS]</dt>
+                <dd><a href="https://www.w3.org/TR/2023/WD-vc-status-list-20230427/">Verifiable Credential Status List v2021</a>. W3C CCG (2022); superseded by Bitstring Status List v1.0 (W3C, 2024). Privacy-preserving credential revocation.</dd>
+
+                <dt>[VC-DATA-MODEL]</dt>
+                <dd><a href="https://www.w3.org/TR/vc-data-model-2.0/">Verifiable Credentials Data Model v2.0</a>. W3C Recommendation, March 2025. Core data model for VCs and VPs.</dd>
+
+                <dt>[ISO-29115]</dt>
+                <dd><a href="https://www.iso.org/standard/45138.html">ISO/IEC 29115:2013</a>. Entity authentication assurance framework. Four assurance levels (LoA 1&ndash;4).</dd>
+
+                <dt>[UM-BREAKING-CHANGE]</dt>
+                <dd>Universal Manifest Breaking-Change Policy. Project governance document.</dd>
+
+                <dt>[UM-DEPRECATION]</dt>
+                <dd>Universal Manifest Deprecation Policy. Project governance document.</dd>
+
+                <dt>[UM-INCIDENT]</dt>
+                <dd>Universal Manifest Incident Response and Rollback. Project governance document.</dd>
+
+                <dt>[UM-RELEASE]</dt>
+                <dd>Universal Manifest Release Cadence. Project governance document.</dd>
+
+                <dt>[UM-RFC]</dt>
+                <dd>Universal Manifest Spec Improvement Queue (RFC mechanism). Project governance document.</dd>
+            </dl>
         </section>
     </section>
 

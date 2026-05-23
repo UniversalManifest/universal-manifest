@@ -10,7 +10,7 @@ Universal Manifest is a JSON-LD document format that lets two parties exchange v
 
 | Version | Status | Document |
 |---------|--------|----------|
-| [v0.3](spec/v0.3/) | Current | Receiver pipeline, encrypted facets, structured receipts, trust tier promotions |
+| [v0.3](spec/v0.3/) | Current | Evaluation sequence, encrypted facets, structured receipts, trust tier promotions |
 | [v0.2](spec/v0.2/) | Previous | Ed25519 signature profile, identity binding, tiered trust model |
 | [v0.1](spec/v0.1/) | Legacy | Core JSON-LD envelope, lifecycle, caching |
 
@@ -18,10 +18,11 @@ Each version is preserved at its permalink. The latest published spec is always 
 
 ## What v0.3 Adds
 
-- **Receiver pipeline**: a six-stage contract (arrive, verify, project, consent, compose, receipt) that every conformant receiver follows.
-- **Encrypted inline facets**: sensitive data encrypted with JWE so only designated recipients can read it. Everyone else sees the facet as opaque.
-- **Structured receipts**: a machine-readable record of what the receiver checked, accepted, rejected, or couldn't read.
+- **Evaluation sequence**: a six-stage evaluation contract (Arrive, Verify, Project, Consent, Compose, Receipt) that every conformant evaluator follows.
+- **Encrypted inline facets**: sensitive data encrypted with JWE so only designated recipients can read it. Everyone else sees the facet as a sealed entry.
+- **Structured receipts**: a machine-readable record of what the evaluator checked, accepted, rejected, or couldn't read.
 - **Normative promotions**: cross-DID binding, `requiredTrustTier`, and agent delegation move from convention to normative requirement.
+- **Structural schemas**: `consents`, `claims`, and `pointers` arrays now have defined schemas. `devices` is reserved for v0.4.
 - **Tier 2 defined**: cryptographic binding via zero-knowledge proof of cross-DID control (at risk).
 
 Full change list: [Changes from v0.2](https://universalmanifest.net/spec/v0.3/#changes-from-v02)
