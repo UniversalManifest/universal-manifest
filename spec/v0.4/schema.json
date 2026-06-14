@@ -1,0 +1,474 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universalmanifest.net/ns/universal-manifest/v0.4/schema.json",
+  "title": "Universal Manifest (v0.4)",
+  "description": "Structural schema for v0.4 Universal Manifest documents. Derived from the v0.4 normative specification (docs/W3C-STYLE-SPEC-v04-preview.html). Extends v0.3 with holderBinding, presentationProof, livenessAttestation, ZKP proof profiles, ceremony proofs, statusRef resolution, bilateral sessions, and agent delegation scope registry.",
+  "type": "object",
+  "required": [
+    "@context",
+    "@id",
+    "@type",
+    "manifestVersion",
+    "subject",
+    "issuedAt",
+    "expiresAt",
+    "signature"
+  ],
+  "properties": {
+    "@context": {
+      "description": "JSON-LD context URL/object/array. Must reference the v0.4 namespace (https://universalmanifest.net/ns/v0.4) per Section 1.2.1.",
+      "oneOf": [
+        { "type": "string" },
+        { "type": "object" },
+        { "type": "array" }
+      ]
+    },
+    "@id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Globally unique opaque identifier per Section 1.2.2. MUST NOT contain PII."
+    },
+    "@type": {
+      "description": "Must include um:Manifest (string or array). Per Section 1.2.3.",
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
+      ]
+    },
+    "manifestVersion": {
+      "const": "0.4",
+      "description": "Per Section 1.3.1, v0.4 conformant manifests MUST declare manifestVersion: '0.4'."
+    },
+    "subject": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable identifier URI per Section 1.3.2 (e.g., a DID)."
+    },
+    "issuedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 / RFC 3339 date-time per Section 1.3.3."
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 / RFC 3339 date-time per Section 1.3.3."
+    },
+    "requiredTrustTier": {
+      "$ref": "#/$defs/trustTier",
+      "description": "Manifest-level minimum trust tier (Section 6.4.5). Default 0."
+    },
+    "facets": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/facet" }
+    },
+    "claims": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/claimV04" }
+    },
+    "consents": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/consent" }
+    },
+    "devices": {
+      "type": "array",
+      "items": { "type": "object" },
+      "description": "Reserved per Section 1.4.6."
+    },
+    "pointers": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/pointer" }
+    },
+    "signature": { "$ref": "#/$defs/signatureV04" },
+    "presentationProof": { "$ref": "#/$defs/presentationProof" },
+    "livenessAttestation": { "$ref": "#/$defs/livenessAttestation" }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "trustTier": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 3,
+      "description": "Integer in 0..3 per Section 6.4.5."
+    },
+    "facet": {
+      "type": "object",
+      "required": ["@id", "@type"],
+      "properties": {
+        "@id": { "type": "string", "minLength": 1 },
+        "@type": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+          ]
+        },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "ref": { "type": "string" },
+        "requiredTrustTier": { "$ref": "#/$defs/trustTier" },
+        "encryptionProfile": { "const": "jwe-inline-v1" },
+        "entity": {
+          "oneOf": [
+            { "$ref": "#/$defs/entity" },
+            { "$ref": "#/$defs/jweEntity" },
+            { "type": "object" },
+            { "type": "string" },
+            { "type": "null" }
+          ]
+        }
+      },
+      "if": {
+        "properties": { "encryptionProfile": { "const": "jwe-inline-v1" } },
+        "required": ["encryptionProfile"]
+      },
+      "then": {
+        "properties": { "entity": { "$ref": "#/$defs/jweEntity" } },
+        "required": ["entity"]
+      },
+      "additionalProperties": true
+    },
+    "entity": {
+      "type": "object",
+      "required": ["@id", "@type"],
+      "properties": {
+        "@id": { "type": "string", "minLength": 1 },
+        "@type": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "jweEntity": {
+      "type": "object",
+      "required": ["protected", "recipients", "iv", "ciphertext", "tag"],
+      "properties": {
+        "protected": { "type": "string", "minLength": 1 },
+        "recipients": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["header"],
+            "properties": {
+              "header": {
+                "type": "object",
+                "required": ["kid"],
+                "properties": { "kid": { "type": "string", "minLength": 1 } },
+                "additionalProperties": true
+              },
+              "encrypted_key": { "type": "string" }
+            },
+            "additionalProperties": true
+          }
+        },
+        "iv": { "type": "string", "minLength": 1 },
+        "ciphertext": { "type": "string", "minLength": 1 },
+        "tag": { "type": "string", "minLength": 1 },
+        "previousKid": { "type": "string" },
+        "rotationReason": { "type": "string" },
+        "revokedRecipientKid": { "type": "string" },
+        "revocationAction": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "claimV04": {
+      "type": "object",
+      "required": ["@type", "issuer"],
+      "properties": {
+        "@type": { "type": "string", "minLength": 1 },
+        "issuer": { "type": "string", "minLength": 1 },
+        "subject": { "type": "string" },
+        "issuedAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" },
+        "claimProof": {
+          "oneOf": [
+            { "type": "object" },
+            { "type": "string", "format": "uri" },
+            { "type": "array", "items": { "$ref": "#/$defs/proofEntry" } }
+          ]
+        },
+        "requiredTrustTier": { "$ref": "#/$defs/trustTier" },
+        "holderBinding": { "$ref": "#/$defs/holderBinding" },
+        "bindingProof": { "$ref": "#/$defs/bindingProof" },
+        "ceremonyProof": { "$ref": "#/$defs/ceremonyProof" }
+      },
+      "additionalProperties": true,
+      "allOf": [
+        {
+          "if": {
+            "properties": { "@type": { "const": "identity.crossDidBinding" } },
+            "required": ["@type"]
+          },
+          "then": { "$ref": "#/$defs/crossDidBindingClaim" }
+        }
+      ]
+    },
+    "proofEntry": {
+      "type": "object",
+      "description": "Individual proof entry per v0.4 Section 6.4.3.",
+      "properties": {
+        "proofType": { "type": "string" },
+        "proofPurpose": { "type": "string" },
+        "verificationMethod": { "type": "string" },
+        "statusRef": { "type": "string" },
+        "proofValue": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "holderBinding": {
+      "type": "object",
+      "description": "Holder binding per v0.4 Section 6.6.1.",
+      "required": ["mode"],
+      "properties": {
+        "mode": {
+          "enum": ["sd-jwt-kb", "bbs-holder-commitment", "reciprocal-control"]
+        },
+        "cnfThumbprint": { "type": "string" },
+        "pseudonymScope": { "type": "string" },
+        "boundDid": { "type": "string" },
+        "subjectProof": { "type": "string" },
+        "boundDidProof": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "bindingProof": {
+      "type": "object",
+      "description": "ZKP binding proof per v0.4 Section 6.4.7.",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "enum": ["ZkLinkedSecretProof", "ZkHdDerivationProof"]
+        }
+      },
+      "additionalProperties": true,
+      "allOf": [
+        {
+          "if": {
+            "properties": { "type": { "const": "ZkLinkedSecretProof" } },
+            "required": ["type"]
+          },
+          "then": {
+            "required": ["cryptosuite", "proofPurpose", "proofValue", "publicInputs"],
+            "properties": {
+              "cryptosuite": { "type": "string", "minLength": 1 },
+              "proofPurpose": { "type": "string", "minLength": 1 },
+              "proofValue": { "type": "string", "minLength": 1 },
+              "publicInputs": {
+                "type": "object",
+                "required": ["commitmentA", "commitmentB"],
+                "properties": {
+                  "commitmentA": { "type": "string" },
+                  "commitmentB": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "ZkHdDerivationProof" } },
+            "required": ["type"]
+          },
+          "then": {
+            "required": ["proofSystem", "circuit", "proofValue", "publicInputs"],
+            "properties": {
+              "proofSystem": { "type": "string", "minLength": 1 },
+              "circuit": { "type": "string", "minLength": 1 },
+              "proofValue": { "type": "string", "minLength": 1 },
+              "publicInputs": {
+                "type": "object",
+                "required": ["publicKeyA", "publicKeyB", "derivationPathA", "derivationPathB"],
+                "properties": {
+                  "publicKeyA": { "type": "string" },
+                  "publicKeyB": { "type": "string" },
+                  "derivationPathA": { "type": "string" },
+                  "derivationPathB": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "ceremonyProof": {
+      "type": "object",
+      "description": "Tier 3 multi-party ceremony proof per v0.4 Section 6.4.8.",
+      "required": ["type", "threshold", "attesters", "ceremonyId", "aggregateProof"],
+      "properties": {
+        "type": { "const": "ThresholdAttestationProof" },
+        "threshold": {
+          "type": "string",
+          "pattern": "^\\d+-of-\\d+$"
+        },
+        "attesters": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1
+        },
+        "ceremonyId": { "type": "string", "minLength": 1 },
+        "aggregateProof": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "crossDidBindingClaim": {
+      "required": ["@type", "issuer", "boundDids", "attester", "attestationMethod", "attestedAt"],
+      "properties": {
+        "@type": { "const": "identity.crossDidBinding" },
+        "boundDids": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 2
+        },
+        "attester": { "type": "string", "minLength": 1 },
+        "attestationMethod": { "type": "string", "minLength": 1 },
+        "attestedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "consent": {
+      "type": "object",
+      "required": ["@id", "@type", "facetRef", "scope", "purpose", "grantedAt", "expiresAt"],
+      "properties": {
+        "@id": { "type": "string", "minLength": 1 },
+        "@type": { "const": "um:Consent" },
+        "facetRef": { "type": "string", "minLength": 1 },
+        "scope": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1
+        },
+        "purpose": { "type": "string", "minLength": 1 },
+        "grantedAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" },
+        "grantor": { "type": "string" },
+        "withdrawnAt": { "type": "string", "format": "date-time" },
+        "conditions": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "pointer": {
+      "type": "object",
+      "required": ["@type"],
+      "properties": {
+        "@type": { "type": "string", "minLength": 1 },
+        "target": { "type": "string" },
+        "@id": { "type": "string" },
+        "label": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": true,
+      "allOf": [
+        {
+          "if": {
+            "properties": { "@type": { "const": "um:agentDelegation" } },
+            "required": ["@type"]
+          },
+          "then": { "$ref": "#/$defs/agentDelegationPointer" }
+        }
+      ]
+    },
+    "agentDelegationPointer": {
+      "required": ["@type", "delegateType", "delegatedBy", "delegatedAt", "expiresAt"],
+      "properties": {
+        "@type": { "const": "um:agentDelegation" },
+        "delegateType": { "enum": ["ai-agent", "bot", "proxy", "human-delegate"] },
+        "delegatedBy": { "type": "string", "minLength": 1 },
+        "delegatedAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" },
+        "delegateId": { "type": "string" },
+        "scope": { "type": "array", "items": { "type": "string" } },
+        "livenessEndpoint": { "type": "string", "format": "uri" }
+      }
+    },
+    "signatureV04": {
+      "type": "object",
+      "description": "Signature Profile A (JCS + Ed25519) per Section 1.6. Same profile as v0.2/v0.3.",
+      "required": ["algorithm", "canonicalization", "keyRef", "value"],
+      "properties": {
+        "algorithm": { "const": "Ed25519" },
+        "canonicalization": { "const": "JCS-RFC8785" },
+        "keyRef": { "type": "string", "minLength": 1 },
+        "value": { "type": "string", "minLength": 1 },
+        "publicKeySpkiB64": { "type": "string", "minLength": 1 },
+        "created": { "type": "string", "format": "date-time" },
+        "statusRef": { "type": "string", "format": "uri" },
+        "revocationCursor": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "presentationProof": {
+      "type": "object",
+      "description": "Presentation proof per v0.4 Section 6.6.2.",
+      "required": ["proofType", "challenge", "audience", "created", "proofValue"],
+      "properties": {
+        "proofType": { "enum": ["sd-jwt-kb", "bbs-derived", "did-auth"] },
+        "challenge": { "type": "string", "minLength": 1 },
+        "audience": { "type": "string", "minLength": 1 },
+        "created": { "type": "string", "format": "date-time" },
+        "proofValue": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "livenessAttestation": {
+      "type": "object",
+      "description": "Liveness attestation per v0.4 Section 6.6.3.",
+      "required": ["attestedAt"],
+      "properties": {
+        "attestedAt": { "type": "string", "format": "date-time" },
+        "validUntil": { "type": "string", "format": "date-time" },
+        "method": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "bilateralSession": {
+      "type": "object",
+      "description": "Bilateral session per v0.4 Section 3.5.",
+      "required": ["@type", "sessionId", "exchangeId", "participants", "initiatedAt", "expiresAt", "state"],
+      "properties": {
+        "@type": { "const": "um:BilateralSession" },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "exchangeId": { "type": "string", "minLength": 1 },
+        "participants": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["did", "role"],
+            "properties": {
+              "did": { "type": "string", "minLength": 1 },
+              "role": { "enum": ["initiator", "responder"] }
+            },
+            "additionalProperties": true
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "initiatedAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" },
+        "state": {
+          "enum": ["initiated", "manifests-exchanged", "receipts-exchanged", "completed", "expired"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "statusRefResponse": {
+      "type": "object",
+      "description": "statusRef resolution response per v0.4 Section 3.4.2.",
+      "required": ["manifestId", "status", "updatedAt"],
+      "properties": {
+        "manifestId": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["active", "revoked", "suspended"] },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "reason": { "type": "string" },
+        "cursor": { "type": "string" },
+        "nextCheck": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

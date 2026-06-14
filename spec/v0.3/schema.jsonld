@@ -1,0 +1,219 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "um": "https://universalmanifest.net/ns/v0.3#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "id": "@id",
+    "type": "@type",
+    "Manifest": "um:Manifest",
+    "Facet": "um:Facet",
+    "Entity": "um:Entity",
+    "Consent": "um:Consent",
+    "Receipt": "um:Receipt",
+    "agentDelegation": "um:agentDelegation",
+    "manifestVersion": "um:manifestVersion",
+    "subject": {
+      "@id": "um:subject",
+      "@type": "@id"
+    },
+    "issuedAt": {
+      "@id": "um:issuedAt",
+      "@type": "xsd:dateTime"
+    },
+    "expiresAt": {
+      "@id": "um:expiresAt",
+      "@type": "xsd:dateTime"
+    },
+    "requiredTrustTier": {
+      "@id": "um:requiredTrustTier",
+      "@type": "xsd:integer"
+    },
+    "facets": {
+      "@id": "um:facets",
+      "@container": "@set"
+    },
+    "claims": {
+      "@id": "um:claims",
+      "@container": "@set"
+    },
+    "consents": {
+      "@id": "um:consents",
+      "@container": "@set"
+    },
+    "devices": {
+      "@id": "um:devices",
+      "@container": "@set"
+    },
+    "pointers": {
+      "@id": "um:pointers",
+      "@container": "@set"
+    },
+    "name": "schema:name",
+    "description": "schema:description",
+    "ref": {
+      "@id": "um:ref",
+      "@type": "@id"
+    },
+    "entity": {
+      "@id": "um:entity"
+    },
+    "encryptionProfile": "um:encryptionProfile",
+    "protected": "um:jweProtected",
+    "recipients": {
+      "@id": "um:jweRecipients",
+      "@container": "@set"
+    },
+    "header": "um:jweHeader",
+    "kid": "um:jweKid",
+    "encrypted_key": "um:jweEncryptedKey",
+    "iv": "um:jweIv",
+    "ciphertext": "um:jweCiphertext",
+    "tag": "um:jweTag",
+    "previousKid": "um:jwePreviousKid",
+    "rotationReason": "um:jweRotationReason",
+    "revokedRecipientKid": "um:jweRevokedRecipientKid",
+    "revocationAction": "um:jweRevocationAction",
+    "issuer": {
+      "@id": "um:issuer",
+      "@type": "@id"
+    },
+    "claimProof": {
+      "@id": "um:claimProof"
+    },
+    "boundDids": {
+      "@id": "um:boundDids",
+      "@container": "@set"
+    },
+    "attester": {
+      "@id": "um:attester",
+      "@type": "@id"
+    },
+    "attestationMethod": "um:attestationMethod",
+    "attestedAt": {
+      "@id": "um:attestedAt",
+      "@type": "xsd:dateTime"
+    },
+    "facetRef": {
+      "@id": "um:facetRef",
+      "@type": "@id"
+    },
+    "scope": {
+      "@id": "um:scope",
+      "@container": "@set"
+    },
+    "purpose": "um:purpose",
+    "grantedAt": {
+      "@id": "um:grantedAt",
+      "@type": "xsd:dateTime"
+    },
+    "grantor": {
+      "@id": "um:grantor",
+      "@type": "@id"
+    },
+    "withdrawnAt": {
+      "@id": "um:withdrawnAt",
+      "@type": "xsd:dateTime"
+    },
+    "conditions": {
+      "@id": "um:conditions",
+      "@container": "@set"
+    },
+    "target": {
+      "@id": "um:target",
+      "@type": "@id"
+    },
+    "label": "um:label",
+    "createdAt": {
+      "@id": "um:createdAt",
+      "@type": "xsd:dateTime"
+    },
+    "delegateType": "um:delegateType",
+    "delegatedBy": {
+      "@id": "um:delegatedBy",
+      "@type": "@id"
+    },
+    "delegatedAt": {
+      "@id": "um:delegatedAt",
+      "@type": "xsd:dateTime"
+    },
+    "delegateId": {
+      "@id": "um:delegateId",
+      "@type": "@id"
+    },
+    "livenessEndpoint": {
+      "@id": "um:livenessEndpoint",
+      "@type": "@id"
+    },
+    "signature": {
+      "@id": "um:signature"
+    },
+    "algorithm": "um:algorithm",
+    "canonicalization": "um:canonicalization",
+    "keyRef": {
+      "@id": "um:keyRef",
+      "@type": "@id"
+    },
+    "publicKeySpkiB64": "um:publicKeySpkiB64",
+    "created": {
+      "@id": "um:created",
+      "@type": "xsd:dateTime"
+    },
+    "value": "um:value",
+    "statusRef": {
+      "@id": "um:statusRef",
+      "@type": "@id"
+    },
+    "revocationCursor": "um:revocationCursor",
+    "manifestId": {
+      "@id": "um:manifestId",
+      "@type": "@id"
+    },
+    "outcome": "um:outcome",
+    "signatureCheck": "um:signatureCheck",
+    "freshnessCheck": "um:freshnessCheck",
+    "revocationStatus": "um:revocationStatus",
+    "facetStatuses": {
+      "@id": "um:facetStatuses",
+      "@container": "@set"
+    },
+    "facetId": {
+      "@id": "um:facetId",
+      "@type": "@id"
+    },
+    "status": "um:status",
+    "reason": "um:reason",
+    "consentStatuses": {
+      "@id": "um:consentStatuses",
+      "@container": "@set"
+    },
+    "consentRef": {
+      "@id": "um:consentRef",
+      "@type": "@id"
+    },
+    "checkedAt": {
+      "@id": "um:checkedAt",
+      "@type": "xsd:dateTime"
+    },
+    "processedAt": {
+      "@id": "um:processedAt",
+      "@type": "xsd:dateTime"
+    },
+    "warnings": {
+      "@id": "um:warnings",
+      "@container": "@set"
+    },
+    "receiptId": {
+      "@id": "um:receiptId",
+      "@type": "@id"
+    },
+    "evaluatorId": {
+      "@id": "um:evaluatorId",
+      "@type": "@id"
+    },
+    "receiptSignature": {
+      "@id": "um:receiptSignature"
+    },
+    "keyResolution": "um:keyResolution"
+  }
+}

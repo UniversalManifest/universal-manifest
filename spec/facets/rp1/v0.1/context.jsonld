@@ -1,0 +1,103 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "um": "https://universalmanifest.net/ns/universal-manifest/v0.2#",
+    "rp1": "https://universalmanifest.net/ns/facets/rp1/v0.1#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "Persona": "rp1:Persona",
+    "ServiceAuth": "rp1:ServiceAuth",
+    "ServiceRequirement": "rp1:ServiceRequirement",
+    "TermsManifest": "rp1:TermsManifest",
+    "TermsAcceptance": "rp1:TermsAcceptance",
+    "ContentTrust": "rp1:ContentTrust",
+    "RMAPPackage": "rp1:RMAPPackage",
+    "AttachmentPolicy": "rp1:AttachmentPolicy",
+    "ServiceCapability": "rp1:ServiceCapability",
+    "EnterprisePolicy": "rp1:EnterprisePolicy",
+    "StoragePolicy": "rp1:StoragePolicy",
+    "PersonaPortability": "rp1:PersonaPortability",
+    "SOMBranchAuthorization": "rp1:SOMBranchAuthorization",
+    "InterServiceAuthorization": "rp1:InterServiceAuthorization",
+    "ZKCredentialProof": "rp1:ZKCredentialProof",
+    "AccessibilityPreferences": "rp1:AccessibilityPreferences",
+    "packageId": "rp1:packageId",
+    "packageVersion": "rp1:packageVersion",
+    "publisherDID": {
+      "@id": "rp1:publisherDID",
+      "@type": "@id"
+    },
+    "artifacts": {
+      "@id": "rp1:artifacts",
+      "@container": "@set"
+    },
+    "serviceDID": {
+      "@id": "rp1:serviceDID",
+      "@type": "@id"
+    },
+    "serviceRequirements": {
+      "@id": "rp1:serviceRequirements",
+      "@container": "@set"
+    },
+    "termsDocumentURL": {
+      "@id": "rp1:termsDocumentURL",
+      "@type": "@id"
+    },
+    "termsDocumentHash": "rp1:termsDocumentHash",
+    "termsVersion": "rp1:termsVersion",
+    "challengeNonce": "rp1:challengeNonce",
+    "sessionNonce": "rp1:sessionNonce",
+    "requiredCredentials": {
+      "@id": "rp1:requiredCredentials",
+      "@container": "@set"
+    },
+    "requestedConsents": {
+      "@id": "rp1:requestedConsents",
+      "@container": "@set"
+    },
+    "hostFunctions": {
+      "@id": "rp1:hostFunctions",
+      "@container": "@set"
+    },
+    "somScopes": {
+      "@id": "rp1:somScopes",
+      "@container": "@set"
+    },
+    "storagePolicy": "rp1:storagePolicy",
+    "retentionPolicy": "rp1:retentionPolicy",
+    "revocationPolicyURL": {
+      "@id": "rp1:revocationPolicyURL",
+      "@type": "@id"
+    },
+    "contentTrustRef": {
+      "@id": "rp1:contentTrustRef",
+      "@type": "@id"
+    },
+    "requirementManifestRef": {
+      "@id": "rp1:requirementManifestRef",
+      "@type": "@id"
+    },
+    "termsManifestRef": {
+      "@id": "rp1:termsManifestRef",
+      "@type": "@id"
+    },
+    "compatibility": "rp1:compatibility",
+    "deprecationPolicy": "rp1:deprecationPolicy",
+    "transportBindingHints": {
+      "@id": "rp1:transportBindingHints",
+      "@container": "@set"
+    },
+    "positioningBackend": "rp1:positioningBackend",
+    "vpsDataPolicy": "rp1:vpsDataPolicy",
+    "accuracy": "rp1:accuracy",
+    "updateRate": "rp1:updateRate",
+    "latency": "rp1:latency",
+    "privacyMode": "rp1:privacyMode",
+    "cachePolicy": "rp1:cachePolicy",
+    "lodPolicy": "rp1:lodPolicy",
+    "streamingPolicy": "rp1:streamingPolicy",
+    "internationalization": "rp1:internationalization",
+    "auditReceipt": "rp1:auditReceipt",
+    "versionCompatibility": "rp1:versionCompatibility"
+  }
+}

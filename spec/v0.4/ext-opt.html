@@ -1,0 +1,2142 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="system">
+<head>
+    <meta charset="utf-8">
+    <script>
+        (function(){
+            var t = localStorage.getItem('um-spec-theme');
+            if (t === 'light' || t === 'dark') {
+                document.documentElement.setAttribute('data-theme', t);
+            }
+        })();
+    </script>
+    <title>Universal Manifest v0.4 — EXT-OPT</title>
+    <link rel="canonical" href="https://universalmanifest.net/spec/v0.4/ext-opt/">
+    <!-- Use the official W3C Working Draft style -->
+    <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/W3C-WD" type="text/css">
+    <style>
+        /* Specific enhancements per W3C specification layout */
+        html, body { margin: 0; padding: 0; }
+        body { max-width: none; line-height: 1.5; font-family: sans-serif; background-image: none !important; }
+        .head { margin-bottom: 1.25rem; }
+        .head a.logo, img[alt="W3C"], .w3c-logo { display: none !important; } /* Strip W3C branding injected by fixup.js */
+        .head h1 { color: #005a9c; }
+        .head h2 {
+            margin-bottom: 0.45rem;
+            margin-top: 0.45rem;
+        }
+        .head dl {
+            display: grid;
+            gap: 0.25rem 0.75rem;
+            grid-template-columns: max-content minmax(0, 1fr);
+            margin: 0.8rem 0;
+        }
+        .head dd,
+        .head dt {
+            margin: 0;
+        }
+        .head .copyright {
+            margin: 0.65rem 0;
+        }
+        .um-site-nav {
+            align-items: center;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            margin-top: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .um-site-nav__label {
+            color: #5a6677;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            margin-right: 0.15rem;
+            text-transform: uppercase;
+        }
+        .um-site-nav a {
+            background: #ffffff;
+            border: 1px solid #c9d3dd;
+            border-radius: 999px;
+            color: #1f2a36;
+            display: inline-flex;
+            font-size: 0.84rem;
+            font-weight: 700;
+            gap: 0.25rem;
+            padding: 0.42rem 0.72rem;
+            text-decoration: none;
+        }
+        .um-site-nav a:hover,
+        .um-site-nav a:focus-visible {
+            background: #eef4fb;
+            outline: none;
+        }
+        .um-site-nav a.is-current {
+            background: #005a9c;
+            border-color: #005a9c;
+            color: #ffffff;
+        }
+        body:not(.toc-inline) #toc,
+        body.toc-sidebar #toc {
+            background: #f4f6f8;
+            border-right: 1px solid #d4dce3;
+            box-sizing: border-box;
+            font-weight: bold;
+            bottom: 0;
+            height: 100vh;
+            left: 0 !important;
+            margin: 0;
+            min-height: 100vh;
+            overflow-y: auto;
+            padding: 1rem 1.25rem 3.5rem;
+            padding-left: 1rem;
+            position: fixed;
+            right: auto;
+            top: 0 !important;
+            width: 22rem;
+        }
+        body:not(.toc-inline),
+        body.toc-sidebar {
+            margin: 0;
+            padding-left: 0;
+        }
+        .toc h2 {
+            font-size: 0.75rem;
+            letter-spacing: 0.06em;
+            margin: 0 0 0.8rem;
+            text-transform: uppercase;
+        }
+        .toc ol {
+            counter-reset: item;
+            list-style: none;
+            margin: 0;
+            padding-left: 0;
+        }
+        .toc li {
+            counter-increment: item;
+            display: block;
+            margin: 0.1rem 0;
+        }
+        .toc li > a {
+            color: #1f2a36;
+            display: flex;
+            font-weight: 600;
+            gap: 0.35rem;
+            line-height: 1.25;
+            padding: 0.18rem 0;
+            text-decoration: none;
+        }
+        .toc li > a::before {
+            content: counters(item, ".") ".";
+            flex: 0 0 auto;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+        .toc ol ol {
+            margin: 0.12rem 0 0.25rem;
+            padding-left: 1rem;
+        }
+        .toc ol ol li > a {
+            font-weight: 500;
+        }
+        .toc a.toc-active {
+            color: #005a9c;
+            font-weight: 700;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        html body #toc-nav,
+        html body.toc-sidebar #toc-nav {
+            align-items: center;
+            bottom: 0 !important;
+            display: flex !important;
+            gap: 0.75rem !important;
+            justify-content: flex-start;
+            left: 0 !important;
+            margin: 0 !important;
+            max-width: 100vw;
+            padding: 0.5rem 0.5rem 0.5rem 1rem !important;
+            position: fixed !important;
+            right: auto !important;
+            transform: none !important;
+            width: auto !important;
+            z-index: 1002 !important;
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+        html body.toc-inline #toc-nav {
+            align-items: center;
+            bottom: 0 !important;
+            display: flex !important;
+            gap: 0.75rem !important;
+            justify-content: flex-start;
+            left: 0 !important;
+            margin: 0 !important;
+            padding: 0.5rem 0.5rem 0.5rem 1rem !important;
+            position: fixed !important;
+            width: auto !important;
+            z-index: 1002 !important;
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+        html body #toc-nav a,
+        html body #toc-nav a#toc-toggle,
+        html body #toc-nav a#toc-jump {
+            align-items: center !important;
+            background: #ffffff !important;
+            border: 1px solid #c9d3dd !important;
+            border-radius: 6px !important;
+            box-sizing: border-box !important;
+            color: #1f2a36 !important;
+            display: inline-flex !important;
+            float: none !important;
+            font-size: 0.85rem !important;
+            gap: 0.35rem !important;
+            height: auto !important;
+            left: auto !important;
+            line-height: 1.2 !important;
+            margin: 0 !important;
+            max-width: none !important;
+            min-height: 0 !important;
+            min-width: 0 !important;
+            padding: 0.45rem 0.6rem !important;
+            position: static !important;
+            right: auto !important;
+            text-decoration: none !important;
+            top: auto !important;
+            width: auto !important;
+            white-space: nowrap !important;
+        }
+        
+        #toc-nav a span#toc-jump-text,
+        #toc-nav a span#toc-expand-text,
+        #toc-nav a span#toc-collapse-text {
+            display: none !important;
+        }
+        html body #toc-nav a:hover {
+            background: #eef4fb;
+        }
+        html body #toc-nav a:focus-visible {
+            outline: 2px solid #005a9c;
+            outline-offset: 2px;
+        }
+        body:not(.toc-inline) > :not(#toc):not(script) {
+            margin-left: calc(22rem + 1.2rem);
+            margin-right: 1.4rem;
+            max-width: 50em;
+        }
+        body.toc-inline > :not(script) {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 50em;
+            padding-left: 1.4rem;
+            padding-right: 1.4rem;
+            box-sizing: border-box;
+        }
+        body.toc-inline #toc {
+            clear: both;
+            margin-bottom: 2rem;
+            padding-bottom: 3.5rem;
+        }
+        body.toc-inline #toc + section {
+            clear: both;
+        }
+        .note, .issue, .example { padding: .5em; border-left: .5em solid; margin: 1em 0; }
+        .example { border-color: #e0cb52; background: #fcfaee; }
+        .example-title { font-weight: bold; margin-bottom: 0.5em; }
+        .migration-callout {
+            background: #eef4fb;
+            border-left: 0.35rem solid #005a9c;
+            box-sizing: border-box;
+            margin-bottom: 1.25rem;
+            margin-top: -1.25rem;
+            padding: 0.65rem 0.85rem;
+        }
+        .migration-callout p {
+            margin: 0;
+        }
+        pre { background-color: #f8f8f8; border: 1px solid #ddd; padding: 1em; overflow: auto; }
+        code { font-family: Inconsolata, Consolas, "Liberation Mono", monospace; color: #c83232; }
+        .rfc2119 { text-transform: lowercase; font-variant: small-caps; font-style: normal; font-weight: bold; color: #900; }
+        .preview-banner {
+            background: #fff3cd;
+            border: 2px solid #e0a800;
+            border-radius: 4px;
+            color: #664d03;
+            font-weight: 600;
+            margin: 1.5em 0 1em;
+            padding: 0.75em 1em;
+        }
+        .preview-banner p { margin: 0.25em 0; }
+        .preview-section {
+            border-left: 4px solid #e0a800;
+            padding-left: 1em;
+            margin: 1.5em 0;
+        }
+        .preview-tag {
+            background: #e0a800;
+            border-radius: 3px;
+            color: #fff;
+            font-size: 0.75em;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            margin-left: 0.5em;
+            padding: 0.15em 0.45em;
+            text-transform: uppercase;
+            vertical-align: middle;
+        }
+        .preview-questions {
+            background: #f8f0d8;
+            border: 1px solid #e0cb52;
+            border-radius: 4px;
+            margin: 1em 0;
+            padding: 0.75em 1em;
+        }
+        .preview-questions p:first-child { font-weight: 700; margin-top: 0; }
+        .preview-questions ul { margin-bottom: 0; }
+        @media (max-width: 1100px) {
+            body:not(.toc-inline) #toc,
+            body.toc-sidebar #toc,
+            .toc {
+                border-right: none;
+                height: auto;
+                min-height: auto;
+                overflow-y: visible;
+                position: static;
+                width: auto;
+            }
+            html body #toc-nav,
+            html body.toc-sidebar #toc-nav,
+            html body.toc-inline #toc-nav {
+                width: auto !important;
+            }
+            html body #toc-nav a#toc-jump span#toc-jump-text {
+                display: none;
+            }
+            body:not(.toc-inline) > :not(#toc):not(script),
+            body > :not(#toc):not(script) {
+                margin-left: auto;
+                margin-right: auto;
+                max-width: 50em;
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        [id] {
+            scroll-margin-top: 2rem;
+        }
+
+        /* ---- Theme Switcher Widget ---- */
+        .um-theme-switcher {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1100;
+        }
+        .um-theme-btn {
+            align-items: center;
+            background: rgba(255,255,255,0.92);
+            border: 1px solid #c9d3dd;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+            color: #1f2a36;
+            cursor: pointer;
+            display: inline-flex;
+            font-size: 0;
+            height: 38px;
+            justify-content: center;
+            padding: 0;
+            width: 38px;
+        }
+        .um-theme-btn:hover { background: #eef4fb; }
+        .um-theme-btn svg { width: 20px; height: 20px; }
+        .um-theme-popover {
+            background: rgba(255,255,255,0.96);
+            border: 1px solid #c9d3dd;
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+            display: none;
+            flex-direction: column;
+            gap: 2px;
+            margin-top: 6px;
+            min-width: 140px;
+            padding: 4px;
+            position: absolute;
+            right: 0;
+            top: 100%;
+        }
+        .um-theme-popover.is-open { display: flex; }
+        .um-theme-opt {
+            align-items: center;
+            background: transparent;
+            border: none;
+            border-radius: 7px;
+            color: #1f2a36;
+            cursor: pointer;
+            display: flex;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 500;
+            gap: 8px;
+            min-height: 38px;
+            padding: 6px 10px;
+            text-align: left;
+            width: 100%;
+        }
+        .um-theme-opt:hover { background: #eef4fb; }
+        .um-theme-opt.is-active { background: #dbe8f4; font-weight: 700; }
+        .um-theme-opt svg { flex-shrink: 0; width: 18px; height: 18px; }
+
+        /* ---- Dark Mode Colors ---- */
+        @media (prefers-color-scheme: dark) {
+            html[data-theme="system"] {
+                color-scheme: dark;
+            }
+            html[data-theme="system"] body {
+                background: #0D1117 !important;
+                color: #E6EDF3;
+            }
+            html[data-theme="system"] .head h1 { color: #58A6FF; }
+            html[data-theme="system"] h2, html[data-theme="system"] h3,
+            html[data-theme="system"] h4, html[data-theme="system"] h5,
+            html[data-theme="system"] h6 { color: #F0F6FC; }
+            html[data-theme="system"] a { color: #58A6FF; }
+            html[data-theme="system"] a:visited { color: #A371F7; }
+            html[data-theme="system"] code { color: #E6EDF3; background: #1C2128; border-color: #30363D; }
+            html[data-theme="system"] pre {
+                background-color: #1C2128 !important;
+                border-color: #30363D !important;
+                color: #E6EDF3;
+            }
+            html[data-theme="system"] pre code { color: #E6EDF3; background: transparent; border-color: transparent; }
+            html[data-theme="system"] .example {
+                background: #161B22;
+                border-color: #D29922;
+            }
+            html[data-theme="system"] .example-title { color: #F0F6FC; }
+            html[data-theme="system"] .note {
+                background: #161B22;
+                border-color: #79C0FF;
+                color: #E6EDF3;
+            }
+            html[data-theme="system"] .issue {
+                background: #161B22;
+                border-color: #F85149;
+                color: #E6EDF3;
+            }
+            html[data-theme="system"] .migration-callout {
+                background: #161B22;
+                border-color: #79C0FF;
+            }
+            html[data-theme="system"] .rfc2119 { color: #F85149; }
+            html[data-theme="system"] hr { border-color: #30363D; }
+            html[data-theme="system"] body:not(.toc-inline) #toc,
+            html[data-theme="system"] body.toc-sidebar #toc {
+                background: #161B22;
+                border-right-color: #30363D;
+            }
+            html[data-theme="system"] .toc h2 { color: #C9D1D9; }
+            html[data-theme="system"] .toc li > a { color: #C9D1D9; }
+            html[data-theme="system"] .toc a.toc-active { color: #58A6FF; }
+            html[data-theme="system"] html body #toc-nav a,
+            html[data-theme="system"] html body #toc-nav a#toc-toggle,
+            html[data-theme="system"] html body #toc-nav a#toc-jump {
+                background: #1C2128 !important;
+                border: 1px solid #30363D !important;
+                color: #E6EDF3 !important;
+            }
+            html[data-theme="system"] html body #toc-nav a:hover {
+                background: #22272E !important;
+            }
+            html[data-theme="system"] .um-site-nav a {
+                background: #1C2128;
+                border-color: #30363D;
+                color: #C9D1D9;
+            }
+            html[data-theme="system"] .um-site-nav a.is-current {
+                background: #58A6FF;
+                border-color: #58A6FF;
+                color: #0D1117;
+            }
+            html[data-theme="system"] .um-site-nav__label { color: #8B949E; }
+            html[data-theme="system"] .um-theme-btn {
+                background: rgba(13,17,23,0.92);
+                border-color: #30363D;
+                color: #C9D1D9;
+            }
+            html[data-theme="system"] .um-theme-btn:hover { background: #22272E; }
+            html[data-theme="system"] .um-theme-popover {
+                background: rgba(22,27,34,0.97);
+                border-color: #30363D;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.45);
+            }
+            html[data-theme="system"] .um-theme-opt { color: #C9D1D9; }
+            html[data-theme="system"] .um-theme-opt:hover { background: #22272E; }
+            html[data-theme="system"] .um-theme-opt.is-active { background: #1C2128; }
+            html[data-theme="system"] .head dd,
+            html[data-theme="system"] .head dt { color: #C9D1D9; }
+            html[data-theme="system"] .head .copyright { color: #8B949E; }
+            html[data-theme="system"] table { background: #161B22; }
+            html[data-theme="system"] th {
+                background: #22272E;
+                color: #F0F6FC;
+                border-bottom-color: #3D444D;
+            }
+            html[data-theme="system"] td {
+                color: #E6EDF3;
+                border-color: #30363D;
+            }
+            html[data-theme="system"] .preview-banner {
+                background: #22272E;
+                border-color: #D29922;
+                color: #D29922;
+            }
+            html[data-theme="system"] .preview-section {
+                border-left-color: #D29922;
+            }
+            html[data-theme="system"] .preview-tag {
+                background: #D29922;
+                color: #0D1117;
+            }
+            html[data-theme="system"] .preview-questions {
+                background: #161B22;
+                border-color: #30363D;
+            }
+        }
+
+        html[data-theme="dark"] {
+            color-scheme: dark;
+        }
+        html[data-theme="dark"] body {
+            background: #0D1117 !important;
+            color: #E6EDF3;
+        }
+        html[data-theme="dark"] .head h1 { color: #58A6FF; }
+        html[data-theme="dark"] h2, html[data-theme="dark"] h3,
+        html[data-theme="dark"] h4, html[data-theme="dark"] h5,
+        html[data-theme="dark"] h6 { color: #F0F6FC; }
+        html[data-theme="dark"] a { color: #58A6FF; }
+        html[data-theme="dark"] a:visited { color: #A371F7; }
+        html[data-theme="dark"] code { color: #E6EDF3; background: #1C2128; border-color: #30363D; }
+        html[data-theme="dark"] pre {
+            background-color: #1C2128 !important;
+            border-color: #30363D !important;
+            color: #E6EDF3;
+        }
+        html[data-theme="dark"] pre code { color: #E6EDF3; background: transparent; border-color: transparent; }
+        html[data-theme="dark"] .example {
+            background: #161B22;
+            border-color: #D29922;
+        }
+        html[data-theme="dark"] .example-title { color: #F0F6FC; }
+        html[data-theme="dark"] .note {
+            background: #161B22;
+            border-color: #79C0FF;
+            color: #E6EDF3;
+        }
+        html[data-theme="dark"] .issue {
+            background: #161B22;
+            border-color: #F85149;
+            color: #E6EDF3;
+        }
+        html[data-theme="dark"] .migration-callout {
+            background: #161B22;
+            border-color: #79C0FF;
+        }
+        html[data-theme="dark"] .rfc2119 { color: #F85149; }
+        html[data-theme="dark"] hr { border-color: #30363D; }
+        html[data-theme="dark"] body:not(.toc-inline) #toc,
+        html[data-theme="dark"] body.toc-sidebar #toc {
+            background: #161B22;
+            border-right-color: #30363D;
+        }
+        html[data-theme="dark"] .toc h2 { color: #C9D1D9; }
+        html[data-theme="dark"] .toc li > a { color: #C9D1D9; }
+        html[data-theme="dark"] .toc a.toc-active { color: #58A6FF; }
+        html[data-theme="dark"] html body #toc-nav a,
+        html[data-theme="dark"] html body #toc-nav a#toc-toggle,
+        html[data-theme="dark"] html body #toc-nav a#toc-jump {
+            background: #1C2128 !important;
+            border: 1px solid #30363D !important;
+            color: #E6EDF3 !important;
+        }
+        html[data-theme="dark"] html body #toc-nav a:hover {
+            background: #22272E !important;
+        }
+        html[data-theme="dark"] .um-site-nav a {
+            background: #1C2128;
+            border-color: #30363D;
+            color: #C9D1D9;
+        }
+        html[data-theme="dark"] .um-site-nav a.is-current {
+            background: #58A6FF;
+            border-color: #58A6FF;
+            color: #0D1117;
+        }
+        html[data-theme="dark"] .um-site-nav__label { color: #8B949E; }
+        html[data-theme="dark"] .um-theme-btn {
+            background: rgba(13,17,23,0.92);
+            border-color: #30363D;
+            color: #C9D1D9;
+        }
+        html[data-theme="dark"] .um-theme-btn:hover { background: #22272E; }
+        html[data-theme="dark"] .um-theme-popover {
+            background: rgba(22,27,34,0.97);
+            border-color: #30363D;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.45);
+        }
+        html[data-theme="dark"] .um-theme-opt { color: #C9D1D9; }
+        html[data-theme="dark"] .um-theme-opt:hover { background: #22272E; }
+        html[data-theme="dark"] .um-theme-opt.is-active { background: #1C2128; }
+        html[data-theme="dark"] .head dd,
+        html[data-theme="dark"] .head dt { color: #C9D1D9; }
+        html[data-theme="dark"] .head .copyright { color: #8B949E; }
+        html[data-theme="dark"] table { background: #161B22; }
+        html[data-theme="dark"] th {
+            background: #22272E;
+            color: #F0F6FC;
+            border-bottom-color: #3D444D;
+        }
+        html[data-theme="dark"] td {
+            color: #E6EDF3;
+            border-color: #30363D;
+        }
+        html[data-theme="dark"] .preview-banner {
+            background: #22272E;
+            border-color: #D29922;
+            color: #D29922;
+        }
+        html[data-theme="dark"] .preview-section {
+            border-left-color: #D29922;
+        }
+        html[data-theme="dark"] .preview-tag {
+            background: #D29922;
+            color: #0D1117;
+        }
+        html[data-theme="dark"] .preview-questions {
+            background: #161B22;
+            border-color: #30363D;
+        }
+
+        /* Force light when explicitly selected */
+        html[data-theme="light"] {
+            color-scheme: light;
+        }
+    </style>
+</head>
+<body class="h-entry">
+    <!-- Theme Switcher -->
+    <div class="um-theme-switcher" id="um-theme-switcher">
+        <button class="um-theme-btn" id="um-theme-btn" type="button" aria-label="Toggle theme" aria-expanded="false" aria-haspopup="true">
+            <svg id="um-theme-icon-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <svg id="um-theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg id="um-theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <div class="um-theme-popover" id="um-theme-popover" role="listbox" aria-label="Theme options">
+            <button class="um-theme-opt is-active" role="option" aria-selected="true" data-theme-value="system">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                System
+            </button>
+            <button class="um-theme-opt" role="option" aria-selected="false" data-theme-value="light">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                Light
+            </button>
+            <button class="um-theme-opt" role="option" aria-selected="false" data-theme-value="dark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                Dark
+            </button>
+        </div>
+    </div>
+    <div class="head">
+        <h1 id="title" class="title p-name">Universal Manifest v0.4 — EXT-OPT</h1>
+        <h2 id="subtitle">Optional-Feature Profiles</h2>
+        <h2><time class="dt-published" datetime="2026-06-11">11 June 2026</time></h2>
+        <dl>
+            <dt>This document:</dt>
+            <dd><a class="u-url" href="https://universalmanifest.net/spec/v0.4/ext-opt/">/spec/v0.4/ext-opt/</a></dd>
+            <dt>Document set:</dt>
+            <dd><a href="https://universalmanifest.net/spec/v0.4/">Universal Manifest v0.4 (Conformance-Tier Stack)</a></dd>
+            <dt>Latest stable version:</dt>
+            <dd><a href="https://universalmanifest.net/spec/v0.3/">https://universalmanifest.net/spec/v0.3/</a></dd>
+            <dt>History:</dt>
+            <dd><a href="https://universalmanifest.net/spec/">https://universalmanifest.net/spec/</a> (version index and changelog)</dd>
+            <dt>Editors:</dt>
+            <dd class="p-author h-card vcard">Universal Manifest Working Group</dd>
+        </dl>
+        <p class="copyright">Copyright &copy; 2026 the Contributors to the Universal Manifest Specification. This document is published under the <a href="https://www.w3.org/copyright/software-license-2023/">W3C Software and Document License</a>.</p>
+        <hr title="Separator for header">
+    </div>
+
+<nav id="toc" class="toc" role="doc-toc">
+<h2 class="toc-heading">Table of Contents</h2>
+<ul>
+<li><a href="#ext-opt-optional-feature-profiles"
+id="toc-ext-opt-optional-feature-profiles">EXT-OPT: Optional-Feature
+Profiles</a>
+<ul>
+<li><a href="#contents" id="toc-contents">Contents</a></li>
+<li><a href="#o1-abstract-data-model--format-independence"
+id="toc-o1-abstract-data-model--format-independence"><span
+class="secno">O1. </span>Abstract Data Model &amp; Format
+Independence</a>
+<ul>
+<li><a href="#o11-abstract-data-model"
+id="toc-o11-abstract-data-model"><span class="secno">O1.1.
+</span>Abstract Data Model</a></li>
+<li><a href="#o12-production-rules" id="toc-o12-production-rules"><span
+class="secno">O1.2. </span>Production Rules</a></li>
+<li><a href="#o13-json-ld-production-rule-reference-encoding"
+id="toc-o13-json-ld-production-rule-reference-encoding"><span
+class="secno">O1.3. </span>JSON-LD Production Rule (Reference
+Encoding)</a></li>
+<li><a href="#o14-cbor-ld-production-rule-compact-encoding"
+id="toc-o14-cbor-ld-production-rule-compact-encoding"><span
+class="secno">O1.4. </span>CBOR-LD Production Rule (Compact
+Encoding)</a></li>
+<li><a href="#o15-signing-and-production"
+id="toc-o15-signing-and-production"><span class="secno">O1.5.
+</span>Signing and Production</a></li>
+<li><a href="#o16-conformance-to-the-abstract-data-model"
+id="toc-o16-conformance-to-the-abstract-data-model"><span
+class="secno">O1.6. </span>Conformance to the Abstract Data
+Model</a></li>
+<li><a href="#o17-context-integrity-production-detail"
+id="toc-o17-context-integrity-production-detail"><span
+class="secno">O1.7. </span>Context Integrity (production
+detail)</a></li>
+</ul></li>
+<li><a href="#o2-statusref-resolution-schema"
+id="toc-o2-statusref-resolution-schema"><span class="secno">O2.
+</span>statusRef Resolution Schema</a>
+<ul>
+<li><a href="#o21-resolution-procedure"
+id="toc-o21-resolution-procedure"><span class="secno">O2.1.
+</span>Resolution Procedure</a></li>
+<li><a href="#o22-response-schema" id="toc-o22-response-schema"><span
+class="secno">O2.2. </span>Response Schema</a></li>
+<li><a href="#o23-status-semantics" id="toc-o23-status-semantics"><span
+class="secno">O2.3. </span>Status Semantics</a></li>
+<li><a href="#o24-error-handling" id="toc-o24-error-handling"><span
+class="secno">O2.4. </span>Error Handling</a></li>
+<li><a href="#o25-status-endpoint-conformance"
+id="toc-o25-status-endpoint-conformance"><span class="secno">O2.5.
+</span>Status Endpoint Conformance</a></li>
+</ul></li>
+<li><a href="#o3-receipt-as-a-first-class-manifest-class"
+id="toc-o3-receipt-as-a-first-class-manifest-class"><span
+class="secno">O3. </span>Receipt as a First-Class Manifest Class
+<span class="preview-tag">PREVIEW</span></a>
+<ul>
+<li><a href="#o31-chain-integrity" id="toc-o31-chain-integrity"><span
+class="secno">O3.1. </span>Chain Integrity</a></li>
+<li><a href="#o32-typed-event-vocabulary"
+id="toc-o32-typed-event-vocabulary"><span class="secno">O3.2.
+</span>Typed Event Vocabulary</a></li>
+<li><a href="#o33-structured-reason-registry"
+id="toc-o33-structured-reason-registry"><span class="secno">O3.3.
+</span>Structured Reason Registry</a></li>
+<li><a href="#o34-transparency-log-anchoring-optional"
+id="toc-o34-transparency-log-anchoring-optional"><span
+class="secno">O3.4. </span>Transparency-Log Anchoring
+(optional)</a></li>
+</ul></li>
+<li><a href="#o4-bilateral-session-model"
+id="toc-o4-bilateral-session-model"><span class="secno">O4.
+</span>Bilateral Session Model
+<span class="preview-tag">PREVIEW</span></a>
+<ul>
+<li><a href="#o41-session-object" id="toc-o41-session-object"><span
+class="secno">O4.1. </span>Session Object</a></li>
+<li><a href="#o42-session-lifecycle"
+id="toc-o42-session-lifecycle"><span class="secno">O4.2. </span>Session
+Lifecycle</a></li>
+<li><a href="#o43-paired-receipt-correlation"
+id="toc-o43-paired-receipt-correlation"><span class="secno">O4.3.
+</span>Paired Receipt Correlation</a></li>
+<li><a href="#o44-transport-independence"
+id="toc-o44-transport-independence"><span class="secno">O4.4.
+</span>Transport Independence</a></li>
+</ul></li>
+<li><a href="#o5-federation" id="toc-o5-federation"><span
+class="secno">O5. </span>Federation
+<span class="preview-tag">PREVIEW</span></a></li>
+<li><a href="#o6-profile-registration-mechanism"
+id="toc-o6-profile-registration-mechanism"><span class="secno">O6.
+</span>Profile Registration Mechanism
+<span class="preview-tag">PREVIEW</span></a></li>
+<li><a href="#o7-agent-delegation-scope-registry"
+id="toc-o7-agent-delegation-scope-registry"><span class="secno">O7.
+</span>Agent-Delegation Scope Registry
+<span class="preview-tag">PREVIEW</span></a></li>
+<li><a href="#o8-category-trust-and-trustweight"
+id="toc-o8-category-trust-and-trustweight"><span class="secno">O8.
+</span>Category Trust and <code>trustWeight</code>
+<span class="preview-tag">PREVIEW</span></a></li>
+<li><a href="#o9-extended-structural-schemas"
+id="toc-o9-extended-structural-schemas"><span class="secno">O9.
+</span>Extended Structural Schemas
+<span class="preview-tag">PREVIEW</span></a>
+<ul>
+<li><a href="#o91-derived-variant-sensor-consent-vocabulary"
+id="toc-o91-derived-variant-sensor-consent-vocabulary"><span
+class="secno">O9.1. </span>Derived-Variant Sensor Consent
+Vocabulary</a></li>
+<li><a href="#o92-two-component-devices-schema"
+id="toc-o92-two-component-devices-schema"><span class="secno">O9.2.
+</span>Two-Component <code>devices</code> Schema</a></li>
+<li><a href="#o93-actorstate-member"
+id="toc-o93-actorstate-member"><span class="secno">O9.3.
+</span><code>actorState</code> Member</a></li>
+</ul></li>
+<li><a href="#o10-cryptographic-requirements-summary"
+id="toc-o10-cryptographic-requirements-summary"><span class="secno">O10.
+</span>Cryptographic Requirements Summary
+<span class="preview-tag">PREVIEW</span></a></li>
+<li><a href="#o11-optional-feature-matrix-consolidated"
+id="toc-o11-optional-feature-matrix-consolidated"><span
+class="secno">O11. </span>Optional-Feature Matrix
+(consolidated)</a></li>
+<li><a href="#appendix-oa-manifest-class-registry-snapshot"
+id="toc-appendix-oa-manifest-class-registry-snapshot">Appendix OA.
+Manifest Class Registry Snapshot
+<span class="preview-tag">PREVIEW</span></a></li>
+<li><a href="#references" id="toc-references">References</a></li>
+</ul></li>
+</ul>
+</nav>
+<blockquote>
+<p><strong>Restructured per the Conformance-Tier Stack strategy
+(owner-selected, audit 2026-06-11). DRAFT for review.</strong></p>
+<p>This is a <strong>companion profile</strong> to the <a
+href="/spec/v0.4/core/">Universal Manifest v0.4
+Base specification</a>. It collects the capabilities that are
+<strong>not rungs on the trust-tier ladder</strong> but are
+independently optional — features a conformance claim <em>adds</em>
+orthogonally to its tier. Read the <a
+href="/spec/v0.4/core/">Base</a> first; this
+document assumes its terminology, envelope, and evaluation sequence.</p>
+<p>Each part below is self-contained. The Base <em>names</em> each of
+these features and points here; nothing in this document changes the
+Tier-0/Tier-1 conformance surface. Parts marked
+<span class="preview-tag">PREVIEW</span> are under working-group review
+and revisable before the schema locks.</p>
+</blockquote>
+<section id="ext-opt-optional-feature-profiles" class="level1">
+<h1>EXT-OPT: Optional-Feature Profiles</h1>
+<p><strong>Companion to:</strong> <a
+href="/spec/v0.4/core/">Base specification</a>
+(Tier-0 / Tier-1 Core). <strong>Registry categories:</strong> spans
+<code>domain</code>, <code>signature</code>, and others (per
+feature).</p>
+<section id="contents" class="level2">
+<h2>Contents</h2>
+<ul>
+<li><a href="#o1-abstract-data-model--format-independence">O1. Abstract
+Data Model &amp; Format Independence</a> (incl. CBOR-LD encoding, ADM
+conformance, context-integrity production)</li>
+<li><a href="#o2-statusref-resolution-schema">O2. statusRef Resolution
+Schema</a></li>
+<li><a href="#o3-receipt-as-a-first-class-manifest-class">O3. Receipt as
+a First-Class Manifest Class</a>
+<span class="preview-tag">PREVIEW</span></li>
+<li><a href="#o4-bilateral-session-model">O4. Bilateral Session
+Model</a> <span class="preview-tag">PREVIEW</span></li>
+<li><a href="#o5-federation">O5. Federation</a>
+<span class="preview-tag">PREVIEW</span></li>
+<li><a href="#o6-profile-registration-mechanism">O6. Profile
+Registration Mechanism</a> <span class="preview-tag">PREVIEW</span></li>
+<li><a href="#o7-agent-delegation-scope-registry">O7. Agent-Delegation
+Scope Registry</a> <span class="preview-tag">PREVIEW</span></li>
+<li><a href="#o8-category-trust-and-trustweight">O8. Category Trust and
+<code>trustWeight</code></a>
+<span class="preview-tag">PREVIEW</span></li>
+<li><a href="#o9-extended-structural-schemas">O9. Extended Structural
+Schemas</a> <span class="preview-tag">PREVIEW</span> (sensor consent,
+two-component devices, actorState)</li>
+<li><a href="#o10-cryptographic-requirements-summary">O10. Cryptographic
+Requirements Summary</a> <span class="preview-tag">PREVIEW</span></li>
+<li><a href="#o11-optional-feature-matrix-consolidated">O11.
+Optional-Feature Matrix (consolidated)</a></li>
+<li><a href="#appendix-oa-manifest-class-registry-snapshot">Appendix OA.
+Manifest Class Registry Snapshot</a>
+<span class="preview-tag">PREVIEW</span></li>
+</ul>
+<hr />
+</section>
+<section id="o1-abstract-data-model--format-independence"
+class="level2">
+<h2><span class="secno">O1. </span>Abstract Data Model &amp; Format
+Independence</h2>
+<p>The <a
+href="/spec/v0.4/core/#abstract-data-model-and-production-rules">Base</a>
+names the abstract data model and treats JSON-LD as the reference
+encoding; this part specifies the model in full, the production-rule
+contract, the CBOR-LD compact encoding, and the conformance and
+context-integrity production details.</p>
+<section id="o11-abstract-data-model" class="level3">
+<h3><span class="secno">O1.1. </span>Abstract Data Model</h3>
+<p>A Universal Manifest is defined in two layers. The <strong>abstract
+data model</strong> specifies the manifest's types, properties, and
+semantics independently of any serialization. A <strong>production
+rule</strong> specifies how that abstract model is written into — and
+read back from — a concrete wire format. This separation, modeled on W3C
+DID Core [<a href="#references">DID-CORE</a>], lets the manifest gain
+new encodings without changing what a manifest <em>means</em>. Member
+definitions and examples are presented in the JSON-LD reference encoding
+as an editorial convenience, not a normative restriction: every
+requirement stated in terms of a JSON-LD member applies to the
+corresponding abstract property in any conformant encoding.</p>
+<p>The abstract data model describes a manifest as a <em>map</em> of
+abstract properties to values, using the format-agnostic core data types
+of [<a href="#references">INFRA</a>]. The abstract properties
+constituting a Universal Manifest (each production rule defines how a
+name is expressed in its format):</p>
+<ul>
+<li><strong>type</strong> (set of strings, REQUIRED) — MUST include
+<code>um:Manifest</code>. Expressed as <code>@type</code> in
+JSON-LD.</li>
+<li><strong>id</strong> (string, REQUIRED) — globally unique opaque
+identifier. Expressed as <code>@id</code>.</li>
+<li><strong>contextReference</strong> (list, REQUIRED) — reference to
+the term definitions fixing property meaning. Expressed as
+<code>@context</code> in JSON-LD; carried as a compression context
+reference in CBOR-LD.</li>
+<li><strong>manifestVersion</strong> (string, REQUIRED);
+<strong>subject</strong> (string, REQUIRED); <strong>issuedAt</strong>,
+<strong>expiresAt</strong> (datetime, REQUIRED).</li>
+<li><strong>facets</strong> (list, OPTIONAL); <strong>claims</strong>,
+<strong>consents</strong>, <strong>pointers</strong>,
+<strong>devices</strong> (lists, OPTIONAL);
+<strong>requiredTrustTier</strong> (integer, OPTIONAL).</li>
+<li><strong>signature</strong> (map, REQUIRED) — integrity proof over
+the payload.</li>
+<li><strong>presentationProof</strong> (map, OPTIONAL);
+<strong>livenessAttestation</strong> (map, OPTIONAL) —
+credential-binding members (<a
+href="/spec/v0.4/ext-t1/">EXT-T1</a>).</li>
+<li><strong>actorState</strong> (map, OPTIONAL, PREVIEW);
+<strong>postQuantumSignature</strong> (map, OPTIONAL, PREVIEW — <a
+href="/spec/v0.4/ext-t2/">EXT-T2</a>).</li>
+</ul>
+<p>The semantics of these properties — the evaluation sequence, the
+tiered trust model, consent matching, signature verification, and all
+conformance obligations — are defined against this abstract data model
+and do not depend on which production rule serialized a given manifest.
+Extensions and future versions that define new root-level members MUST
+define them as abstract properties with a representation in each
+production rule they are used with; unknown members are preserved as
+unprocessed entries. The integrity proof is computed over the bytes of a
+specific production (<a href="#o15-signing-and-production">O1.5</a>), so
+a signature is bound to one encoding: converting a signed manifest
+between encodings requires re-signing; the <em>meaning</em> is preserved
+across encodings, the <em>signature bytes</em> are not.</p>
+</section>
+<section id="o12-production-rules" class="level3">
+<h3><span class="secno">O1.2. </span>Production Rules</h3>
+<p>A <strong>production rule</strong> is a bidirectional mapping between
+the abstract data model and a concrete byte representation.
+<em>Production</em> serializes; <em>consumption</em> parses back. A
+production rule MUST: (1) define a media type identifying the encoding;
+(2) specify how each abstract property is represented, including
+required and optional properties; (3) guarantee that consumption of a
+produced representation yields an abstract manifest equal to the
+original (lossless round-trip) for all properties defined by this
+specification. This specification defines two production rules: JSON-LD
+(reference) and CBOR-LD (compact). Future versions or profiles MAY
+define additional production rules (e.g., plain-JSON or COSE-based)
+without altering the abstract data model. Evaluators MUST NOT assume the
+absence of a production rule from this list means a manifest is
+non-conformant; they reject representations whose media type or encoding
+they do not support, exactly as they reject unsupported signature
+profiles.</p>
+</section>
+<section id="o13-json-ld-production-rule-reference-encoding"
+class="level3">
+<h3><span class="secno">O1.3. </span>JSON-LD Production Rule (Reference
+Encoding)</h3>
+<p>The JSON-LD production rule is the reference encoding and the default
+for interoperation. A manifest in this encoding is a JSON-LD document
+[<a href="#references">JSON-LD</a>] as described in <a
+href="/spec/v0.4/core/#core-identity-members">Base
+§1.2</a>–<a
+href="/spec/v0.4/core/#signature-profile-a-jcs--ed25519">§1.6</a>.
+Media type <code>application/um+ld+json</code> (also valid
+<code>application/ld+json</code>). The mapping is direct: abstract
+<strong>type</strong>, <strong>id</strong>,
+<strong>contextReference</strong> → <code>@type</code>,
+<code>@id</code>, <code>@context</code>; all other abstract properties →
+JSON members of the same name; abstract datetimes → RFC 3339 strings;
+integers/strings/lists/maps → JSON counterparts. A lone
+<code>@context</code> string is consumed as a one-element
+<code>contextReference</code> list; producers SHOULD emit the array form
+(normalization does not affect the signature, which covers the concrete
+bytes of the consumed production).</p>
+</section>
+<section id="o14-cbor-ld-production-rule-compact-encoding"
+class="level3">
+<h3><span class="secno">O1.4. </span>CBOR-LD Production Rule (Compact
+Encoding)</h3>
+<p>The CBOR-LD production rule is a second, compact binary encoding
+defined to demonstrate that the abstract data model is genuinely
+format-independent. It targets constrained channels — QR codes, NFC
+tags, low-bandwidth/embedded transports — where JSON-LD verbosity is
+costly. Media type <code>application/um+cbor-ld</code>. CBOR-LD [<a
+href="#references">CBOR-LD</a>] compresses a JSON-LD document into CBOR
+[<a href="#references">RFC8949</a>] by using the manifest's JSON-LD
+context to replace string term names with compact integer tokens:</p>
+<ol type="1">
+<li><strong>Production (encode).</strong> Begin with the JSON-LD
+production; using the context identified by
+<strong>contextReference</strong>, map each defined term to its integer
+token, then emit as CBOR. The <strong>contextReference</strong> is
+carried as a context identifier (not inlined term strings).</li>
+<li><strong>Consumption (decode).</strong> Read the context identifier,
+load the corresponding context, reverse the integer-to-term mapping, and
+reconstruct the JSON-LD document; interpreting it under <a
+href="#o13-json-ld-production-rule-reference-encoding">O1.3</a> yields
+the abstract manifest.</li>
+</ol>
+<p>This mapping is bidirectional and semantically lossless for all
+abstract properties: a manifest produced in CBOR-LD and then consumed
+MUST yield the same abstract manifest as the JSON-LD production from
+which it was derived. Conformance is identical across the two encodings;
+only the bytes on the wire differ. CBOR-LD decoding requires the
+manifest's context to be available to the decoder; deployments on
+offline or constrained channels SHOULD pre-provision the context for the
+relevant version, since it cannot be assumed retrievable at decode time.
+Term tokenization is deterministic only when both parties use the same
+context version, which the versioned namespace makes explicit.</p>
+<p><strong>Preview:</strong> A complete CBOR-LD profile — registered
+context-to-token table, a fixed signature production for the binary
+encoding (<a href="#o15-signing-and-production">O1.5</a>), and
+conformance fixtures — will be finalized after working-group review.
+Input is requested on whether CBOR-LD is the right compact encoding to
+standardize first.</p>
+</section>
+<section id="o15-signing-and-production" class="level3">
+<h3><span class="secno">O1.5. </span>Signing and Production</h3>
+<p>The integrity proof is computed over the canonical bytes of a
+specific production. Signature Profile A (<a
+href="/spec/v0.4/core/#signature-profile-a-jcs--ed25519">Base
+§1.6</a>) is defined against the JSON-LD production: the signing input
+is the JCS-canonicalized JSON-LD document with the signing-input
+exclusions removed (the <strong>signature</strong> property and, when
+present, <strong>presentationProof</strong> and
+<strong>postQuantumSignature</strong>). Each production rule MUST either
+reuse a profile defined against the abstract model or specify how the
+integrity proof is computed over its own canonical bytes, so a verifier
+can recompute the signing input deterministically. Because a signature
+is bound to the bytes of one production, a manifest re-encoded under a
+different production rule MUST be re-signed under that production's
+signing rule. <em>(Working-group note: whether a future profile should
+sign a canonicalization of the abstract model — making one signature
+portable across encodings — is the strategic open question of the
+format-independence design; this draft builds in per-production
+signing.)</em></p>
+</section>
+<section id="o16-conformance-to-the-abstract-data-model" class="level3">
+<h3><span class="secno">O1.6. </span>Conformance to the Abstract Data
+Model</h3>
+<p>The behavioral requirements of <a
+href="/spec/v0.4/core/#evaluator-behavior">Base
+§4.1</a>–<a
+href="/spec/v0.4/core/#bilateral-participant-behavior">§4.3</a>
+are stated against the abstract data model and apply identically
+regardless of encoding. A conformant implementation MUST support at
+least one production rule and SHOULD support the JSON-LD reference
+encoding; MUST consume supported representations into the abstract data
+model before applying behavioral requirements; MUST reject an
+unsupported encoding rather than misinterpreting it; MUST preserve every
+abstract property across a production/consumption round-trip when it
+both produces and consumes an encoding; and MUST verify the integrity
+proof against the bytes of the production it consumed.
+<strong>Supporting only the JSON-LD reference encoding is sufficient for
+full conformance</strong>; supporting CBOR-LD is OPTIONAL.</p>
+</section>
+<section id="o17-context-integrity-production-detail" class="level3">
+<h3><span class="secno">O1.7. </span>Context Integrity (production
+detail)</h3>
+<p>Term meanings — and, for CBOR-LD, tokenization — depend on the
+content of the versioned namespace context. The manifest signature
+covers the context <em>reference</em> (the URI string), not the context
+<em>document content</em>: if the served context changes or an attacker
+controls its resolution, term semantics and CBOR-LD round-trips can
+change silently under a still-valid signature. To prevent this, the
+versioned namespace URI identifies an <strong>immutable</strong>
+context: once published, the context document for a version MUST NOT
+change. Evaluators SHOULD ship or pin the context for each supported
+version rather than fetching it at evaluation time, and MUST NOT fetch
+contexts from untrusted resolvers at verification time. CBOR-LD
+deployments MUST use the pinned context, since tokenization correctness
+depends on byte-identical context versions on both sides. <em>(The Base
+states the evaluator-facing requirement in <a
+href="/spec/v0.4/core/#context-integrity">Base
+§6.10</a>; this is the production/encoding detail.)</em></p>
+<hr />
+</section>
+</section>
+<section id="o2-statusref-resolution-schema" class="level2">
+<h2><span class="secno">O2. </span>statusRef Resolution Schema</h2>
+<p>This part specifies the resolution protocol for the
+<code>signature.statusRef</code> field (<a
+href="/spec/v0.4/core/#revocation-aware-verification-extension">Base
+§1.6.6</a>, <a
+href="/spec/v0.4/core/#statusref-resolution-schema">Base
+§3.4</a>). <code>signature.statusRef</code> resolves the status of the
+<strong>manifest instance</strong> identified by
+<code>manifestId</code>; it does <strong>not</strong> convey the
+revocation status of any key (key revocation is determined separately
+via the key's DID document verification-method state, or a
+<code>claimProof</code> entry's own <code>statusRef</code>). These
+distinct objects of revocation MUST NOT be conflated.</p>
+<section id="o21-resolution-procedure" class="level3">
+<h3><span class="secno">O2.1. </span>Resolution Procedure</h3>
+<p>When <code>signature.statusRef</code> is present and the evaluator
+implements revocation-aware verification, the evaluator MUST: (1) issue
+an HTTP <code>GET</code> to the <code>statusRef</code> URI; (2) if it
+has a cached response, SHOULD include its most recently stored
+<code>cursor</code> in an <code>If-None-Match</code> header (subject to
+the <code>revocationCursor</code> floor below); (3) the status endpoint
+MUST respond with content type <code>application/json</code>; (4) the
+evaluator MUST parse the response and evaluate the <code>status</code>
+field. <code>statusRef</code> URIs MUST use <code>https</code>; status
+responses carry no independent signature, so authenticated transport is
+the only integrity protection — evaluators MUST NOT resolve a
+<code>statusRef</code> over plaintext and MUST treat a non-HTTPS
+<code>statusRef</code> as unreachable. Status endpoints SHOULD return an
+<code>ETag</code> equal to the current <code>cursor</code>; a
+<code>304 Not Modified</code> means status is unchanged. The
+holder-embedded <code>signature.revocationCursor</code> is the
+issuance-time floor: an evaluator whose cached response is older than
+<code>revocationCursor</code> MUST revalidate, and the response
+<code>cursor</code> supersedes it thereafter.</p>
+</section>
+<section id="o22-response-schema" class="level3">
+<h3><span class="secno">O2.2. </span>Response Schema</h3>
+<p>A status endpoint MUST return a JSON object with
+<code>manifestId</code> (MUST match the manifest's <code>@id</code>),
+<code>status</code> (one of <code>"active"</code>,
+<code>"revoked"</code>, <code>"suspended"</code>; MUST be present), and
+<code>updatedAt</code> (RFC 3339; MUST be present). It MAY include
+<code>reason</code> (human-readable), <code>cursor</code> (opaque;
+evaluators SHOULD store for conditional requests), and
+<code>nextCheck</code> (an ISO 8601 duration, e.g. <code>"PT1H"</code>,
+recommending when to next poll; evaluators SHOULD respect it).</p>
+</section>
+<section id="o23-status-semantics" class="level3">
+<h3><span class="secno">O2.3. </span>Status Semantics</h3>
+<ul>
+<li><code>"active"</code> — signature and credentials remain valid; the
+evaluator MUST continue evaluation.</li>
+<li><code>"revoked"</code> — permanently invalidated by the holder; the
+evaluator MUST reject with outcome <code>"rejected"</code> and
+<code>revocationStatus: "revoked"</code>.</li>
+<li><code>"suspended"</code> — temporarily suspended; the evaluator
+SHOULD treat as <code>"accepted-with-warnings"</code> and record
+<code>revocationStatus: "suspended"</code>; MAY apply local policy on
+whether to process.</li>
+</ul>
+</section>
+<section id="o24-error-handling" class="level3">
+<h3><span class="secno">O2.4. </span>Error Handling</h3>
+<p>When the status endpoint is unreachable or errors, evaluators MUST:
+on <strong>404</strong>, record
+<code>revocationStatus: "unchecked"</code> with reason
+<code>um:reason:status:endpoint-unknown-manifest</code>; on <strong>503
+or network failure</strong>, record <code>"unchecked"</code> with reason
+<code>um:reason:status:endpoint-unavailable</code> and MUST NOT reject
+the manifest solely because the endpoint is unreachable; on
+<strong>other 4xx/5xx</strong>, record <code>"unchecked"</code> with the
+HTTP status code in the reason. Evaluators in offline mode MUST record
+<code>"unchecked"</code> with reason
+<code>um:reason:status:offline</code>. Deployments MAY use a W3C
+Bitstring Status List endpoint [<a href="#references">VC-STATUS</a>] as
+the <code>statusRef</code> target, provided the evaluator can parse the
+response into the status semantics above; this is a SHOULD-level
+alternative that mitigates the status-resolution correlation risk (<a
+href="#o5-federation">O5</a> and the privacy considerations in <a
+href="/spec/v0.4/ext-t2/#t221-privacy-considerations-for-track-b">EXT-T2
+§T2.2.1</a>).</p>
+</section>
+<section id="o25-status-endpoint-conformance" class="level3">
+<h3><span class="secno">O2.5. </span>Status Endpoint Conformance</h3>
+<p>A <strong>conformant status endpoint</strong> (<a
+href="/spec/v0.4/core/#status-endpoint-conformance">Base
+§4.6</a>) MUST respond with the response schema and status semantics
+above (including the <code>status</code> values and the
+<code>cursor</code>/<code>nextCheck</code> fields), MUST key its
+response to the <code>manifestId</code> queried, and SHOULD support
+conditional requests. Resolver conformance (the federated-status class
+of <a href="#o5-federation">O5</a>) is deferred pending the
+working-group decision on whether federation moves to a companion
+specification.</p>
+<p><em>(Worked example: statusRef response — see <a
+href="/spec/v0.4/cookbook/">Cookbook</a>.)</em></p>
+<hr />
+</section>
+</section>
+<section id="o3-receipt-as-a-first-class-manifest-class" class="level2">
+<h2><span class="secno">O3. </span>Receipt as a First-Class Manifest
+Class <span class="preview-tag">PREVIEW</span></h2>
+<p>A receipt is itself a <strong>first-class manifest class</strong> (<a
+href="/spec/v0.4/core/#manifest-classes-and-the-polymorphic-envelope">Base
+§1.0.1</a>, <a
+href="/spec/v0.4/core/#receipt-as-a-first-class-manifest-class">Base
+§3.3.2</a>): a signed, portable record that can be chained, retained,
+and independently verified, carrying the common envelope members with
+<code>@type</code> including both <code>um:Manifest</code> and
+<code>um:Receipt</code>, plus the receipt fields of <a
+href="/spec/v0.4/core/#receipt-fields">Base
+§3.3.1</a>. This promotion is additive; an evaluator that only emits
+inline receipts remains conformant, and the chain-integrity members are
+OPTIONAL unless a receipt is part of a sequence.</p>
+<section id="o31-chain-integrity" class="level3">
+<h3><span class="secno">O3.1. </span>Chain Integrity</h3>
+<p>Receipts in a session or audit sequence form a hash-linked chain. A
+chained receipt MUST include <code>chainId</code> (a URI identifying the
+chain; for a bilateral session it MUST equal the <code>sessionId</code>
+of <a href="#o4-bilateral-session-model">O4</a>; it is the stable
+identifier tying a sequence together — <code>exchangeId</code> is per
+exchange round and does not serve this purpose), <code>seq</code> (a
+monotonically increasing non-negative integer; the first receipt has
+<code>seq</code> 0), and <code>prevHash</code> (the hash of the
+immediately preceding receipt's canonical signing bytes, encoded as a
+multibase/multihash string [<a href="#references">MULTIFORMATS</a>]; the
+multihash function MUST be SHA-256 for v0.4; omitted for
+<code>seq</code> 0).</p>
+<p>A chained receipt SHOULD be signed with a <strong>session-scoped
+signing key</strong> (for example,
+<code>deviceCapability.sessionSigningKey</code> of <a
+href="#o92-two-component-devices-schema">O9.2</a>, or another ephemeral
+key bound to the session) rather than a long-lived identity key, so a
+receipt chain does not become a long-lived correlator. Because a
+session-scoped key cannot be authorized through the subject's DID
+document the way <a
+href="/spec/v0.4/ext-t1/#t15-claim-proof-process--end-to-end-verification-path">EXT-T1
+§T1.5</a> authorizes manifest-signing keys, a session-scoped
+receipt-signing key MUST be introduced by a
+<code>sessionKeyAuthorization</code> — a statement naming the session
+key, the <code>chainId</code>, and a validity window, signed by a key
+authorized for the evaluator's DID — carried in or referenced from the
+first receipt, so the chain is attributable to a known evaluator.
+Evaluators verifying a chain MUST confirm each <code>seq</code>
+increments by one without gaps and each <code>prevHash</code> matches
+the prior receipt; a broken link MUST be reported and the chain after
+the break treated as unverified.</p>
+</section>
+<section id="o32-typed-event-vocabulary" class="level3">
+<h3><span class="secno">O3.2. </span>Typed Event Vocabulary</h3>
+<p>A receipt manifest MAY carry an <code>events</code> array recording
+typed lifecycle events. Each event object MUST carry an
+<code>eventType</code> from the registry below and an <code>at</code>
+(RFC 3339) timestamp; it MAY carry an event-specific <code>reason</code>
+(<a href="#o33-structured-reason-registry">O3.3</a>) and a
+<code>subjectRef</code> identifying the affected facet, claim, consent,
+or device. Recognized event classes: <code>manifest-arrived</code>,
+<code>manifest-verified</code>, <code>manifest-rejected</code> (envelope
+lifecycle); <code>facet-processed</code>, <code>facet-sealed</code>,
+<code>facet-consent-denied</code> (facet outcomes);
+<code>consent-granted</code>, <code>consent-withdrawn</code>,
+<code>consent-expired</code> (consent transitions);
+<code>claim-verified</code>, <code>claim-failed</code>,
+<code>binding-verified</code>, <code>binding-failed</code> (trust
+outcomes); <code>avatar-retrieved</code>,
+<code>avatar-substituted</code> (presence/avatar disclosure outcomes;
+presence is a locator, not authorization);
+<code>session-completed</code> (session terminal event). This is a
+registry, not a closed enumeration: new classes are added through the
+profile registration mechanism (<a
+href="#o6-profile-registration-mechanism">O6</a>). Evaluators
+encountering an unrecognized <code>eventType</code> MUST preserve the
+event but MUST NOT act on it.</p>
+</section>
+<section id="o33-structured-reason-registry" class="level3">
+<h3><span class="secno">O3.3. </span>Structured Reason Registry</h3>
+<p>Receipt <code>reason</code> values (on facet statuses, consent
+statuses, and events) SHOULD be drawn from a structured reason registry
+using <code>um:reason:&lt;category&gt;:&lt;code&gt;</code> naming (for
+example <code>um:reason:consent:withdrawn</code>,
+<code>um:reason:crypto:no-decryption-key</code>,
+<code>um:reason:trust:tier-unsupported</code>). Structured reasons make
+receipts machine-comparable. Free-text reasons remain valid where no
+registry code applies. New reason codes are registered through the
+profile registration mechanism (<a
+href="#o6-profile-registration-mechanism">O6</a>).</p>
+</section>
+<section id="o34-transparency-log-anchoring-optional" class="level3">
+<h3><span class="secno">O3.4. </span>Transparency-Log Anchoring
+(optional)</h3>
+<p>A receipt manifest MAY be anchored to an append-only transparency log
+following the Certificate Transparency 2.0 model [<a
+href="#references">RFC9162</a>]. When anchored, the receipt MAY carry a
+<code>transparencyAnchor</code> object with <code>logId</code>,
+<code>inclusionProof</code> (a Merkle inclusion proof), and
+<code>anchoredAt</code> (RFC 3339). Anchoring is OPTIONAL and does not
+increase per-event cost for deployments that do not use it; it provides
+tamper-evident, independently auditable history. Evaluators that do not
+implement transparency anchoring MUST preserve the
+<code>transparencyAnchor</code> field without acting on it.</p>
+<p><em>(Worked example: chained receipt manifest with typed events — see
+<a href="/spec/v0.4/cookbook/">Cookbook</a>.)</em></p>
+<p><strong>Preview:</strong> Promoting the Receipt to a first-class
+class — with the <code>seq</code>/<code>prevHash</code> chain, typed
+event vocabulary, structured reason registry, and optional CT-style
+anchoring — is built on the editors' default (promote in v0.4;
+additive). Input is requested on the canonical event-class and
+reason-code registries and on the hash/multibase encoding for
+<code>prevHash</code>.</p>
+<hr />
+</section>
+</section>
+<section id="o4-bilateral-session-model" class="level2">
+<h2><span class="secno">O4. </span>Bilateral Session Model
+<span class="preview-tag">PREVIEW</span></h2>
+<p>This part specifies the protocol-layer session model for bilateral
+exchanges, extending the manifest-level bilateral exchange of <a
+href="/spec/v0.4/core/#bilateral-exchange">Base
+§6.4.6</a> with session objects, paired receipt correlation, and
+exchange identifiers.</p>
+<section id="o41-session-object" class="level3">
+<h3><span class="secno">O4.1. </span>Session Object</h3>
+<p>A bilateral session is a time-bounded interaction between two
+participants who each present and evaluate the other's manifest. A
+session object MUST contain <code>@type</code>
+(<code>"um:BilateralSession"</code>), <code>sessionId</code> (a globally
+unique URI; MUST be present), <code>exchangeId</code> (a correlation
+identifier shared by both parties in a single exchange round; both
+include the same <code>exchangeId</code> in their receipts; MUST be
+present), <code>participants</code> (an array of exactly two participant
+objects, each with a <code>did</code> and <code>role</code> ∈
+{<code>"initiator"</code>, <code>"responder"</code>}),
+<code>initiatedAt</code> (RFC 3339), <code>expiresAt</code> (RFC 3339;
+evaluators MUST reject session operations after this time), and
+<code>state</code>. A session comprises exactly one exchange round; a
+new exchange between the same parties is a new session with new
+<code>sessionId</code>/<code>exchangeId</code>. <code>sessionId</code>
+and <code>exchangeId</code> MUST each be generated with at least 128
+bits of entropy and MUST NOT encode party identifiers, since both are
+correlation tokens the parties rely on.</p>
+</section>
+<section id="o42-session-lifecycle" class="level3">
+<h3><span class="secno">O4.2. </span>Session Lifecycle</h3>
+<p>States, strictly forward (no return to a previous state):
+<code>"initiated"</code> (initiator created the session and sent
+<code>sessionId</code>/<code>exchangeId</code>);
+<code>"manifests-exchanged"</code> (both presented manifests; each
+SHOULD reference <code>exchangeId</code> in its presentation context);
+<code>"receipts-exchanged"</code> (both produced and shared receipts;
+each receipt MUST include <code>exchangeId</code>);
+<code>"completed"</code> (both acknowledged the other's receipt);
+<code>"expired"</code> (TTL elapsed without <code>"completed"</code>;
+evaluators MUST treat as terminated). <code>"expired"</code> MAY be
+entered from any active state.</p>
+</section>
+<section id="o43-paired-receipt-correlation" class="level3">
+<h3><span class="secno">O4.3. </span>Paired Receipt Correlation</h3>
+<p>A receipt produced as part of a bilateral session MUST include an
+<code>exchangeId</code> matching the session's, enabling pairing: Party
+A's receipt (evaluating B's manifest) correlates with Party B's receipt
+(evaluating A's manifest) via the shared identifier. A receipt exchanged
+in a bilateral session MUST include <code>evaluatorId</code> and SHOULD
+carry <code>receiptSignature</code>, so the exchanged receipts are
+attributable and tamper-evident.</p>
+</section>
+<section id="o44-transport-independence" class="level3">
+<h3><span class="secno">O4.4. </span>Transport Independence</h3>
+<p>The session model is transport-agnostic. Sessions MAY be conducted
+over any transport that can carry manifest payloads in a supported
+production rule — JSON-LD or (once finalized) CBOR-LD on constrained
+channels: local transports (NFC, BLE, QR scan), network transports
+(HTTPS, WebSocket), or hybrids. Transport-specific bindings MAY be
+defined in profile documents. The session object MUST NOT assume any
+specific transport capability.</p>
+<p><em>(Worked example: bilateral session object — see <a
+href="/spec/v0.4/cookbook/">Cookbook</a>.)</em></p>
+<p><strong>Note (working-group):</strong> Whether the session model
+remains in the core specification or is published as a separate
+companion specification is open; bilateral sessions are protocol-layer
+concerns that may evolve independently of the manifest format.</p>
+<hr />
+</section>
+</section>
+<section id="o5-federation" class="level2">
+<h2><span class="secno">O5. </span>Federation
+<span class="preview-tag">PREVIEW</span></h2>
+<p>This part specifies the federation model: how multiple resolver
+operators coordinate to provide status checks, cache invalidation, and
+availability across a distributed network.</p>
+<p><strong>Resolver coordination.</strong> A federated resolver network
+consists of two or more resolver operators that synchronize manifest
+status. Resolvers MUST identify themselves using DIDs and MUST establish
+mutual trust through bilateral attestation (each attests to the other's
+identity via an <code>identity.crossDidBinding</code> claim or
+equivalent). Resolver discovery is out of scope; deployments MAY use a
+well-known URI (<code>/.well-known/um-resolvers</code>), a DID service
+endpoint, or out-of-band configuration.</p>
+<p><strong>Status check distribution.</strong> When an evaluator
+resolves a <code>statusRef</code> URI, it MAY query multiple federated
+resolvers. If any resolver reports <code>"revoked"</code>, the evaluator
+MUST treat the manifest as revoked (revocation is authoritative and
+overrides other responses). If resolvers disagree, the evaluator MUST
+act on the most restrictive status received and SHOULD record a warning
+with reason <code>um:reason:status:federation-inconsistent</code>; the
+recorded <code>revocationStatus</code> reflects the most restrictive
+answer received, not <code>"unchecked"</code>. If all queried resolvers
+are unreachable, follow the error handling in <a
+href="#o24-error-handling">O2.4</a>.</p>
+<p><strong>Cache invalidation.</strong> When a manifest's status
+changes, the issuing resolver MUST propagate the change to all federated
+resolvers; the federation SHOULD achieve propagation within 60 seconds
+for revocation events. During the propagation window, different
+evaluators may receive different answers. Evaluators SHOULD treat cached
+status as provisional and re-check per <code>nextCheck</code>.</p>
+<p><strong>Availability and failover.</strong> The federation uses
+eventual consistency. Evaluators MAY query any federated resolver, not
+only the primary <code>statusRef</code> endpoint; if the primary is
+unavailable, the evaluator SHOULD fall back to alternative resolvers
+discovered through the federation. In split-brain scenarios, the
+recorded <code>revocationStatus</code> reflects the most restrictive
+answer actually received from any reachable resolver, with a
+<code>um:reason:status:federation-inconsistent</code> warning;
+<code>"unchecked"</code> is reserved for the case where <em>no</em>
+resolver returned an answer.</p>
+<p><strong>Manifest forwarding.</strong> When a manifest is forwarded
+across federation boundaries, the forwarding agent MUST preserve all
+fields (unknown fields survive the evaluation sequence). Forwarding
+metadata MUST NOT be added to the manifest payload, because the
+payload's bytes are covered by the signature; a forwarding agent MAY
+convey a <code>forwardedVia</code> array (resolver DIDs in path order)
+in transport-level metadata or a wrapper object that carries the
+manifest unmodified — such metadata is informational and MUST NOT affect
+evaluation. Forwarded manifests MUST be re-verified by the receiving
+evaluator; the forwarding agent's handling does not substitute for the
+receiver's own evaluation.</p>
+<p><strong>Note (working-group):</strong> Whether federation should be
+published as a separate companion specification is open; it introduces
+protocol-layer complexity that may evolve independently of the manifest
+format.</p>
+<hr />
+</section>
+<section id="o6-profile-registration-mechanism" class="level2">
+<h2><span class="secno">O6. </span>Profile Registration Mechanism
+<span class="preview-tag">PREVIEW</span></h2>
+<p>This part defines the formal registration process for new
+cryptographic, trust, and domain profiles that extend the Universal
+Manifest specification, following IANA-style registry conventions. It is
+the mechanism the <a
+href="/spec/v0.4/core/#extensibility--profiles">Base
+§5</a> extension model relies on.</p>
+<p><strong>Profile identification.</strong> Each registered profile MUST
+have a canonical identifier following
+<code>um:profile:&lt;category&gt;:&lt;name&gt;</code>. Categories:
+<code>signature</code> (e.g.,
+<code>um:profile:signature:jcs-ed25519</code>), <code>trust</code>
+(e.g., <code>um:profile:trust:zkp-bbs-linked-secret</code>),
+<code>domain</code> (domain-specific manifest class profiles, e.g.,
+<code>um:profile:domain:receipt</code>), <code>binding</code>
+(credential binding profiles, e.g.,
+<code>um:profile:binding:sd-jwt-kb</code>). Each identifier MUST be
+paired with a human-readable name and version string; identifiers are
+globally unique and MUST NOT be reused after deprecation. This process
+also governs the subsidiary value registries referenced elsewhere:
+receipt event classes (<a href="#o32-typed-event-vocabulary">O3.2</a>),
+receipt reason codes (<a
+href="#o33-structured-reason-registry">O3.3</a>), agent-delegation scope
+values (<a href="#o7-agent-delegation-scope-registry">O7</a>), liveness
+<code>proofType</code> values (<a
+href="/spec/v0.4/ext-t1/#t13-liveness-attestation">EXT-T1
+§T1.3</a>), and additional JWE algorithm pairs (<a
+href="/spec/v0.4/core/#jwe-algorithm-constraints">Base
+§2.4</a>).</p>
+<p><strong>Registration process (five steps).</strong> (1)
+<strong>Proposal</strong> — a profile author submits a specification to
+the working group via the [<a href="#references">UM-RFC</a>] mechanism,
+including a scope statement, normative requirements (RFC 2119 keywords),
+security considerations, an interoperability assessment, and at least
+one conformance test fixture. (2) <strong>Review</strong> — the working
+group reviews for completeness, security, and interoperability, and MUST
+verify the profile does not conflict with existing profiles at the same
+extension point. (3) <strong>Conformance integration</strong> — the
+author provides fixtures; the working group integrates them into the
+conformance suite. (4) <strong>Registration</strong> — upon consensus,
+the profile receives its canonical identifier and is added to the
+registry. (5) <strong>Maintenance</strong> — the author maintains the
+spec and tests; the working group MAY deprecate the profile if
+maintenance lapses, security issues arise, or a superseding profile is
+registered.</p>
+<p><strong>Conflict resolution.</strong> Two profiles defining
+incompatible semantics for the same extension point MUST NOT both be
+registered without resolution; the working group MUST resolve by
+merging, selecting one, or defining a compatibility boundary.
+<strong>Deprecation.</strong> The working group MAY mark a profile
+<code>"deprecated"</code> (with a date and superseding-profile
+reference); evaluators SHOULD warn on deprecated-profile references but
+MUST NOT reject manifests solely for referencing one until the profile
+is declared <code>"sunset"</code> at a major-version boundary.
+<strong>Registry hosting.</strong> The registry MUST be published as a
+standalone document at
+<code>https://universalmanifest.net/registry/profiles/</code>, updated
+independently of the specification version; each entry contains the
+identifier, name, version, status (<code>"active"</code>,
+<code>"deprecated"</code>, <code>"sunset"</code>), specification URI,
+and registration date.</p>
+<p><strong>Note (working-group):</strong> Whether low-risk profiles
+(e.g., new domain entity types) should follow a lighter-weight
+registration with designated expert review instead of full consensus is
+under evaluation.</p>
+<hr />
+</section>
+<section id="o7-agent-delegation-scope-registry" class="level2">
+<h2><span class="secno">O7. </span>Agent-Delegation Scope Registry
+<span class="preview-tag">PREVIEW</span></h2>
+<p>This part defines a registry of recognized scope values for the
+<code>scope</code> field in <code>um:agentDelegation</code> pointers (<a
+href="/spec/v0.4/core/#agent-delegation">Base
+§6.5</a>), with a namespace convention and registration procedure.</p>
+<p><strong>Namespace convention.</strong> Scope values MUST follow a
+dot-separated <code>&lt;domain&gt;.&lt;capability&gt;</code> naming (the
+domain identifies the functional area; the capability the specific
+authority). Examples: <code>spatial.session</code>,
+<code>social.messaging</code>, <code>commerce.transaction</code>. Custom
+scope values defined by profile documents SHOULD use a reverse-DNS
+prefix to prevent collisions (e.g.,
+<code>com.example.custom-capability</code>).</p>
+<p><strong>Core scope values.</strong> All evaluators recognizing
+<code>um:agentDelegation</code> pointers MUST understand these:
+<code>spatial.session</code> (participate in spatial computing sessions
+on behalf of the subject); <code>spatial.navigation</code> (navigate
+spatial environments); <code>social.messaging</code> (send and receive
+messages); <code>social.presence</code> (represent the subject's
+presence status); <code>commerce.transaction</code> (initiate
+transactions, within any spending limits declared in the manifest);
+<code>identity.attestation</code> (present the subject's identity claims
+to verifiers — does <strong>not</strong> grant authority to create or
+modify claims).</p>
+<p><strong>Evaluator behavior for unrecognized scopes.</strong> An
+evaluator encountering unrecognized scope values MUST: (1) record them
+in the receipt; (2) restrict the delegate to only the recognized scopes
+(the delegate MUST NOT exercise capabilities for unrecognized scopes);
+(3) if the pointer contains <strong>only</strong> unrecognized scopes,
+SHOULD treat the delegation as having no effective scope and record
+this.</p>
+<p><strong>Registration procedure.</strong> New scope values are
+registered through the profile registration mechanism (<a
+href="#o6-profile-registration-mechanism">O6</a>); a registration MUST
+include the scope string, a description, the domain it governs, and any
+constraints (e.g., "requires <code>requiredTrustTier</code> &gt;=
+1").</p>
+<p><em>(Non-normative: Mastercard's Verifiable Intent pattern — a
+three-layer SD-JWT structure for bounded-scope agent delegation — is
+compatible, each layer mapping to a scope constraint. Working-group
+note: whether scope values should use URI-based naming for stronger
+uniqueness is under evaluation.)</em></p>
+<hr />
+</section>
+<section id="o8-category-trust-and-trustweight" class="level2">
+<h2><span class="secno">O8. </span>Category Trust and
+<code>trustWeight</code> <span class="preview-tag">PREVIEW</span></h2>
+<p>A recurring failure mode in service directories is treating a
+self-declared service category (for example "emergency-services" or
+"verified-merchant") as if it were attested. v0.4 separates the
+<em>claim</em> of a category from its <em>attestation</em> by splitting
+the single self-declared category field into four distinct
+category-trust claim objects and by replacing the v0.1/v0.3
+<code>interpretedAs: "hint-only"</code> enum with a typed
+<code>trustWeight</code> field an evaluator can act on uniformly.</p>
+<p><strong>The <code>trustWeight</code> field.</strong> Any claim or
+category-trust object MAY carry a <code>trustWeight</code> field
+replacing the older <code>interpretedAs: "hint-only"</code> convention.
+<code>trustWeight</code> is one of: <code>"hint"</code> (self-asserted,
+unattested; evaluators MUST NOT grant trust-transitive or high-impact
+authority on a <code>hint</code>-weighted value alone — the typed
+successor to <code>interpretedAs: "hint-only"</code>);
+<code>"attested"</code> (backed by a Verifiable Credential or
+attestation from a named issuer; evaluators verify per the claim-proof
+process — <a
+href="/spec/v0.4/ext-t1/#t15-claim-proof-process--end-to-end-verification-path">EXT-T1
+§T1.5</a> — before relying on it); <code>"authoritative"</code> (issued
+by an identity service provider or registry the evaluator treats as
+authoritative for the category by local policy). When
+<code>trustWeight</code> is absent, evaluators MUST default to
+<code>"hint"</code>. Evaluators encountering the deprecated
+<code>interpretedAs</code> member (from v0.1/v0.3) MUST ignore it; in
+its absence <code>trustWeight</code> defaults to <code>"hint"</code>,
+preserving the prior <code>interpretedAs: "hint-only"</code> semantics.
+The <code>interpretedAs</code> member is removed from the v0.4
+vocabulary.</p>
+<p><strong>Category trust split.</strong> The single self-declared
+category is replaced by four distinct <em>category-trust objects</em>
+(claim-level objects carried in the <code>claims</code> array,
+distinguished by their <code>@type</code>; not top-level
+<code>um:Facet</code> objects), each carrying the common claim members
+of <a
+href="/spec/v0.4/core/#claims-array-schema">Base
+§1.4.3</a> plus <code>trustWeight</code>: <code>operatorIdentity</code>
+(the operating entity's identity, signed by an identity service
+provider; RECOMMENDED for any non-trivial service);
+<code>serviceCategoryClaim</code> (the self-declared category; always
+<code>trustWeight: "hint"</code> unless paired with a
+<code>categoryAttestation</code>); <code>categoryAttestation</code> (a
+Verifiable Credential attesting the category from a recognized
+authority; REQUIRED for high-impact categories — defined at the profile
+level, e.g. emergency, medical, financial, child-directed);
+<code>urgencyClaim</code> (any urgency/priority assertion, carried as a
+separate signed claim so urgency cannot be smuggled in via the category
+field). Normative rules: an evaluator MUST NOT act on a
+<code>serviceCategoryClaim</code> for a high-impact category without a
+verified <code>categoryAttestation</code>; MUST verify
+<code>categoryAttestation</code> credentials for revocation per <a
+href="#o2-statusref-resolution-schema">O2</a>; and MUST treat
+<code>operatorIdentity</code> and <code>serviceCategoryClaim</code> as
+independent. The high-impact category list is profile-level, not fixed
+by this specification, consistent with eIDAS 2.0 [<a
+href="#references">eIDAS2</a>] assurance-level practice.</p>
+<p><strong>Preview:</strong> The <code>trustWeight</code> field and the
+four-way category-trust split are built on the editors' default (adopt
+<code>trustWeight</code> in v0.4). <code>trustWeight</code> is a small
+but forward-compatibility-critical wire-shape change; doing it before
+the wire is fielded avoids a v0.5 break. Input is requested on the
+high-impact category list and on whether <code>trustWeight</code> should
+be a closed enum or an extensible vocabulary.</p>
+<hr />
+</section>
+<section id="o9-extended-structural-schemas" class="level2">
+<h2><span class="secno">O9. </span>Extended Structural Schemas
+<span class="preview-tag">PREVIEW</span></h2>
+<p>The Base names three structural-state extensions as reserved members
+(<a
+href="/spec/v0.4/core/#consents-array-schema">Base
+§1.4.4</a>, <a
+href="/spec/v0.4/core/#devices-array-schema">§1.4.6</a>,
+<a
+href="/spec/v0.4/core/#actorstate-member">§1.4.7</a>);
+this part specifies them.</p>
+<section id="o91-derived-variant-sensor-consent-vocabulary"
+class="level3">
+<h3><span class="secno">O9.1. </span>Derived-Variant Sensor Consent
+Vocabulary</h3>
+<p>Spatial-computing sensors expose data at very different sensitivities
+depending on processing. A single boolean "eye-tracking allowed" consent
+cannot distinguish "raw gaze vector stream" from "region-of-interest hit
+only." v0.4 extends the <code>consents</code> vocabulary (<a
+href="/spec/v0.4/core/#consents-array-schema">Base
+§1.4.4</a>) with <strong>derived-variant</strong> consent keys: each
+sensor class is qualified by a derivation tier so holders consent to the
+minimum-sensitivity variant a use case needs. Non-breaking: the v0.1
+boolean keys remain valid and are interpreted as the most-permissive
+variant only when a deployment explicitly opts in; absent an explicit
+grant for a derived variant, evaluators MUST fail closed.</p>
+<p>A derived-variant consent key uses dot-separated
+<code>sensor.&lt;class&gt;.&lt;signal&gt;.&lt;derivation&gt;</code>
+naming, aligned with the Khronos OpenXR sensor classes [<a
+href="#references">OPENXR</a>]. Eight sensor classes (eye, hand, face,
+body, depth, audio, rgb-camera, environment) are each qualified by a
+derivation tier from <code>raw</code> (least processed, most sensitive)
+through progressively more-derived variants (e.g.
+<code>roi-derived</code>, <code>event-derived</code>,
+<code>presence-derived</code>). Examples:
+<code>sensor.eye.gaze.raw</code> (raw gaze vector stream);
+<code>sensor.eye.gaze.roi-derived</code> (region-of-interest hit-test
+results only); <code>sensor.hand.pose.raw</code> (full hand skeleton);
+<code>sensor.hand.pose.gesture-derived</code> (recognized discrete
+gestures only). Each derived-variant consent entry MUST carry the
+<code>purpose</code> field of <a
+href="/spec/v0.4/core/#consents-array-schema">Base
+§1.4.4</a>, binding the grant to a stated purpose so a grant for one
+purpose cannot be silently reused for another (consent-creep prevention,
+per GDPR Article 5(1)(b) and ISO/IEC 27560:2023). The
+<code>purpose</code> value SHOULD be drawn from the W3C Data Privacy
+Vocabulary where an applicable term exists. An evaluator MUST match the
+most specific derived-variant key granted: a grant for
+<code>sensor.eye.gaze.roi-derived</code> MUST NOT be read as granting
+<code>sensor.eye.gaze.raw</code>. A grant for a less-derived (more
+sensitive) variant MAY be treated by policy as also authorizing strictly
+more-derived variants of the same signal, but a deployment doing so MUST
+document the implication in its conformance claim.</p>
+<p><em>(Worked example: derived-variant sensor consent with purpose
+binding — see <a
+href="/spec/v0.4/cookbook/">Cookbook</a>.)</em></p>
+<p><strong>Preview:</strong> Built on the editors' default (add in v0.4;
+small, non-breaking). Input is requested on the full derivation-tier
+enumeration per sensor class and on whether the sensor key is best
+carried as a dedicated <code>sensorConsent</code> field or folded into
+<code>scope</code>.</p>
+</section>
+<section id="o92-two-component-devices-schema" class="level3">
+<h3><span class="secno">O9.2. </span>Two-Component <code>devices</code>
+Schema</h3>
+<p>The <code>devices</code> array (<a
+href="/spec/v0.4/core/#devices-array-schema">Base
+§1.4.6</a>) registers hardware endpoints (XR headsets, NFC readers,
+smart displays, wearable sensors) associated with the subject. v0.3
+reserved this member; v0.4 defines device entries as a
+<strong>two-component split</strong> mirroring the layered
+device-attestation models of FIDO, TPM 2.0, WebAuthn Level 3 [<a
+href="#references">WEBAUTHN</a>], Android Hardware Attestation, and
+Apple DeviceCheck: a long-lived hardware provenance component and a
+session-scoped capability component. Separating them lets a session-only
+manifest advertise device capabilities without leaking a long-lived
+hardware identifier. Each entry is a device object that MAY carry a
+<code>deviceAttestation</code>, a <code>deviceCapability</code>, or
+both; it MUST include a <code>@type</code> of <code>"um:Device"</code>
+and an <code>@id</code>. The <code>deviceAttestation</code> and
+<code>deviceCapability</code> sub-objects are device
+<em>components</em>, not <code>um:Facet</code> objects.</p>
+<p><strong><code>deviceAttestation</code> (long-lived,
+manufacturer-signed).</strong> When present it MUST contain
+<code>deviceClass</code> (a string, e.g. <code>"xr-headset"</code>,
+<code>"nfc-reader"</code>, <code>"wearable-sensor"</code>),
+<code>modelHash</code> (a hash identifying the model/firmware baseline,
+suitable for matching against a manufacturer registry without revealing
+a per-unit serial), and <code>attestation</code> (a Verifiable
+Credential or platform attestation object signed by the manufacturer or
+attestation authority — e.g. a WebAuthn/FIDO device attestation or a TPM
+2.0 [<a href="#references">TPM2</a>] quote; evaluators MUST verify it
+against a configurable manufacturer trust anchor before relying on the
+device's hardware claims). It MAY carry <code>manufacturer</code>
+(DID/URI) and <code>attestedAt</code> (RFC 3339). Because hardware
+identifiers are long-lived and potentially correlatable, holders SHOULD
+omit <code>deviceAttestation</code> from session-only or pseudonymous
+manifests and carry only <code>deviceCapability</code>.</p>
+<p><strong><code>deviceCapability</code> (session-scoped,
+user-signed).</strong> Describes what the device can do for the current
+session, signed by the subject (or a session-scoped key), not the
+manufacturer. When present it MAY contain <code>sensors</code>
+(sensor-class identifiers, e.g. <code>"eye-tracking"</code>,
+<code>"hand-tracking"</code>, <code>"depth"</code>,
+<code>"rgb-camera"</code>, using OpenXR sensor-class naming),
+<code>openxrExtensions</code> (OpenXR extension identifiers the
+device/runtime supports), <code>positioningTier</code> (e.g.
+<code>"3dof"</code>, <code>"6dof"</code>, <code>"world-scale"</code>),
+<code>processingConstraints</code> (compute/thermal/power limits an
+evaluator should respect), <code>privacyModes</code> (e.g.
+<code>"on-device-only"</code>, <code>"roi-derived-only"</code>), and
+<code>sessionSigningKey</code> (a session-scoped ephemeral public key
+used to sign per-session device assertions; MUST NOT be a long-lived
+hardware identifier; generated per session to avoid cross-session
+linkage). Evaluators MUST NOT treat <code>deviceCapability</code> claims
+as hardware-attested unless a corresponding verified
+<code>deviceAttestation</code> is present on the same entry; absent such
+attestation, <code>deviceCapability</code> is a self-declared,
+session-scoped assertion (analogous to a hint-weight claim — <a
+href="#o8-category-trust-and-trustweight">O8</a>).</p>
+<p>The <code>devices</code> array is part of the signed payload: holders
+include it when signing, and evaluators MUST include it when recomputing
+the signing input and MUST NOT discard it before verification or during
+Arrive-stage unknown-field handling (it is a named structural member).
+Evaluators that do not implement the device components MUST preserve the
+array and record entries as present-but-unprocessed.</p>
+<p><em>(Worked example: device entry with both components — see <a
+href="/spec/v0.4/cookbook/">Cookbook</a>.)</em></p>
+<p><strong>Preview:</strong> The two-component split is built on the
+editors' default (define in v0.4), because the wire shape is not yet
+fielded and this is the most consequential wire-shape decision in this
+version. Attestation transparency logs for device attestations are out
+of scope for v0.4 (flagged for v0.5). Input is requested on the
+sensor-class and OpenXR-extension vocabularies and on session-key
+generation requirements.</p>
+</section>
+<section id="o93-actorstate-member" class="level3">
+<h3><span class="secno">O9.3. </span><code>actorState</code> Member</h3>
+<p>The <code>actorState</code> member (<a
+href="/spec/v0.4/core/#actorstate-member">Base
+§1.4.7</a>) is an OPTIONAL top-level object declaring who is operating
+the session the manifest is presented in: the human principal, a
+delegated agent, or a hybrid. It bridges the
+<code>um:agentDelegation</code> pointer (<a
+href="/spec/v0.4/core/#agent-delegation">Base
+§6.5</a>) — which declares that delegation <em>exists</em> — to the
+session-state semantics of who is <em>currently acting</em>. RECOMMENDED
+whenever an <code>um:agentDelegation</code> pointer is present.</p>
+<p>When present, <code>actorState</code> MUST contain
+<code>principal</code> (the DID of the human or legal entity the
+manifest represents; MUST match the manifest <code>subject</code>; an
+evaluator finding <code>actorState.principal</code> not equal to
+<code>subject</code> MUST record this as a verification failure and MUST
+NOT rely on the manifest for delegated-authority decisions). When
+present, it MAY contain an <code>executor</code> object describing who
+is operating on the principal's behalf: <code>type</code> (one of
+<code>"human"</code>, <code>"agent"</code>, <code>"hybrid"</code>; MUST
+be present when <code>executor</code> is present);
+<code>delegateId</code> (the DID of the operating agent; REQUIRED when
+<code>type</code> is <code>"agent"</code> or <code>"hybrid"</code>);
+<code>delegationRef</code> (a reference to the
+<code>um:agentDelegation</code> pointer by <code>@id</code> that
+authorizes this executor; when present, evaluators MUST confirm the
+referenced pointer exists, is unexpired, and names
+<code>delegateId</code> as its delegate); <code>lastVerifiedAt</code>
+(RFC 3339 of the last interactive verification of the principal;
+meaningful only when <code>type</code> is <code>"human"</code> or
+<code>"hybrid"</code>; relates to the liveness model in <a
+href="/spec/v0.4/ext-t1/#t13-liveness-attestation">EXT-T1
+§T1.3</a>). When <code>executor</code> is absent, evaluators MUST treat
+the session as principal-operated (<code>type: "human"</code> with no
+delegate). <code>actorState</code> is additive and non-breaking; v0.3
+manifests omit it, and evaluators that do not implement it record it as
+present-but-unprocessed.</p>
+<p><em>(Worked example: actorState with an agent executor — see <a
+href="/spec/v0.4/cookbook/">Cookbook</a>.)</em></p>
+<p><strong>Preview:</strong> Built on the editors' default (add as
+OPTIONAL, RECOMMENDED with <code>um:agentDelegation</code>). It is a
+wire-shape addition. Input is requested on whether
+<code>actorState</code> should become REQUIRED when any delegation
+pointer is present.</p>
+<hr />
+</section>
+</section>
+<section id="o10-cryptographic-requirements-summary" class="level2">
+<h2><span class="secno">O10. </span>Cryptographic Requirements Summary
+<span class="preview-tag">PREVIEW</span></h2>
+<p>This consolidates the cryptographic requirements scattered across the
+signature profile (<a
+href="/spec/v0.4/core/#signature-profile-a-jcs--ed25519">Base
+§1.6</a>), encrypted facets (<a
+href="/spec/v0.4/core/#jwe-algorithm-constraints">Base
+§2.4</a>), the tiered trust model (<a
+href="/spec/v0.4/core/#tiered-trust-model">Base
+§6.4.2</a>), the ZKP profiles (<a
+href="/spec/v0.4/ext-t2/#t21-tier-2-zkp-proof-profile">EXT-T2
+§T2.1</a>), the ceremony model (<a
+href="/spec/v0.4/ext-t3/">EXT-T3</a>), credential binding (<a
+href="/spec/v0.4/ext-t1/">EXT-T1</a>), and post-quantum
+signatures (<a
+href="/spec/v0.4/ext-t2/#t23-post-quantum-signatures">EXT-T2
+§T2.3</a>) into a single reference. This is a summary; the normative
+requirement for each algorithm lives in its referenced section, so this
+table can be updated as profiles are added without editing those
+sections.</p>
+<table>
+<thead>
+<tr>
+<th>Requirement level</th>
+<th>Algorithms / cryptosuites</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Mandatory-to-implement</strong></td>
+<td>Ed25519 over JCS-RFC8785 (Signature Profile A); SD-JWT Key Binding
+(KB-JWT); JWK Thumbprint; ECDH-ES+A256KW / A256GCM for encrypted
+facets</td>
+<td><a
+href="/spec/v0.4/core/#signature-profile-a-jcs--ed25519">Base
+§1.6</a>, <a href="/spec/v0.4/ext-t1/#t11-holder-binding">EXT-T1
+§T1.1</a>, <a
+href="/spec/v0.4/core/#jwe-algorithm-constraints">Base
+§2.4</a></td>
+</tr>
+<tr>
+<td><strong>Recommended</strong></td>
+<td>BBS+ signatures and BBS+ derived proofs (BLS12-381); WebAuthn Level
+3 device/liveness attestation</td>
+<td><a
+href="/spec/v0.4/ext-t2/#t21-tier-2-zkp-proof-profile">EXT-T2
+§T2.1</a>, <a
+href="/spec/v0.4/ext-t1/#t13-liveness-attestation">EXT-T1
+§T1.3</a></td>
+</tr>
+<tr>
+<td><strong>Optional (Tier 2 profiles)</strong> †</td>
+<td>Groth16 (HD-derivation proofs); BBS+ linked-secret equality
+proofs</td>
+<td><a
+href="/spec/v0.4/ext-t2/#t21-tier-2-zkp-proof-profile">EXT-T2
+§T2.1</a></td>
+</tr>
+<tr>
+<td><strong>Future</strong></td>
+<td>FROST threshold Schnorr/Ed25519 [<a href="#references">RFC9591</a>];
+threshold BBS+; ML-DSA / SLH-DSA / FN-DSA post-quantum signatures</td>
+<td><a href="/spec/v0.4/ext-t3/">EXT-T3</a>, <a
+href="/spec/v0.4/ext-t2/#t23-post-quantum-signatures">EXT-T2
+§T2.3</a></td>
+</tr>
+</tbody>
+</table>
+<p>† Items marked "Optional (Tier 2 profiles)" are optional at the
+specification level but become mandatory <em>within</em> the named
+optional profile: Groth16 is REQUIRED for an implementation that
+supports Profile 2B. The mandatory-to-implement row is likewise scoped
+to the module that uses each algorithm: Ed25519 over JCS-RFC8785 is
+unconditional for every implementation; the JWE pair is mandatory for
+evaluators claiming encrypted-facet support; SD-JWT Key Binding and JWK
+Thumbprint are mandatory for implementations claiming credential-binding
+support.</p>
+<p><strong>Preview:</strong> Built on the editors' default (add as a
+reference summary). Input is requested on whether any "recommended" item
+(notably BBS+ for privacy-preserving Tier 2) should be elevated to
+mandatory-to-implement for v0.4.</p>
+<hr />
+</section>
+<section id="o11-optional-feature-matrix-consolidated" class="level2">
+<h2><span class="secno">O11. </span>Optional-Feature Matrix
+(consolidated)</h2>
+<p>This consolidates <a
+href="/spec/v0.4/core/#optional-feature-matrix">Base
+§4.7</a> with the modules this companion introduces. An implementation
+that does not implement an optional module still conforms, provided it
+observes the mandatory baseline behavior for that module.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Conformance</th>
+<th>Mandatory baseline when not implemented</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Encrypted-facet decryption (<a
+href="/spec/v0.4/core/#encrypted-facets-jwe-inline-profile">Base
+§2.3</a>)</td>
+<td>OPTIONAL</td>
+<td>Sealed-entry handling REQUIRED: record present-but-sealed; never
+infer content.</td>
+</tr>
+<tr>
+<td>Revocation-aware verification (<a
+href="#o2-statusref-resolution-schema">O2</a>)</td>
+<td>RECOMMENDED</td>
+<td>Record <code>revocationStatus: "unchecked"</code>; do not grant
+revocation-gated trust.</td>
+</tr>
+<tr>
+<td>Credential binding (<a
+href="/spec/v0.4/ext-t1/">EXT-T1</a>)</td>
+<td>OPTIONAL (REQUIRED for Tier 1+)</td>
+<td>Record <code>holderBindingStatus: "absent"</code>; cap relied-upon
+claims at Tier 0.</td>
+</tr>
+<tr>
+<td>CBOR-LD encoding (<a
+href="#o14-cbor-ld-production-rule-compact-encoding">O1.4</a>)</td>
+<td>OPTIONAL</td>
+<td>Support JSON-LD reference encoding; reject unsupported
+encodings.</td>
+</tr>
+<tr>
+<td>Transparency anchoring (<a
+href="#o34-transparency-log-anchoring-optional">O3.4</a>)</td>
+<td>OPTIONAL</td>
+<td>Verify the manifest signature and proofs directly; do not require a
+transparency log.</td>
+</tr>
+<tr>
+<td>Tier-2 cryptographic binding (<a
+href="/spec/v0.4/ext-t2/">EXT-T2</a>)</td>
+<td>OPTIONAL</td>
+<td>Record <code>"trustTierUnsupported"</code> for Tier-2-required
+items; do not downgrade.</td>
+</tr>
+<tr>
+<td>Tier-3 ceremony (<a
+href="/spec/v0.4/ext-t3/">EXT-T3</a>)</td>
+<td>OPTIONAL</td>
+<td>Record <code>"trustTierUnsupported"</code> for Tier-3-required
+items; do not downgrade.</td>
+</tr>
+<tr>
+<td>Bilateral session model (<a
+href="#o4-bilateral-session-model">O4</a>)</td>
+<td>OPTIONAL</td>
+<td>Manifest-level bilateral exchange (<a
+href="/spec/v0.4/core/#bilateral-exchange">Base
+§6.4.6</a>) still applies.</td>
+</tr>
+<tr>
+<td>Federation (<a href="#o5-federation">O5</a>)</td>
+<td>OPTIONAL</td>
+<td>Single-endpoint statusRef resolution (<a
+href="#o2-statusref-resolution-schema">O2</a>) applies.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</section>
+<section id="appendix-oa-manifest-class-registry-snapshot"
+class="level2">
+<h2>Appendix OA. Manifest Class Registry Snapshot
+<span class="preview-tag">PREVIEW</span></h2>
+<p><em>This appendix is informative.</em> It snapshots the manifest
+classes (<a
+href="/spec/v0.4/core/#manifest-classes-and-the-polymorphic-envelope">Base
+§1.0.1</a>) currently surfaced by integration profiles, to illustrate
+the polymorphic-envelope model. It does <strong>not</strong> bind
+conformance; the authoritative, versioned registry is maintained as a
+standalone document under the profile registration mechanism (<a
+href="#o6-profile-registration-mechanism">O6</a>). Discriminating
+members are the members whose presence identifies the class.</p>
+<table>
+<thead>
+<tr>
+<th>Manifest class</th>
+<th>Discriminating members</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity capsule</td>
+<td><code>claims[]</code> with identity claim types;
+<code>holderBinding</code></td>
+<td>Portable identity and credential presentation.</td>
+</tr>
+<tr>
+<td>Consent record</td>
+<td><code>consents[]</code> with <code>um:Consent</code> entries</td>
+<td>Records permission grants governing facet use.</td>
+</tr>
+<tr>
+<td>Device-capability descriptor</td>
+<td><code>devices[]</code> with <code>deviceCapability</code></td>
+<td>Advertises session-scoped device capabilities.</td>
+</tr>
+<tr>
+<td>Device-attestation record</td>
+<td><code>devices[]</code> with <code>deviceAttestation</code></td>
+<td>Conveys manufacturer-signed hardware provenance.</td>
+</tr>
+<tr>
+<td>Receipt</td>
+<td><code>@type</code> includes <code>um:Receipt</code>;
+<code>seq</code>/<code>prevHash</code></td>
+<td>Signed, chainable evaluation/audit record.</td>
+</tr>
+<tr>
+<td>Cross-DID binding</td>
+<td><code>claims[]</code> with
+<code>identity.crossDidBinding</code></td>
+<td>Asserts common control of multiple DIDs.</td>
+</tr>
+<tr>
+<td>Agent-delegation capsule</td>
+<td><code>pointers[]</code> with <code>um:agentDelegation</code>;
+<code>actorState</code></td>
+<td>Declares delegated session authority and the operating actor.</td>
+</tr>
+<tr>
+<td>Encrypted-facet carrier</td>
+<td><code>facets[]</code> with <code>encryptionProfile</code></td>
+<td>Carries sealed, recipient-scoped payloads.</td>
+</tr>
+<tr>
+<td>Category/service descriptor</td>
+<td><code>claims[]</code> with <code>operatorIdentity</code> /
+<code>categoryAttestation</code> types</td>
+<td>Describes a service with attested category trust.</td>
+</tr>
+<tr>
+<td>Bilateral-session record</td>
+<td><code>@type</code> <code>um:BilateralSession</code>;
+<code>exchangeId</code></td>
+<td>Correlates a two-party manifest exchange.</td>
+</tr>
+</tbody>
+</table>
+<p>The snapshot is illustrative and non-exhaustive; integration profiles
+(e.g., the RP1 integration profile) surface additional classes. A
+manifest may belong to more than one class at once; the normative rule
+is in <a
+href="/spec/v0.4/core/#manifest-classes-and-the-polymorphic-envelope">Base
+§1.0.1</a>. The bilateral-session-record row anticipates a manifest that
+<em>records</em> a session: the session object of <a
+href="#o41-session-object">O4.1</a> is a protocol-layer object, not
+itself a manifest, so a session-record manifest would carry the common
+envelope members with <code>@type</code> including both
+<code>um:Manifest</code> and <code>um:BilateralSession</code>; its class
+profile is a working-group deliverable.</p>
+</section>
+<section id="references" class="level2">
+<h2>References</h2>
+<p>Cited in this profile (full descriptors in the published artifact):
+<strong>[DID-CORE]</strong>, <strong>[INFRA]</strong>,
+<strong>[JSON-LD]</strong>, <strong>[CBOR-LD]</strong>,
+<strong>[RFC8949]</strong> (CBOR), <strong>[RFC3339]</strong>,
+<strong>[RFC9162]</strong> (Certificate Transparency 2.0),
+<strong>[MULTIFORMATS]</strong>, <strong>[VC-STATUS]</strong> (Bitstring
+Status List), <strong>[UM-RFC]</strong>, <strong>[eIDAS2]</strong>,
+<strong>[OPENXR]</strong>, <strong>[WEBAUTHN]</strong>,
+<strong>[TPM2]</strong>, <strong>[RFC9591]</strong> (FROST).</p>
+<hr />
+<p><em>Companion to the <a
+href="/spec/v0.4/core/">Base specification</a>.
+For worked examples, see the <a
+href="/spec/v0.4/cookbook/">Cookbook</a>.</em></p>
+</section>
+</section>
+
+    <script>
+        (function(){
+            var root = document.documentElement;
+            var btn = document.getElementById('um-theme-btn');
+            var popover = document.getElementById('um-theme-popover');
+            var opts = popover.querySelectorAll('.um-theme-opt');
+            var icons = {
+                system: document.getElementById('um-theme-icon-system'),
+                light: document.getElementById('um-theme-icon-light'),
+                dark: document.getElementById('um-theme-icon-dark')
+            };
+            var KEY = 'um-spec-theme';
+
+            function getStored() {
+                var v = localStorage.getItem(KEY);
+                return (v === 'light' || v === 'dark') ? v : 'system';
+            }
+
+            function applyTheme(t) {
+                root.setAttribute('data-theme', t);
+                localStorage.setItem(KEY, t);
+                for (var k in icons) {
+                    icons[k].style.display = (k === t) ? '' : 'none';
+                }
+                for (var i = 0; i < opts.length; i++) {
+                    var active = opts[i].getAttribute('data-theme-value') === t;
+                    opts[i].classList.toggle('is-active', active);
+                    opts[i].setAttribute('aria-selected', active ? 'true' : 'false');
+                }
+            }
+
+            function openPopover() {
+                popover.classList.add('is-open');
+                btn.setAttribute('aria-expanded', 'true');
+            }
+
+            function closePopover() {
+                popover.classList.remove('is-open');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (popover.classList.contains('is-open')) {
+                    closePopover();
+                } else {
+                    openPopover();
+                }
+            });
+
+            for (var i = 0; i < opts.length; i++) {
+                opts[i].addEventListener('click', function(e) {
+                    applyTheme(this.getAttribute('data-theme-value'));
+                    closePopover();
+                });
+            }
+
+            document.addEventListener('click', function(e) {
+                if (!popover.contains(e.target) && e.target !== btn) {
+                    closePopover();
+                }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closePopover();
+            });
+
+            applyTheme(getStored());
+        })();
+    </script>
+</body>
+</html>

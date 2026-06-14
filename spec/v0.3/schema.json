@@ -1,0 +1,400 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universalmanifest.net/ns/universal-manifest/v0.3/schema.json",
+  "title": "Universal Manifest (v0.3)",
+  "description": "Structural schema for v0.3 Universal Manifest documents. Derived from the v0.3 normative specification (docs/W3C-STYLE-SPEC-v03.html). Validates envelope, signature profile A, claims/consents/pointers/devices structural arrays, encrypted facets, and requiredTrustTier declarations.",
+  "type": "object",
+  "required": [
+    "@context",
+    "@id",
+    "@type",
+    "manifestVersion",
+    "subject",
+    "issuedAt",
+    "expiresAt",
+    "signature"
+  ],
+  "properties": {
+    "@context": {
+      "description": "JSON-LD context URL/object/array. Must reference the v0.3 namespace (https://universalmanifest.net/ns/v0.3) per Section 1.2.1.",
+      "oneOf": [
+        { "type": "string" },
+        { "type": "object" },
+        { "type": "array" }
+      ]
+    },
+    "@id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Globally unique opaque identifier per Section 1.2.2. MUST NOT contain PII."
+    },
+    "@type": {
+      "description": "Must include um:Manifest (string or array). Per Section 1.2.3.",
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
+      ]
+    },
+    "manifestVersion": {
+      "const": "0.3",
+      "description": "Per Section 1.3.1, v0.3 conformant manifests MUST declare manifestVersion: '0.3'."
+    },
+    "subject": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable identifier URI per Section 1.3.2 (e.g., a DID)."
+    },
+    "issuedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 / RFC 3339 date-time per Section 1.3.3."
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 / RFC 3339 date-time per Section 1.3.3."
+    },
+    "requiredTrustTier": {
+      "$ref": "#/$defs/trustTier",
+      "description": "Manifest-level minimum trust tier (Section 6.4.5). Default 0."
+    },
+    "facets": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/facet" }
+    },
+    "claims": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/claim" }
+    },
+    "consents": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/consent" }
+    },
+    "devices": {
+      "type": "array",
+      "items": { "type": "object" },
+      "description": "Reserved per Section 1.4.6. Evaluators MUST accept and preserve a devices array but MUST NOT assign semantic meaning to its contents until a future spec version defines the entry schema."
+    },
+    "pointers": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/pointer" }
+    },
+    "signature": { "$ref": "#/$defs/signatureV03" }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "trustTier": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 3,
+      "description": "Integer in 0..3 per Section 6.4.5. Tier 0 self-asserted, Tier 1 attested/claimProof, Tier 2 ZK cryptographic binding (at risk), Tier 3 multi-party ceremony (future v0.4+)."
+    },
+    "facet": {
+      "type": "object",
+      "required": ["@id", "@type"],
+      "properties": {
+        "@id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "URI uniquely identifying this facet within the manifest. Used by consents[].facetRef matching and receipt recording per Section 2.1."
+        },
+        "@type": {
+          "description": "MUST include um:Facet per Section 2.1.",
+          "oneOf": [
+            { "type": "string" },
+            {
+              "type": "array",
+              "items": { "type": "string" },
+              "minItems": 1
+            }
+          ]
+        },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "ref": { "type": "string" },
+        "requiredTrustTier": { "$ref": "#/$defs/trustTier" },
+        "encryptionProfile": {
+          "const": "jwe-inline-v1",
+          "description": "Section 2.3.1 — when present, entity MUST be a JWE JSON Serialization object."
+        },
+        "entity": {
+          "description": "Plain um:Entity object, or (when encryptionProfile is present) a JWE JSON Serialization object per Section 2.3.2.",
+          "oneOf": [
+            { "$ref": "#/$defs/entity" },
+            { "$ref": "#/$defs/jweEntity" },
+            { "type": "object" },
+            { "type": "string" },
+            { "type": "null" }
+          ]
+        }
+      },
+      "if": {
+        "properties": {
+          "encryptionProfile": { "const": "jwe-inline-v1" }
+        },
+        "required": ["encryptionProfile"]
+      },
+      "then": {
+        "properties": {
+          "entity": { "$ref": "#/$defs/jweEntity" }
+        },
+        "required": ["entity"]
+      },
+      "additionalProperties": true
+    },
+    "entity": {
+      "type": "object",
+      "required": ["@id", "@type"],
+      "properties": {
+        "@id": { "type": "string", "minLength": 1 },
+        "@type": {
+          "oneOf": [
+            { "type": "string" },
+            {
+              "type": "array",
+              "items": { "type": "string" },
+              "minItems": 1
+            }
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "jweEntity": {
+      "type": "object",
+      "description": "JWE JSON Serialization for encrypted facet entity per Section 2.3.2.",
+      "required": ["protected", "recipients", "iv", "ciphertext", "tag"],
+      "properties": {
+        "protected": {
+          "type": "string",
+          "minLength": 1,
+          "description": "base64url-encoded JWE Protected Header. Must specify alg and enc."
+        },
+        "recipients": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["header"],
+            "properties": {
+              "header": {
+                "type": "object",
+                "required": ["kid"],
+                "properties": {
+                  "kid": { "type": "string", "minLength": 1 }
+                },
+                "additionalProperties": true
+              },
+              "encrypted_key": { "type": "string" }
+            },
+            "additionalProperties": true
+          },
+          "description": "Recipient objects each with header.kid and encrypted_key."
+        },
+        "iv": { "type": "string", "minLength": 1 },
+        "ciphertext": { "type": "string", "minLength": 1 },
+        "tag": { "type": "string", "minLength": 1 },
+        "previousKid": { "type": "string" },
+        "rotationReason": { "type": "string" },
+        "revokedRecipientKid": { "type": "string" },
+        "revocationAction": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "claim": {
+      "type": "object",
+      "required": ["@type", "issuer"],
+      "properties": {
+        "@type": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Claim type identifier per Section 1.4.3. Specialized claim types (e.g., 'identity.crossDidBinding') extend this base schema."
+        },
+        "issuer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subject": { "type": "string" },
+        "issuedAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" },
+        "claimProof": {
+          "description": "Proof material demonstrating claim issuance to the manifest subject. Enables Tier 1+ verification. MAY be a single proof (string URI or object) for backward compatibility, or an array of proof entries for multi-proof claims. See Section 6.4.3.",
+          "oneOf": [
+            { "type": "string", "format": "uri" },
+            { "$ref": "#/$defs/proofEntry" },
+            {
+              "type": "array",
+              "items": { "$ref": "#/$defs/proofEntry" },
+              "minItems": 1
+            }
+          ]
+        },
+        "requiredTrustTier": { "$ref": "#/$defs/trustTier" }
+      },
+      "additionalProperties": true,
+      "allOf": [
+        {
+          "if": {
+            "properties": { "@type": { "const": "identity.crossDidBinding" } },
+            "required": ["@type"]
+          },
+          "then": { "$ref": "#/$defs/crossDidBindingClaim" }
+        }
+      ]
+    },
+    "crossDidBindingClaim": {
+      "description": "identity.crossDidBinding claim per Section 6.4.4. boundDids MUST contain at least 2 DIDs.",
+      "required": ["@type", "issuer", "boundDids", "attester", "attestationMethod", "attestedAt"],
+      "properties": {
+        "@type": { "const": "identity.crossDidBinding" },
+        "boundDids": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 2
+        },
+        "attester": { "type": "string", "minLength": 1 },
+        "attestationMethod": { "type": "string", "minLength": 1 },
+        "attestedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "consent": {
+      "type": "object",
+      "required": ["@id", "@type", "facetRef", "scope", "purpose", "grantedAt", "expiresAt"],
+      "properties": {
+        "@id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "URI uniquely identifying this consent entry per Section 1.4.4."
+        },
+        "@type": {
+          "const": "um:Consent"
+        },
+        "facetRef": {
+          "type": "string",
+          "minLength": 1,
+          "description": "String matching the @id of the governed facet per Section 1.4.4."
+        },
+        "scope": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "grantedAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" },
+        "grantor": { "type": "string" },
+        "withdrawnAt": { "type": "string", "format": "date-time" },
+        "conditions": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "pointer": {
+      "type": "object",
+      "required": ["@type"],
+      "properties": {
+        "@type": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Pointer type identifier per Section 1.4.5."
+        },
+        "target": {
+          "type": "string",
+          "description": "URI of the referenced resource. Required for base pointer types per Section 1.4.5. Type-specific pointers may replace target with their own required fields."
+        },
+        "@id": { "type": "string" },
+        "label": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": true,
+      "allOf": [
+        {
+          "if": {
+            "properties": { "@type": { "const": "um:agentDelegation" } },
+            "required": ["@type"]
+          },
+          "then": { "$ref": "#/$defs/agentDelegationPointer" }
+        }
+      ]
+    },
+    "agentDelegationPointer": {
+      "description": "um:agentDelegation pointer per Section 6.5.1. Replaces base target field with type-specific required fields.",
+      "required": ["@type", "delegateType", "delegatedBy", "delegatedAt", "expiresAt"],
+      "properties": {
+        "@type": { "const": "um:agentDelegation" },
+        "delegateType": {
+          "enum": ["ai-agent", "bot", "proxy", "human-delegate"]
+        },
+        "delegatedBy": { "type": "string", "minLength": 1 },
+        "delegatedAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" },
+        "delegateId": { "type": "string" },
+        "scope": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "livenessEndpoint": { "type": "string", "format": "uri" }
+      }
+    },
+    "proofEntry": {
+      "type": "object",
+      "description": "A single proof demonstrating claim issuance or attestation. Compatible with W3C VP envelope, OmaTrust proof wrapper, and other proof formats. See Section 6.4.3.",
+      "properties": {
+        "proofType": {
+          "type": "string",
+          "description": "Type of proof mechanism. RECOMMENDED values: VerifiablePresentation, DataIntegrityProof, sd-jwt-kb, pop-jws, evidence-pointer."
+        },
+        "proofPurpose": {
+          "type": "string",
+          "description": "The verification relationship this proof satisfies, per W3C DID Core Section 5.3. RECOMMENDED values: assertionMethod, authentication, keyAgreement, capabilityDelegation."
+        }
+      },
+      "additionalProperties": true
+    },
+    "signatureV03": {
+      "type": "object",
+      "description": "Signature Profile A (JCS + Ed25519) per Section 1.6. v0.3 carries the v0.2 profile forward unchanged.",
+      "required": ["algorithm", "canonicalization", "keyRef", "value"],
+      "properties": {
+        "algorithm": { "const": "Ed25519" },
+        "canonicalization": { "const": "JCS-RFC8785" },
+        "keyRef": {
+          "type": "string",
+          "minLength": 1,
+          "description": "URI reference to verification key material. REQUIRED per Section 1.6.2."
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "description": "base64url-encoded Ed25519 signature."
+        },
+        "publicKeySpkiB64": {
+          "type": "string",
+          "minLength": 1,
+          "description": "OPTIONAL base64-encoded SPKI DER public key bytes for offline verification. Must be consistent with keyRef when both present."
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "statusRef": {
+          "type": "string",
+          "format": "uri"
+        },
+        "revocationCursor": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

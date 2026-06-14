@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="system">
+<head>
+    <meta charset="utf-8">
+    <script>
+        (function(){
+            var t = localStorage.getItem('um-spec-theme');
+            if (t === 'light' || t === 'dark') {
+                document.documentElement.setAttribute('data-theme', t);
+            }
+        })();
+    </script>
+    <title>Universal Manifest — Primer</title>
+    <link rel="canonical" href="https://universalmanifest.net/spec/v0.4/primer/">
+    <!-- Use the official W3C Working Draft style -->
+    <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/W3C-WD" type="text/css">
+    <style>
+        /* Specific enhancements per W3C specification layout */
+        html, body { margin: 0; padding: 0; }
+        body { max-width: none; line-height: 1.5; font-family: sans-serif; background-image: none !important; }
+        .head { margin-bottom: 1.25rem; }
+        .head a.logo, img[alt="W3C"], .w3c-logo { display: none !important; } /* Strip W3C branding injected by fixup.js */
+        .head h1 { color: #005a9c; }
+        .head h2 {
+            margin-bottom: 0.45rem;
+            margin-top: 0.45rem;
+        }
+        .head dl {
+            display: grid;
+            gap: 0.25rem 0.75rem;
+            grid-template-columns: max-content minmax(0, 1fr);
+            margin: 0.8rem 0;
+        }
+        .head dd,
+        .head dt {
+            margin: 0;
+        }
+        .head .copyright {
+            margin: 0.65rem 0;
+        }
+        .um-site-nav {
+            align-items: center;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            margin-top: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .um-site-nav__label {
+            color: #5a6677;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            margin-right: 0.15rem;
+            text-transform: uppercase;
+        }
+        .um-site-nav a {
+            background: #ffffff;
+            border: 1px solid #c9d3dd;
+            border-radius: 999px;
+            color: #1f2a36;
+            display: inline-flex;
+            font-size: 0.84rem;
+            font-weight: 700;
+            gap: 0.25rem;
+            padding: 0.42rem 0.72rem;
+            text-decoration: none;
+        }
+        .um-site-nav a:hover,
+        .um-site-nav a:focus-visible {
+            background: #eef4fb;
+            outline: none;
+        }
+        .um-site-nav a.is-current {
+            background: #005a9c;
+            border-color: #005a9c;
+            color: #ffffff;
+        }
+        body:not(.toc-inline) #toc,
+        body.toc-sidebar #toc {
+            background: #f4f6f8;
+            border-right: 1px solid #d4dce3;
+            box-sizing: border-box;
+            font-weight: bold;
+            bottom: 0;
+            height: 100vh;
+            left: 0 !important;
+            margin: 0;
+            min-height: 100vh;
+            overflow-y: auto;
+            padding: 1rem 1.25rem 3.5rem;
+            padding-left: 1rem;
+            position: fixed;
+            right: auto;
+            top: 0 !important;
+            width: 22rem;
+        }
+        body:not(.toc-inline),
+        body.toc-sidebar {
+            margin: 0;
+            padding-left: 0;
+        }
+        .toc h2 {
+            font-size: 0.75rem;
+            letter-spacing: 0.06em;
+            margin: 0 0 0.8rem;
+            text-transform: uppercase;
+        }
+        .toc ol {
+            counter-reset: item;
+            list-style: none;
+            margin: 0;
+            padding-left: 0;
+        }
+        .toc li {
+            counter-increment: item;
+            display: block;
+            margin: 0.1rem 0;
+        }
+        .toc li > a {
+            color: #1f2a36;
+            display: flex;
+            font-weight: 600;
+            gap: 0.35rem;
+            line-height: 1.25;
+            padding: 0.18rem 0;
+            text-decoration: none;
+        }
+        .toc li > a::before {
+            content: counters(item, ".") ".";
+            flex: 0 0 auto;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+        .toc ol ol {
+            margin: 0.12rem 0 0.25rem;
+            padding-left: 1rem;
+        }
+        .toc ol ol li > a {
+            font-weight: 500;
+        }
+        .toc a.toc-active {
+            color: #005a9c;
+            font-weight: 700;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        html body #toc-nav,
+        html body.toc-sidebar #toc-nav {
+            align-items: center;
+            bottom: 0 !important;
+            display: flex !important;
+            gap: 0.75rem !important;
+            justify-content: flex-start;
+            left: 0 !important;
+            margin: 0 !important;
+            max-width: 100vw;
+            padding: 0.5rem 0.5rem 0.5rem 1rem !important;
+            position: fixed !important;
+            right: auto !important;
+            transform: none !important;
+            width: auto !important;
+            z-index: 1002 !important;
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+        html body.toc-inline #toc-nav {
+            align-items: center;
+            bottom: 0 !important;
+            display: flex !important;
+            gap: 0.75rem !important;
+            justify-content: flex-start;
+            left: 0 !important;
+            margin: 0 !important;
+            padding: 0.5rem 0.5rem 0.5rem 1rem !important;
+            position: fixed !important;
+            width: auto !important;
+            z-index: 1002 !important;
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+        html body #toc-nav a,
+        html body #toc-nav a#toc-toggle,
+        html body #toc-nav a#toc-jump {
+            align-items: center !important;
+            background: #ffffff !important;
+            border: 1px solid #c9d3dd !important;
+            border-radius: 6px !important;
+            box-sizing: border-box !important;
+            color: #1f2a36 !important;
+            display: inline-flex !important;
+            float: none !important;
+            font-size: 0.85rem !important;
+            gap: 0.35rem !important;
+            height: auto !important;
+            left: auto !important;
+            line-height: 1.2 !important;
+            margin: 0 !important;
+            max-width: none !important;
+            min-height: 0 !important;
+            min-width: 0 !important;
+            padding: 0.45rem 0.6rem !important;
+            position: static !important;
+            right: auto !important;
+            text-decoration: none !important;
+            top: auto !important;
+            width: auto !important;
+            white-space: nowrap !important;
+        }
+        
+        #toc-nav a span#toc-jump-text,
+        #toc-nav a span#toc-expand-text,
+        #toc-nav a span#toc-collapse-text {
+            display: none !important;
+        }
+        html body #toc-nav a:hover {
+            background: #eef4fb;
+        }
+        html body #toc-nav a:focus-visible {
+            outline: 2px solid #005a9c;
+            outline-offset: 2px;
+        }
+        body:not(.toc-inline) > :not(#toc):not(script) {
+            margin-left: calc(22rem + 1.2rem);
+            margin-right: 1.4rem;
+            max-width: 50em;
+        }
+        body.toc-inline > :not(script) {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 50em;
+            padding-left: 1.4rem;
+            padding-right: 1.4rem;
+            box-sizing: border-box;
+        }
+        body.toc-inline #toc {
+            clear: both;
+            margin-bottom: 2rem;
+            padding-bottom: 3.5rem;
+        }
+        body.toc-inline #toc + section {
+            clear: both;
+        }
+        .note, .issue, .example { padding: .5em; border-left: .5em solid; margin: 1em 0; }
+        .example { border-color: #e0cb52; background: #fcfaee; }
+        .example-title { font-weight: bold; margin-bottom: 0.5em; }
+        .migration-callout {
+            background: #eef4fb;
+            border-left: 0.35rem solid #005a9c;
+            box-sizing: border-box;
+            margin-bottom: 1.25rem;
+            margin-top: -1.25rem;
+            padding: 0.65rem 0.85rem;
+        }
+        .migration-callout p {
+            margin: 0;
+        }
+        pre { background-color: #f8f8f8; border: 1px solid #ddd; padding: 1em; overflow: auto; }
+        code { font-family: Inconsolata, Consolas, "Liberation Mono", monospace; color: #c83232; }
+        .rfc2119 { text-transform: lowercase; font-variant: small-caps; font-style: normal; font-weight: bold; color: #900; }
+        .preview-banner {
+            background: #fff3cd;
+            border: 2px solid #e0a800;
+            border-radius: 4px;
+            color: #664d03;
+            font-weight: 600;
+            margin: 1.5em 0 1em;
+            padding: 0.75em 1em;
+        }
+        .preview-banner p { margin: 0.25em 0; }
+        .preview-section {
+            border-left: 4px solid #e0a800;
+            padding-left: 1em;
+            margin: 1.5em 0;
+        }
+        .preview-tag {
+            background: #e0a800;
+            border-radius: 3px;
+            color: #fff;
+            font-size: 0.75em;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            margin-left: 0.5em;
+            padding: 0.15em 0.45em;
+            text-transform: uppercase;
+            vertical-align: middle;
+        }
+        .preview-questions {
+            background: #f8f0d8;
+            border: 1px solid #e0cb52;
+            border-radius: 4px;
+            margin: 1em 0;
+            padding: 0.75em 1em;
+        }
+        .preview-questions p:first-child { font-weight: 700; margin-top: 0; }
+        .preview-questions ul { margin-bottom: 0; }
+        @media (max-width: 1100px) {
+            body:not(.toc-inline) #toc,
+            body.toc-sidebar #toc,
+            .toc {
+                border-right: none;
+                height: auto;
+                min-height: auto;
+                overflow-y: visible;
+                position: static;
+                width: auto;
+            }
+            html body #toc-nav,
+            html body.toc-sidebar #toc-nav,
+            html body.toc-inline #toc-nav {
+                width: auto !important;
+            }
+            html body #toc-nav a#toc-jump span#toc-jump-text {
+                display: none;
+            }
+            body:not(.toc-inline) > :not(#toc):not(script),
+            body > :not(#toc):not(script) {
+                margin-left: auto;
+                margin-right: auto;
+                max-width: 50em;
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        [id] {
+            scroll-margin-top: 2rem;
+        }
+
+        /* ---- Theme Switcher Widget ---- */
+        .um-theme-switcher {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1100;
+        }
+        .um-theme-btn {
+            align-items: center;
+            background: rgba(255,255,255,0.92);
+            border: 1px solid #c9d3dd;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+            color: #1f2a36;
+            cursor: pointer;
+            display: inline-flex;
+            font-size: 0;
+            height: 38px;
+            justify-content: center;
+            padding: 0;
+            width: 38px;
+        }
+        .um-theme-btn:hover { background: #eef4fb; }
+        .um-theme-btn svg { width: 20px; height: 20px; }
+        .um-theme-popover {
+            background: rgba(255,255,255,0.96);
+            border: 1px solid #c9d3dd;
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+            display: none;
+            flex-direction: column;
+            gap: 2px;
+            margin-top: 6px;
+            min-width: 140px;
+            padding: 4px;
+            position: absolute;
+            right: 0;
+            top: 100%;
+        }
+        .um-theme-popover.is-open { display: flex; }
+        .um-theme-opt {
+            align-items: center;
+            background: transparent;
+            border: none;
+            border-radius: 7px;
+            color: #1f2a36;
+            cursor: pointer;
+            display: flex;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 500;
+            gap: 8px;
+            min-height: 38px;
+            padding: 6px 10px;
+            text-align: left;
+            width: 100%;
+        }
+        .um-theme-opt:hover { background: #eef4fb; }
+        .um-theme-opt.is-active { background: #dbe8f4; font-weight: 700; }
+        .um-theme-opt svg { flex-shrink: 0; width: 18px; height: 18px; }
+
+        /* ---- Dark Mode Colors ---- */
+        @media (prefers-color-scheme: dark) {
+            html[data-theme="system"] {
+                color-scheme: dark;
+            }
+            html[data-theme="system"] body {
+                background: #0D1117 !important;
+                color: #E6EDF3;
+            }
+            html[data-theme="system"] .head h1 { color: #58A6FF; }
+            html[data-theme="system"] h2, html[data-theme="system"] h3,
+            html[data-theme="system"] h4, html[data-theme="system"] h5,
+            html[data-theme="system"] h6 { color: #F0F6FC; }
+            html[data-theme="system"] a { color: #58A6FF; }
+            html[data-theme="system"] a:visited { color: #A371F7; }
+            html[data-theme="system"] code { color: #E6EDF3; background: #1C2128; border-color: #30363D; }
+            html[data-theme="system"] pre {
+                background-color: #1C2128 !important;
+                border-color: #30363D !important;
+                color: #E6EDF3;
+            }
+            html[data-theme="system"] pre code { color: #E6EDF3; background: transparent; border-color: transparent; }
+            html[data-theme="system"] .example {
+                background: #161B22;
+                border-color: #D29922;
+            }
+            html[data-theme="system"] .example-title { color: #F0F6FC; }
+            html[data-theme="system"] .note {
+                background: #161B22;
+                border-color: #79C0FF;
+                color: #E6EDF3;
+            }
+            html[data-theme="system"] .issue {
+                background: #161B22;
+                border-color: #F85149;
+                color: #E6EDF3;
+            }
+            html[data-theme="system"] .migration-callout {
+                background: #161B22;
+                border-color: #79C0FF;
+            }
+            html[data-theme="system"] .rfc2119 { color: #F85149; }
+            html[data-theme="system"] hr { border-color: #30363D; }
+            html[data-theme="system"] body:not(.toc-inline) #toc,
+            html[data-theme="system"] body.toc-sidebar #toc {
+                background: #161B22;
+                border-right-color: #30363D;
+            }
+            html[data-theme="system"] .toc h2 { color: #C9D1D9; }
+            html[data-theme="system"] .toc li > a { color: #C9D1D9; }
+            html[data-theme="system"] .toc a.toc-active { color: #58A6FF; }
+            html[data-theme="system"] html body #toc-nav a,
+            html[data-theme="system"] html body #toc-nav a#toc-toggle,
+            html[data-theme="system"] html body #toc-nav a#toc-jump {
+                background: #1C2128 !important;
+                border: 1px solid #30363D !important;
+                color: #E6EDF3 !important;
+            }
+            html[data-theme="system"] html body #toc-nav a:hover {
+                background: #22272E !important;
+            }
+            html[data-theme="system"] .um-site-nav a {
+                background: #1C2128;
+                border-color: #30363D;
+                color: #C9D1D9;
+            }
+            html[data-theme="system"] .um-site-nav a.is-current {
+                background: #58A6FF;
+                border-color: #58A6FF;
+                color: #0D1117;
+            }
+            html[data-theme="system"] .um-site-nav__label { color: #8B949E; }
+            html[data-theme="system"] .um-theme-btn {
+                background: rgba(13,17,23,0.92);
+                border-color: #30363D;
+                color: #C9D1D9;
+            }
+            html[data-theme="system"] .um-theme-btn:hover { background: #22272E; }
+            html[data-theme="system"] .um-theme-popover {
+                background: rgba(22,27,34,0.97);
+                border-color: #30363D;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.45);
+            }
+            html[data-theme="system"] .um-theme-opt { color: #C9D1D9; }
+            html[data-theme="system"] .um-theme-opt:hover { background: #22272E; }
+            html[data-theme="system"] .um-theme-opt.is-active { background: #1C2128; }
+            html[data-theme="system"] .head dd,
+            html[data-theme="system"] .head dt { color: #C9D1D9; }
+            html[data-theme="system"] .head .copyright { color: #8B949E; }
+            html[data-theme="system"] table { background: #161B22; }
+            html[data-theme="system"] th {
+                background: #22272E;
+                color: #F0F6FC;
+                border-bottom-color: #3D444D;
+            }
+            html[data-theme="system"] td {
+                color: #E6EDF3;
+                border-color: #30363D;
+            }
+            html[data-theme="system"] .preview-banner {
+                background: #22272E;
+                border-color: #D29922;
+                color: #D29922;
+            }
+            html[data-theme="system"] .preview-section {
+                border-left-color: #D29922;
+            }
+            html[data-theme="system"] .preview-tag {
+                background: #D29922;
+                color: #0D1117;
+            }
+            html[data-theme="system"] .preview-questions {
+                background: #161B22;
+                border-color: #30363D;
+            }
+        }
+
+        html[data-theme="dark"] {
+            color-scheme: dark;
+        }
+        html[data-theme="dark"] body {
+            background: #0D1117 !important;
+            color: #E6EDF3;
+        }
+        html[data-theme="dark"] .head h1 { color: #58A6FF; }
+        html[data-theme="dark"] h2, html[data-theme="dark"] h3,
+        html[data-theme="dark"] h4, html[data-theme="dark"] h5,
+        html[data-theme="dark"] h6 { color: #F0F6FC; }
+        html[data-theme="dark"] a { color: #58A6FF; }
+        html[data-theme="dark"] a:visited { color: #A371F7; }
+        html[data-theme="dark"] code { color: #E6EDF3; background: #1C2128; border-color: #30363D; }
+        html[data-theme="dark"] pre {
+            background-color: #1C2128 !important;
+            border-color: #30363D !important;
+            color: #E6EDF3;
+        }
+        html[data-theme="dark"] pre code { color: #E6EDF3; background: transparent; border-color: transparent; }
+        html[data-theme="dark"] .example {
+            background: #161B22;
+            border-color: #D29922;
+        }
+        html[data-theme="dark"] .example-title { color: #F0F6FC; }
+        html[data-theme="dark"] .note {
+            background: #161B22;
+            border-color: #79C0FF;
+            color: #E6EDF3;
+        }
+        html[data-theme="dark"] .issue {
+            background: #161B22;
+            border-color: #F85149;
+            color: #E6EDF3;
+        }
+        html[data-theme="dark"] .migration-callout {
+            background: #161B22;
+            border-color: #79C0FF;
+        }
+        html[data-theme="dark"] .rfc2119 { color: #F85149; }
+        html[data-theme="dark"] hr { border-color: #30363D; }
+        html[data-theme="dark"] body:not(.toc-inline) #toc,
+        html[data-theme="dark"] body.toc-sidebar #toc {
+            background: #161B22;
+            border-right-color: #30363D;
+        }
+        html[data-theme="dark"] .toc h2 { color: #C9D1D9; }
+        html[data-theme="dark"] .toc li > a { color: #C9D1D9; }
+        html[data-theme="dark"] .toc a.toc-active { color: #58A6FF; }
+        html[data-theme="dark"] html body #toc-nav a,
+        html[data-theme="dark"] html body #toc-nav a#toc-toggle,
+        html[data-theme="dark"] html body #toc-nav a#toc-jump {
+            background: #1C2128 !important;
+            border: 1px solid #30363D !important;
+            color: #E6EDF3 !important;
+        }
+        html[data-theme="dark"] html body #toc-nav a:hover {
+            background: #22272E !important;
+        }
+        html[data-theme="dark"] .um-site-nav a {
+            background: #1C2128;
+            border-color: #30363D;
+            color: #C9D1D9;
+        }
+        html[data-theme="dark"] .um-site-nav a.is-current {
+            background: #58A6FF;
+            border-color: #58A6FF;
+            color: #0D1117;
+        }
+        html[data-theme="dark"] .um-site-nav__label { color: #8B949E; }
+        html[data-theme="dark"] .um-theme-btn {
+            background: rgba(13,17,23,0.92);
+            border-color: #30363D;
+            color: #C9D1D9;
+        }
+        html[data-theme="dark"] .um-theme-btn:hover { background: #22272E; }
+        html[data-theme="dark"] .um-theme-popover {
+            background: rgba(22,27,34,0.97);
+            border-color: #30363D;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.45);
+        }
+        html[data-theme="dark"] .um-theme-opt { color: #C9D1D9; }
+        html[data-theme="dark"] .um-theme-opt:hover { background: #22272E; }
+        html[data-theme="dark"] .um-theme-opt.is-active { background: #1C2128; }
+        html[data-theme="dark"] .head dd,
+        html[data-theme="dark"] .head dt { color: #C9D1D9; }
+        html[data-theme="dark"] .head .copyright { color: #8B949E; }
+        html[data-theme="dark"] table { background: #161B22; }
+        html[data-theme="dark"] th {
+            background: #22272E;
+            color: #F0F6FC;
+            border-bottom-color: #3D444D;
+        }
+        html[data-theme="dark"] td {
+            color: #E6EDF3;
+            border-color: #30363D;
+        }
+        html[data-theme="dark"] .preview-banner {
+            background: #22272E;
+            border-color: #D29922;
+            color: #D29922;
+        }
+        html[data-theme="dark"] .preview-section {
+            border-left-color: #D29922;
+        }
+        html[data-theme="dark"] .preview-tag {
+            background: #D29922;
+            color: #0D1117;
+        }
+        html[data-theme="dark"] .preview-questions {
+            background: #161B22;
+            border-color: #30363D;
+        }
+
+        /* Force light when explicitly selected */
+        html[data-theme="light"] {
+            color-scheme: light;
+        }
+    </style>
+</head>
+<body class="h-entry">
+    <!-- Theme Switcher -->
+    <div class="um-theme-switcher" id="um-theme-switcher">
+        <button class="um-theme-btn" id="um-theme-btn" type="button" aria-label="Toggle theme" aria-expanded="false" aria-haspopup="true">
+            <svg id="um-theme-icon-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <svg id="um-theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg id="um-theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <div class="um-theme-popover" id="um-theme-popover" role="listbox" aria-label="Theme options">
+            <button class="um-theme-opt is-active" role="option" aria-selected="true" data-theme-value="system">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                System
+            </button>
+            <button class="um-theme-opt" role="option" aria-selected="false" data-theme-value="light">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                Light
+            </button>
+            <button class="um-theme-opt" role="option" aria-selected="false" data-theme-value="dark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                Dark
+            </button>
+        </div>
+    </div>
+    <div class="head">
+        <h1 id="title" class="title p-name">Universal Manifest — Primer</h1>
+        <h2 id="subtitle">v0.4 · Informative</h2>
+        <h2><time class="dt-published" datetime="2026-06-11">11 June 2026</time></h2>
+        <dl>
+            <dt>This document:</dt>
+            <dd><a class="u-url" href="https://universalmanifest.net/spec/v0.4/primer/">/spec/v0.4/primer/</a></dd>
+            <dt>Document set:</dt>
+            <dd><a href="https://universalmanifest.net/spec/v0.4/">Universal Manifest v0.4 (Conformance-Tier Stack)</a></dd>
+            <dt>Latest stable version:</dt>
+            <dd><a href="https://universalmanifest.net/spec/v0.3/">https://universalmanifest.net/spec/v0.3/</a></dd>
+            <dt>History:</dt>
+            <dd><a href="https://universalmanifest.net/spec/">https://universalmanifest.net/spec/</a> (version index and changelog)</dd>
+            <dt>Editors:</dt>
+            <dd class="p-author h-card vcard">Universal Manifest Working Group</dd>
+        </dl>
+        <p class="copyright">Copyright &copy; 2026 the Contributors to the Universal Manifest Specification. This document is published under the <a href="https://www.w3.org/copyright/software-license-2023/">W3C Software and Document License</a>.</p>
+        <hr title="Separator for header">
+    </div>
+
+<nav id="toc" class="toc" role="doc-toc">
+<h2 class="toc-heading">Table of Contents</h2>
+<ul>
+<li><a href="#universal-manifest-in-one-sitting"
+id="toc-universal-manifest-in-one-sitting">Universal Manifest, in one
+sitting</a>
+<ul>
+<li><a href="#what-it-is" id="toc-what-it-is">What it is</a></li>
+<li><a href="#the-shape-of-a-manifest"
+id="toc-the-shape-of-a-manifest">The shape of a manifest</a></li>
+<li><a href="#the-lifecycle-how-a-manifest-becomes-a-decision"
+id="toc-the-lifecycle-how-a-manifest-becomes-a-decision">The lifecycle:
+how a manifest becomes a decision</a></li>
+<li><a href="#the-core-guarantees" id="toc-the-core-guarantees">The core
+guarantees</a></li>
+<li><a href="#a-map-of-the-documents-tiers-and-extensions-at-one-glance"
+id="toc-a-map-of-the-documents-tiers-and-extensions-at-one-glance">A map
+of the documents: tiers and extensions at one glance</a></li>
+</ul></li>
+</ul>
+</nav>
+<blockquote>
+<p><strong>Restructured per the Conformance-Tier Stack strategy
+(owner-selected, audit 2026-06-11). DRAFT for review.</strong></p>
+<p>This Primer is the breadth-first entry point to the Universal
+Manifest v0.4 document set. It is informative: it contains no normative
+requirements and defines no wire formats. Read it first to understand
+<em>what</em> Universal Manifest is and <em>how the pieces fit</em>.
+Then descend into the normative documents your work requires — starting
+with the <a href="/spec/v0.4/core/">Base
+specification</a>, which everything else builds on.</p>
+</blockquote>
+<section id="universal-manifest-in-one-sitting" class="level1">
+<h1>Universal Manifest, in one sitting</h1>
+<section id="what-it-is" class="level2">
+<h2>What it is</h2>
+<p>A <strong>Universal Manifest</strong> is a portable, signed,
+self-describing capsule of state about a subject — a person, an app, a
+venue, a device — that one party can hand to another and the receiving
+party can verify <em>on its own</em>, without phoning home.</p>
+<p>Think of it as a sealed envelope that travels with you. Inside are
+identity references, role permissions, device registrations, consent
+records, and pointers to authoritative data. Stamped across the outside
+is a cryptographic signature that proves the contents have not been
+altered since they were assembled, and a hard expiry that bounds how
+long anyone may rely on them. A smart display at a venue door, a kiosk,
+a peer's phone, or a network edge can read that envelope, check the
+stamp, apply its own policy, and act — even with no network connection
+at all.</p>
+<p>That last property is the whole point. Universal Manifest is designed
+for <strong>local-first</strong> environments: venue edges, public
+displays, air-gapped rooms, NFC and BLE taps between two phones. In
+those settings an evaluator cannot assume a live connection to a cloud
+service of record. It must be able to decide, from the bytes in front of
+it plus material it already holds, whether to trust what it is looking
+at. A Universal Manifest is the standardized shape of those bytes, and
+this specification is the contract for how to read them.</p>
+<p>Conceptually, Universal Manifest is a <strong>hybrid</strong> of two
+ideas the web already knows. From the <em>Web Publication Manifest</em>
+it borrows semantic linkability — linked-data identity references and
+pointers to canonical sources, so a manifest can describe a subject by
+reference rather than by copying everything inline. From the <em>Web App
+Manifest</em> it borrows an applied processing lifecycle — a defined
+sequence an evaluator runs to turn a received document into a decision.
+Put those together and you get a state capsule with both meaning and a
+runtime.</p>
+<p>One framing worth keeping in mind, because it explains much of the
+design: a manifest is a <strong>bag of claims, not a proof of
+truth</strong>. The signature proves <em>who assembled the
+envelope</em>. It does not, by itself, prove that the subject controls
+every DID mentioned inside, or that an issuer really issued a claim
+listed there. The specification is largely about closing that gap
+honestly — giving evaluators graduated, explicit ways to verify the
+parts that matter, and to record exactly how far that verification
+got.</p>
+</section>
+<section id="the-shape-of-a-manifest" class="level2">
+<h2>The shape of a manifest</h2>
+<p>Every manifest, no matter what kind, shares one fixed
+<strong>envelope</strong>. What makes a particular manifest an identity
+capsule versus a device descriptor versus a consent record versus a
+receipt is <em>which optional members it carries</em> — not a different
+schema per kind. The specification calls this a <strong>polymorphic
+envelope</strong>: one outer shape, many payloads.</p>
+<p>The envelope has four layers:</p>
+<ul>
+<li><p><strong>Anchor members</strong> identify and semantically ground
+the manifest: a context reference (which vocabulary version its terms
+come from), a globally unique opaque <code>id</code>, and a
+<code>type</code> that always includes <code>um:Manifest</code>. The
+context reference is what lets two implementations agree on what each
+term <em>means</em>.</p></li>
+<li><p><strong>Identity and lifespan members</strong> say what the
+manifest is about and for how long: the <code>subject</code> (a stable
+identifier URI, typically a Decentralized Identifier), and the
+<code>issuedAt</code> / <code>expiresAt</code> pair that bounds its
+validity. Expiry is not a hint — it is an absolute rejection
+gate.</p></li>
+<li><p><strong>Structural state members</strong> carry the actual
+payload, all optional, each a top-level array:</p>
+<ul>
+<li><strong><code>facets</code></strong> — composable functional blocks.
+A facet packages one verifiable capability, metadata subset, or
+configuration module, and may carry an encrypted payload that only
+intended recipients can open.</li>
+<li><strong><code>claims</code></strong> — statements about the subject,
+each with a type and an issuer, and optionally proof material that lets
+an evaluator verify the statement rather than merely read it.</li>
+<li><strong><code>consents</code></strong> — per-facet permission
+records that say what an evaluator is allowed to <em>do</em> with a
+facet's data, for what purpose, and until when.</li>
+<li><strong><code>pointers</code></strong> — references to canonical
+external data sources.</li>
+<li><strong><code>devices</code></strong> — registered hardware targets
+bound to the subject.</li>
+</ul></li>
+<li><p><strong>The integrity proof</strong> — the <code>signature</code>
+member — is the seal. In v0.4 every conformant manifest must carry a
+signature under one baseline profile (JSON Canonicalization + Ed25519),
+computed over the canonical bytes of everything else in the envelope. It
+is deterministic, compact, and verifiable offline on constrained
+devices.</p></li>
+</ul>
+<p>A useful mental model: the anchor and lifespan members and the
+signature are the <em>envelope you can always rely on being there</em>;
+facets, claims, consents, pointers, and devices are the <em>contents you
+discover by looking inside</em>. An evaluator that meets a member it
+does not understand keeps it (so the signature still verifies) but does
+not act on it (so unknown extensions can never change a decision). That
+single rule — <strong>preserve everything, act only on what you
+recognize</strong> — is what makes the format extensible without
+becoming brittle.</p>
+</section>
+<section id="the-lifecycle-how-a-manifest-becomes-a-decision"
+class="level2">
+<h2>The lifecycle: how a manifest becomes a decision</h2>
+<p>The conceptual spine of the whole specification is the
+<strong>six-stage evaluation sequence</strong>. When any evaluator
+encounters a manifest, it runs the manifest through these six stages in
+order. Each stage produces a defined output that feeds the next, and the
+evaluator may stop early at any stage by emitting a rejection. Told as a
+story:</p>
+<ol type="1">
+<li><p><strong>Arrive.</strong> The envelope is received and parsed. The
+evaluator confirms the required members are present and that
+<code>type</code> includes <code>um:Manifest</code>. It keeps any
+members it does not recognize — they must survive untouched through
+signature verification — but they will have no effect on the
+outcome.</p></li>
+<li><p><strong>Verify.</strong> The evaluator checks the seal and the
+clock. It verifies the signature over the canonical bytes; it rejects
+anything expired or with an issue-time after its expiry. If the manifest
+leans on stronger identity binding for higher assurance, this is where
+those binding checks run, each recording its own outcome. A failed
+signature ends the story here.</p></li>
+<li><p><strong>Project.</strong> The evaluator extracts only the facets,
+claims, pointers, and devices relevant to <em>its</em> context.
+Disclosure is holder-controlled: the holder chose what to include.
+Crucially, a facet that is absent is <em>not projected</em> — it is not
+evidence of absence. The evaluator must never assume it is seeing the
+subject's complete state.</p></li>
+<li><p><strong>Consent.</strong> Before touching any facet's data, the
+evaluator checks the matching consent record: is my intended operation
+in the consent's scope, is my purpose within its declared purpose, is it
+still inside its validity window? No valid consent, no processing. An
+encrypted facet the evaluator cannot open is acknowledged as a
+<strong>sealed entry</strong> — recorded as present, never guessed
+at.</p></li>
+<li><p><strong>Compose.</strong> The evaluator assembles the result into
+one of four honest outcomes: <code>accepted</code>,
+<code>accepted-with-warnings</code>, <code>accepted-partial</code> (some
+facets processed, others sealed or denied), or <code>rejected</code>.
+The result is machine-readable and carries per-facet status.</p></li>
+<li><p><strong>Receipt.</strong> The evaluator emits a
+<strong>structured receipt</strong> — a machine-readable record of what
+it actually did. The receipt must not hide failed checks or suppress
+negative outcomes. It is the audit trail, and in v0.4 it can itself be a
+signed, chainable manifest.</p></li>
+</ol>
+<p>Two design commitments run through every stage. First,
+<strong>honesty</strong>: a receipt records the real outcome, including
+the gap between what a manifest <em>declared</em> it needed and what the
+evaluator could actually <em>verify</em>. Second, <strong>fail-safe
+defaults</strong>: missing consent blocks processing, unverifiable trust
+caps out low, unknown content is preserved but inert. The evaluator
+never invents assurance it did not earn.</p>
+</section>
+<section id="the-core-guarantees" class="level2">
+<h2>The core guarantees</h2>
+<p>Strip the specification to its promises and five remain:</p>
+<ul>
+<li><p><strong>Integrity.</strong> A valid signature means the
+envelope's contents are exactly what the signer assembled. Tampering
+breaks the seal. (The signature proves authorship of the envelope — not
+the truth of every claim inside it; see the bag-of-claims framing
+above.)</p></li>
+<li><p><strong>Freshness.</strong> Expiry is enforced absolutely. A
+manifest past <code>expiresAt</code> must be evicted or rejected. This
+is the primary defense against replaying a stale capsule.</p></li>
+<li><p><strong>Holder-controlled disclosure.</strong> The holder decides
+which facets to include in any given presentation. Evaluators cannot
+infer what was withheld, and selective disclosure is a first-class,
+supported behavior rather than a leak.</p></li>
+<li><p><strong>Consent-gated use.</strong> Facet data may be acted on
+only within an explicit, in-window, scope-and-purpose-matching consent.
+Sealed (encrypted) facets are honored as present-but-unread.</p></li>
+<li><p><strong>Honest, graduated trust.</strong> Claims are verified
+along an explicit ladder of assurance, and the receipt records exactly
+which rung was reached. An evaluator never silently upgrades
+self-asserted data to verified, and never extends trust from one DID to
+another without binding proof for that specific pair.</p></li>
+</ul>
+<p>These hold for the <em>baseline</em> of the specification — the part
+every conformant implementation must support. Everything beyond the
+baseline is layered on top in a disciplined way, which is the subject of
+the next section.</p>
+</section>
+<section id="a-map-of-the-documents-tiers-and-extensions-at-one-glance"
+class="level2">
+<h2>A map of the documents: tiers and extensions at one glance</h2>
+<p>Universal Manifest v0.4 is organized as a <strong>conformance-tier
+stack</strong>. The idea is simple: the question that decides what you
+must read and build is <em>"what level of assurance am I certifying
+to?"</em> The baseline answers most needs; each higher tier and each
+optional capability is a self-contained companion document you add only
+when you need it.</p>
+<p><strong>The trust ladder.</strong> Trust tiers are <em>strictly
+additive</em> — a claim verified at a higher tier automatically
+satisfies every lower tier. Higher tiers buy stronger guarantees at the
+cost of more user ceremony. The specification mandates no minimum; an
+evaluator picks its tier from its own threat model.</p>
+<ul>
+<li><strong>Tier 0 — Signature-only.</strong> Zero friction. Claims are
+self-asserted by the signer; the only cryptographic check is the
+manifest signature. Right for low-stakes interactions where trust in the
+signer is established out of band. <em>Never sufficient for
+Sybil-critical decisions.</em></li>
+<li><strong>Tier 1 — Attested / proof-backed.</strong> Low friction.
+Claims carry external proof of issuance (a Verifiable Presentation, or
+an attested cross-DID binding), plus a <strong>holder binding</strong>
+proving the party presenting the manifest is the same party the
+credential was issued to. Right for social identity, reputation, and
+basic access control.</li>
+<li><strong>Tier 2 — Cryptographic binding.</strong> Medium friction.
+Control of multiple DIDs is proven in zero knowledge, without revealing
+key material. Right for high-stakes Sybil resistance.</li>
+<li><strong>Tier 3 — Multi-party ceremony.</strong> High friction.
+Multiple keyholders — potentially different people in different places —
+co-sign, like a multi-signature wallet. Right for the highest-stakes
+organizational and financial contexts.</li>
+</ul>
+<p><strong>How that ladder becomes documents:</strong></p>
+<ul>
+<li><p><strong><a href="/spec/v0.4/core/">The
+Base</a></strong> — <em>everything required to build a conformant Tier-0
+/ Tier-1 evaluator and holder.</em> The envelope, the six-stage
+lifecycle, the baseline signature profile, encrypted facets, receipts,
+conformance, and the base security and privacy model. The Base also
+<em>names</em> the Tier-1 binding requirement and points to its profile
+for the mechanics, so it stays at "what conformance demands" altitude. A
+developer can ship an interoperable baseline from the Base alone — the
+same test v0.3 passed. <strong>Read this first; everything else assumes
+it.</strong></p></li>
+<li><p><strong><a href="/spec/v0.4/ext-t1/">Extension — Tier-1
+Binding Profile</a></strong> — the mechanics that turn the Tier-1
+<em>requirement</em> into running code: holder binding, presentation
+proofs, liveness attestation, the end-to-end claim-proof verification
+path, and the binding sub-steps and receipt fields. Read this when you
+implement Tier 1.</p></li>
+<li><p><strong><a href="/spec/v0.4/ext-t2/">Extension —
+Tier-2 Cryptographic-Binding Profile</a></strong> — zero-knowledge
+cross-DID proof profiles, the unlinkable (BBS+) privacy track that
+shares the same cryptography, and the post-quantum migration path. Read
+this when you implement Sybil-resistant high assurance.</p></li>
+<li><p><strong><a href="/spec/v0.4/ext-t3/">Extension — Tier-3
+Multi-Party Ceremony Profile</a></strong> — the ceremony model,
+signer-role taxonomy, and threshold-protocol guidance. Read this for
+co-signed, highest-stakes deployments.</p></li>
+<li><p><strong><a href="/spec/v0.4/ext-opt/">Extension —
+Optional-Feature Profiles</a></strong> — capabilities that are not rungs
+on the tier ladder but are independently optional: the
+format-independent abstract data model and its second (CBOR-LD)
+encoding, the <code>statusRef</code> revocation protocol,
+receipts-as-a-class with hash-chaining, the bilateral session model,
+federation, the profile registration mechanism, <code>trustWeight</code>
+and category trust, extended <code>devices</code> /
+<code>actorState</code> / sensor-consent schemas, and the
+cryptographic-requirements summary. Read the parts that match the
+feature you are adding.</p></li>
+<li><p><strong><a href="/spec/v0.4/cookbook/">The
+Cookbook</a></strong> — every worked example, consolidated and organized
+by scenario and tagged by the tier it exercises. The normative documents
+keep one anchoring example per concept; the rest live here, with
+narrative connective tissue. Read this when you want a concrete payload
+to copy.</p></li>
+</ul>
+<p><strong>Reading paths, by who you are:</strong></p>
+<ul>
+<li><em>Evaluating Tier-0 signatures only?</em> Base, and you are
+done.</li>
+<li><em>Building Tier-1 attested identity?</em> Base + Tier-1 Binding
+Profile.</li>
+<li><em>Deploying Sybil-resistant assurance?</em> Base + Tier-1 + Tier-2
+(and Tier-3 for co-signing).</li>
+<li><em>Adding revocation, federation, sessions, or a new manifest
+class?</em> Base + the relevant parts of Optional-Feature Profiles.</li>
+<li><em>Just want to see real manifests?</em> Primer → Cookbook.</li>
+</ul>
+<p><strong>The stable-versus-preview line.</strong> The Base is the
+production-candidate core, on track to harden toward v1.0. The advanced
+tiers and several optional features are marked <strong>PREVIEW</strong>
+— under active working-group review, built into the draft on the
+editors' recommended defaults, and fully revisable before the schema
+locks. Naming a capability in the Base is breadth; specifying it in an
+extension is depth. That separation is what keeps the Base digestible
+while the frontier keeps moving — and it is exactly the discipline that
+kept v0.3 readable.</p>
+<hr />
+<p><em>This Primer summarizes; it does not bind. Where it and a
+normative document appear to differ, the normative document governs.
+Start with the <a href="/spec/v0.4/core/">Base
+specification</a>.</em></p>
+</section>
+</section>
+
+    <script>
+        (function(){
+            var root = document.documentElement;
+            var btn = document.getElementById('um-theme-btn');
+            var popover = document.getElementById('um-theme-popover');
+            var opts = popover.querySelectorAll('.um-theme-opt');
+            var icons = {
+                system: document.getElementById('um-theme-icon-system'),
+                light: document.getElementById('um-theme-icon-light'),
+                dark: document.getElementById('um-theme-icon-dark')
+            };
+            var KEY = 'um-spec-theme';
+
+            function getStored() {
+                var v = localStorage.getItem(KEY);
+                return (v === 'light' || v === 'dark') ? v : 'system';
+            }
+
+            function applyTheme(t) {
+                root.setAttribute('data-theme', t);
+                localStorage.setItem(KEY, t);
+                for (var k in icons) {
+                    icons[k].style.display = (k === t) ? '' : 'none';
+                }
+                for (var i = 0; i < opts.length; i++) {
+                    var active = opts[i].getAttribute('data-theme-value') === t;
+                    opts[i].classList.toggle('is-active', active);
+                    opts[i].setAttribute('aria-selected', active ? 'true' : 'false');
+                }
+            }
+
+            function openPopover() {
+                popover.classList.add('is-open');
+                btn.setAttribute('aria-expanded', 'true');
+            }
+
+            function closePopover() {
+                popover.classList.remove('is-open');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (popover.classList.contains('is-open')) {
+                    closePopover();
+                } else {
+                    openPopover();
+                }
+            });
+
+            for (var i = 0; i < opts.length; i++) {
+                opts[i].addEventListener('click', function(e) {
+                    applyTheme(this.getAttribute('data-theme-value'));
+                    closePopover();
+                });
+            }
+
+            document.addEventListener('click', function(e) {
+                if (!popover.contains(e.target) && e.target !== btn) {
+                    closePopover();
+                }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closePopover();
+            });
+
+            applyTheme(getStored());
+        })();
+    </script>
+</body>
+</html>

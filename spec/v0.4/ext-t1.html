@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="system">
+<head>
+    <meta charset="utf-8">
+    <script>
+        (function(){
+            var t = localStorage.getItem('um-spec-theme');
+            if (t === 'light' || t === 'dark') {
+                document.documentElement.setAttribute('data-theme', t);
+            }
+        })();
+    </script>
+    <title>Universal Manifest v0.4 — EXT-T1</title>
+    <link rel="canonical" href="https://universalmanifest.net/spec/v0.4/ext-t1/">
+    <!-- Use the official W3C Working Draft style -->
+    <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/W3C-WD" type="text/css">
+    <style>
+        /* Specific enhancements per W3C specification layout */
+        html, body { margin: 0; padding: 0; }
+        body { max-width: none; line-height: 1.5; font-family: sans-serif; background-image: none !important; }
+        .head { margin-bottom: 1.25rem; }
+        .head a.logo, img[alt="W3C"], .w3c-logo { display: none !important; } /* Strip W3C branding injected by fixup.js */
+        .head h1 { color: #005a9c; }
+        .head h2 {
+            margin-bottom: 0.45rem;
+            margin-top: 0.45rem;
+        }
+        .head dl {
+            display: grid;
+            gap: 0.25rem 0.75rem;
+            grid-template-columns: max-content minmax(0, 1fr);
+            margin: 0.8rem 0;
+        }
+        .head dd,
+        .head dt {
+            margin: 0;
+        }
+        .head .copyright {
+            margin: 0.65rem 0;
+        }
+        .um-site-nav {
+            align-items: center;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            margin-top: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .um-site-nav__label {
+            color: #5a6677;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            margin-right: 0.15rem;
+            text-transform: uppercase;
+        }
+        .um-site-nav a {
+            background: #ffffff;
+            border: 1px solid #c9d3dd;
+            border-radius: 999px;
+            color: #1f2a36;
+            display: inline-flex;
+            font-size: 0.84rem;
+            font-weight: 700;
+            gap: 0.25rem;
+            padding: 0.42rem 0.72rem;
+            text-decoration: none;
+        }
+        .um-site-nav a:hover,
+        .um-site-nav a:focus-visible {
+            background: #eef4fb;
+            outline: none;
+        }
+        .um-site-nav a.is-current {
+            background: #005a9c;
+            border-color: #005a9c;
+            color: #ffffff;
+        }
+        body:not(.toc-inline) #toc,
+        body.toc-sidebar #toc {
+            background: #f4f6f8;
+            border-right: 1px solid #d4dce3;
+            box-sizing: border-box;
+            font-weight: bold;
+            bottom: 0;
+            height: 100vh;
+            left: 0 !important;
+            margin: 0;
+            min-height: 100vh;
+            overflow-y: auto;
+            padding: 1rem 1.25rem 3.5rem;
+            padding-left: 1rem;
+            position: fixed;
+            right: auto;
+            top: 0 !important;
+            width: 22rem;
+        }
+        body:not(.toc-inline),
+        body.toc-sidebar {
+            margin: 0;
+            padding-left: 0;
+        }
+        .toc h2 {
+            font-size: 0.75rem;
+            letter-spacing: 0.06em;
+            margin: 0 0 0.8rem;
+            text-transform: uppercase;
+        }
+        .toc ol {
+            counter-reset: item;
+            list-style: none;
+            margin: 0;
+            padding-left: 0;
+        }
+        .toc li {
+            counter-increment: item;
+            display: block;
+            margin: 0.1rem 0;
+        }
+        .toc li > a {
+            color: #1f2a36;
+            display: flex;
+            font-weight: 600;
+            gap: 0.35rem;
+            line-height: 1.25;
+            padding: 0.18rem 0;
+            text-decoration: none;
+        }
+        .toc li > a::before {
+            content: counters(item, ".") ".";
+            flex: 0 0 auto;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+        .toc ol ol {
+            margin: 0.12rem 0 0.25rem;
+            padding-left: 1rem;
+        }
+        .toc ol ol li > a {
+            font-weight: 500;
+        }
+        .toc a.toc-active {
+            color: #005a9c;
+            font-weight: 700;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        html body #toc-nav,
+        html body.toc-sidebar #toc-nav {
+            align-items: center;
+            bottom: 0 !important;
+            display: flex !important;
+            gap: 0.75rem !important;
+            justify-content: flex-start;
+            left: 0 !important;
+            margin: 0 !important;
+            max-width: 100vw;
+            padding: 0.5rem 0.5rem 0.5rem 1rem !important;
+            position: fixed !important;
+            right: auto !important;
+            transform: none !important;
+            width: auto !important;
+            z-index: 1002 !important;
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+        html body.toc-inline #toc-nav {
+            align-items: center;
+            bottom: 0 !important;
+            display: flex !important;
+            gap: 0.75rem !important;
+            justify-content: flex-start;
+            left: 0 !important;
+            margin: 0 !important;
+            padding: 0.5rem 0.5rem 0.5rem 1rem !important;
+            position: fixed !important;
+            width: auto !important;
+            z-index: 1002 !important;
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+        html body #toc-nav a,
+        html body #toc-nav a#toc-toggle,
+        html body #toc-nav a#toc-jump {
+            align-items: center !important;
+            background: #ffffff !important;
+            border: 1px solid #c9d3dd !important;
+            border-radius: 6px !important;
+            box-sizing: border-box !important;
+            color: #1f2a36 !important;
+            display: inline-flex !important;
+            float: none !important;
+            font-size: 0.85rem !important;
+            gap: 0.35rem !important;
+            height: auto !important;
+            left: auto !important;
+            line-height: 1.2 !important;
+            margin: 0 !important;
+            max-width: none !important;
+            min-height: 0 !important;
+            min-width: 0 !important;
+            padding: 0.45rem 0.6rem !important;
+            position: static !important;
+            right: auto !important;
+            text-decoration: none !important;
+            top: auto !important;
+            width: auto !important;
+            white-space: nowrap !important;
+        }
+        
+        #toc-nav a span#toc-jump-text,
+        #toc-nav a span#toc-expand-text,
+        #toc-nav a span#toc-collapse-text {
+            display: none !important;
+        }
+        html body #toc-nav a:hover {
+            background: #eef4fb;
+        }
+        html body #toc-nav a:focus-visible {
+            outline: 2px solid #005a9c;
+            outline-offset: 2px;
+        }
+        body:not(.toc-inline) > :not(#toc):not(script) {
+            margin-left: calc(22rem + 1.2rem);
+            margin-right: 1.4rem;
+            max-width: 50em;
+        }
+        body.toc-inline > :not(script) {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 50em;
+            padding-left: 1.4rem;
+            padding-right: 1.4rem;
+            box-sizing: border-box;
+        }
+        body.toc-inline #toc {
+            clear: both;
+            margin-bottom: 2rem;
+            padding-bottom: 3.5rem;
+        }
+        body.toc-inline #toc + section {
+            clear: both;
+        }
+        .note, .issue, .example { padding: .5em; border-left: .5em solid; margin: 1em 0; }
+        .example { border-color: #e0cb52; background: #fcfaee; }
+        .example-title { font-weight: bold; margin-bottom: 0.5em; }
+        .migration-callout {
+            background: #eef4fb;
+            border-left: 0.35rem solid #005a9c;
+            box-sizing: border-box;
+            margin-bottom: 1.25rem;
+            margin-top: -1.25rem;
+            padding: 0.65rem 0.85rem;
+        }
+        .migration-callout p {
+            margin: 0;
+        }
+        pre { background-color: #f8f8f8; border: 1px solid #ddd; padding: 1em; overflow: auto; }
+        code { font-family: Inconsolata, Consolas, "Liberation Mono", monospace; color: #c83232; }
+        .rfc2119 { text-transform: lowercase; font-variant: small-caps; font-style: normal; font-weight: bold; color: #900; }
+        .preview-banner {
+            background: #fff3cd;
+            border: 2px solid #e0a800;
+            border-radius: 4px;
+            color: #664d03;
+            font-weight: 600;
+            margin: 1.5em 0 1em;
+            padding: 0.75em 1em;
+        }
+        .preview-banner p { margin: 0.25em 0; }
+        .preview-section {
+            border-left: 4px solid #e0a800;
+            padding-left: 1em;
+            margin: 1.5em 0;
+        }
+        .preview-tag {
+            background: #e0a800;
+            border-radius: 3px;
+            color: #fff;
+            font-size: 0.75em;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            margin-left: 0.5em;
+            padding: 0.15em 0.45em;
+            text-transform: uppercase;
+            vertical-align: middle;
+        }
+        .preview-questions {
+            background: #f8f0d8;
+            border: 1px solid #e0cb52;
+            border-radius: 4px;
+            margin: 1em 0;
+            padding: 0.75em 1em;
+        }
+        .preview-questions p:first-child { font-weight: 700; margin-top: 0; }
+        .preview-questions ul { margin-bottom: 0; }
+        @media (max-width: 1100px) {
+            body:not(.toc-inline) #toc,
+            body.toc-sidebar #toc,
+            .toc {
+                border-right: none;
+                height: auto;
+                min-height: auto;
+                overflow-y: visible;
+                position: static;
+                width: auto;
+            }
+            html body #toc-nav,
+            html body.toc-sidebar #toc-nav,
+            html body.toc-inline #toc-nav {
+                width: auto !important;
+            }
+            html body #toc-nav a#toc-jump span#toc-jump-text {
+                display: none;
+            }
+            body:not(.toc-inline) > :not(#toc):not(script),
+            body > :not(#toc):not(script) {
+                margin-left: auto;
+                margin-right: auto;
+                max-width: 50em;
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        [id] {
+            scroll-margin-top: 2rem;
+        }
+
+        /* ---- Theme Switcher Widget ---- */
+        .um-theme-switcher {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1100;
+        }
+        .um-theme-btn {
+            align-items: center;
+            background: rgba(255,255,255,0.92);
+            border: 1px solid #c9d3dd;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+            color: #1f2a36;
+            cursor: pointer;
+            display: inline-flex;
+            font-size: 0;
+            height: 38px;
+            justify-content: center;
+            padding: 0;
+            width: 38px;
+        }
+        .um-theme-btn:hover { background: #eef4fb; }
+        .um-theme-btn svg { width: 20px; height: 20px; }
+        .um-theme-popover {
+            background: rgba(255,255,255,0.96);
+            border: 1px solid #c9d3dd;
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+            display: none;
+            flex-direction: column;
+            gap: 2px;
+            margin-top: 6px;
+            min-width: 140px;
+            padding: 4px;
+            position: absolute;
+            right: 0;
+            top: 100%;
+        }
+        .um-theme-popover.is-open { display: flex; }
+        .um-theme-opt {
+            align-items: center;
+            background: transparent;
+            border: none;
+            border-radius: 7px;
+            color: #1f2a36;
+            cursor: pointer;
+            display: flex;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 500;
+            gap: 8px;
+            min-height: 38px;
+            padding: 6px 10px;
+            text-align: left;
+            width: 100%;
+        }
+        .um-theme-opt:hover { background: #eef4fb; }
+        .um-theme-opt.is-active { background: #dbe8f4; font-weight: 700; }
+        .um-theme-opt svg { flex-shrink: 0; width: 18px; height: 18px; }
+
+        /* ---- Dark Mode Colors ---- */
+        @media (prefers-color-scheme: dark) {
+            html[data-theme="system"] {
+                color-scheme: dark;
+            }
+            html[data-theme="system"] body {
+                background: #0D1117 !important;
+                color: #E6EDF3;
+            }
+            html[data-theme="system"] .head h1 { color: #58A6FF; }
+            html[data-theme="system"] h2, html[data-theme="system"] h3,
+            html[data-theme="system"] h4, html[data-theme="system"] h5,
+            html[data-theme="system"] h6 { color: #F0F6FC; }
+            html[data-theme="system"] a { color: #58A6FF; }
+            html[data-theme="system"] a:visited { color: #A371F7; }
+            html[data-theme="system"] code { color: #E6EDF3; background: #1C2128; border-color: #30363D; }
+            html[data-theme="system"] pre {
+                background-color: #1C2128 !important;
+                border-color: #30363D !important;
+                color: #E6EDF3;
+            }
+            html[data-theme="system"] pre code { color: #E6EDF3; background: transparent; border-color: transparent; }
+            html[data-theme="system"] .example {
+                background: #161B22;
+                border-color: #D29922;
+            }
+            html[data-theme="system"] .example-title { color: #F0F6FC; }
+            html[data-theme="system"] .note {
+                background: #161B22;
+                border-color: #79C0FF;
+                color: #E6EDF3;
+            }
+            html[data-theme="system"] .issue {
+                background: #161B22;
+                border-color: #F85149;
+                color: #E6EDF3;
+            }
+            html[data-theme="system"] .migration-callout {
+                background: #161B22;
+                border-color: #79C0FF;
+            }
+            html[data-theme="system"] .rfc2119 { color: #F85149; }
+            html[data-theme="system"] hr { border-color: #30363D; }
+            html[data-theme="system"] body:not(.toc-inline) #toc,
+            html[data-theme="system"] body.toc-sidebar #toc {
+                background: #161B22;
+                border-right-color: #30363D;
+            }
+            html[data-theme="system"] .toc h2 { color: #C9D1D9; }
+            html[data-theme="system"] .toc li > a { color: #C9D1D9; }
+            html[data-theme="system"] .toc a.toc-active { color: #58A6FF; }
+            html[data-theme="system"] html body #toc-nav a,
+            html[data-theme="system"] html body #toc-nav a#toc-toggle,
+            html[data-theme="system"] html body #toc-nav a#toc-jump {
+                background: #1C2128 !important;
+                border: 1px solid #30363D !important;
+                color: #E6EDF3 !important;
+            }
+            html[data-theme="system"] html body #toc-nav a:hover {
+                background: #22272E !important;
+            }
+            html[data-theme="system"] .um-site-nav a {
+                background: #1C2128;
+                border-color: #30363D;
+                color: #C9D1D9;
+            }
+            html[data-theme="system"] .um-site-nav a.is-current {
+                background: #58A6FF;
+                border-color: #58A6FF;
+                color: #0D1117;
+            }
+            html[data-theme="system"] .um-site-nav__label { color: #8B949E; }
+            html[data-theme="system"] .um-theme-btn {
+                background: rgba(13,17,23,0.92);
+                border-color: #30363D;
+                color: #C9D1D9;
+            }
+            html[data-theme="system"] .um-theme-btn:hover { background: #22272E; }
+            html[data-theme="system"] .um-theme-popover {
+                background: rgba(22,27,34,0.97);
+                border-color: #30363D;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.45);
+            }
+            html[data-theme="system"] .um-theme-opt { color: #C9D1D9; }
+            html[data-theme="system"] .um-theme-opt:hover { background: #22272E; }
+            html[data-theme="system"] .um-theme-opt.is-active { background: #1C2128; }
+            html[data-theme="system"] .head dd,
+            html[data-theme="system"] .head dt { color: #C9D1D9; }
+            html[data-theme="system"] .head .copyright { color: #8B949E; }
+            html[data-theme="system"] table { background: #161B22; }
+            html[data-theme="system"] th {
+                background: #22272E;
+                color: #F0F6FC;
+                border-bottom-color: #3D444D;
+            }
+            html[data-theme="system"] td {
+                color: #E6EDF3;
+                border-color: #30363D;
+            }
+            html[data-theme="system"] .preview-banner {
+                background: #22272E;
+                border-color: #D29922;
+                color: #D29922;
+            }
+            html[data-theme="system"] .preview-section {
+                border-left-color: #D29922;
+            }
+            html[data-theme="system"] .preview-tag {
+                background: #D29922;
+                color: #0D1117;
+            }
+            html[data-theme="system"] .preview-questions {
+                background: #161B22;
+                border-color: #30363D;
+            }
+        }
+
+        html[data-theme="dark"] {
+            color-scheme: dark;
+        }
+        html[data-theme="dark"] body {
+            background: #0D1117 !important;
+            color: #E6EDF3;
+        }
+        html[data-theme="dark"] .head h1 { color: #58A6FF; }
+        html[data-theme="dark"] h2, html[data-theme="dark"] h3,
+        html[data-theme="dark"] h4, html[data-theme="dark"] h5,
+        html[data-theme="dark"] h6 { color: #F0F6FC; }
+        html[data-theme="dark"] a { color: #58A6FF; }
+        html[data-theme="dark"] a:visited { color: #A371F7; }
+        html[data-theme="dark"] code { color: #E6EDF3; background: #1C2128; border-color: #30363D; }
+        html[data-theme="dark"] pre {
+            background-color: #1C2128 !important;
+            border-color: #30363D !important;
+            color: #E6EDF3;
+        }
+        html[data-theme="dark"] pre code { color: #E6EDF3; background: transparent; border-color: transparent; }
+        html[data-theme="dark"] .example {
+            background: #161B22;
+            border-color: #D29922;
+        }
+        html[data-theme="dark"] .example-title { color: #F0F6FC; }
+        html[data-theme="dark"] .note {
+            background: #161B22;
+            border-color: #79C0FF;
+            color: #E6EDF3;
+        }
+        html[data-theme="dark"] .issue {
+            background: #161B22;
+            border-color: #F85149;
+            color: #E6EDF3;
+        }
+        html[data-theme="dark"] .migration-callout {
+            background: #161B22;
+            border-color: #79C0FF;
+        }
+        html[data-theme="dark"] .rfc2119 { color: #F85149; }
+        html[data-theme="dark"] hr { border-color: #30363D; }
+        html[data-theme="dark"] body:not(.toc-inline) #toc,
+        html[data-theme="dark"] body.toc-sidebar #toc {
+            background: #161B22;
+            border-right-color: #30363D;
+        }
+        html[data-theme="dark"] .toc h2 { color: #C9D1D9; }
+        html[data-theme="dark"] .toc li > a { color: #C9D1D9; }
+        html[data-theme="dark"] .toc a.toc-active { color: #58A6FF; }
+        html[data-theme="dark"] html body #toc-nav a,
+        html[data-theme="dark"] html body #toc-nav a#toc-toggle,
+        html[data-theme="dark"] html body #toc-nav a#toc-jump {
+            background: #1C2128 !important;
+            border: 1px solid #30363D !important;
+            color: #E6EDF3 !important;
+        }
+        html[data-theme="dark"] html body #toc-nav a:hover {
+            background: #22272E !important;
+        }
+        html[data-theme="dark"] .um-site-nav a {
+            background: #1C2128;
+            border-color: #30363D;
+            color: #C9D1D9;
+        }
+        html[data-theme="dark"] .um-site-nav a.is-current {
+            background: #58A6FF;
+            border-color: #58A6FF;
+            color: #0D1117;
+        }
+        html[data-theme="dark"] .um-site-nav__label { color: #8B949E; }
+        html[data-theme="dark"] .um-theme-btn {
+            background: rgba(13,17,23,0.92);
+            border-color: #30363D;
+            color: #C9D1D9;
+        }
+        html[data-theme="dark"] .um-theme-btn:hover { background: #22272E; }
+        html[data-theme="dark"] .um-theme-popover {
+            background: rgba(22,27,34,0.97);
+            border-color: #30363D;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.45);
+        }
+        html[data-theme="dark"] .um-theme-opt { color: #C9D1D9; }
+        html[data-theme="dark"] .um-theme-opt:hover { background: #22272E; }
+        html[data-theme="dark"] .um-theme-opt.is-active { background: #1C2128; }
+        html[data-theme="dark"] .head dd,
+        html[data-theme="dark"] .head dt { color: #C9D1D9; }
+        html[data-theme="dark"] .head .copyright { color: #8B949E; }
+        html[data-theme="dark"] table { background: #161B22; }
+        html[data-theme="dark"] th {
+            background: #22272E;
+            color: #F0F6FC;
+            border-bottom-color: #3D444D;
+        }
+        html[data-theme="dark"] td {
+            color: #E6EDF3;
+            border-color: #30363D;
+        }
+        html[data-theme="dark"] .preview-banner {
+            background: #22272E;
+            border-color: #D29922;
+            color: #D29922;
+        }
+        html[data-theme="dark"] .preview-section {
+            border-left-color: #D29922;
+        }
+        html[data-theme="dark"] .preview-tag {
+            background: #D29922;
+            color: #0D1117;
+        }
+        html[data-theme="dark"] .preview-questions {
+            background: #161B22;
+            border-color: #30363D;
+        }
+
+        /* Force light when explicitly selected */
+        html[data-theme="light"] {
+            color-scheme: light;
+        }
+    </style>
+</head>
+<body class="h-entry">
+    <!-- Theme Switcher -->
+    <div class="um-theme-switcher" id="um-theme-switcher">
+        <button class="um-theme-btn" id="um-theme-btn" type="button" aria-label="Toggle theme" aria-expanded="false" aria-haspopup="true">
+            <svg id="um-theme-icon-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <svg id="um-theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg id="um-theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <div class="um-theme-popover" id="um-theme-popover" role="listbox" aria-label="Theme options">
+            <button class="um-theme-opt is-active" role="option" aria-selected="true" data-theme-value="system">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                System
+            </button>
+            <button class="um-theme-opt" role="option" aria-selected="false" data-theme-value="light">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                Light
+            </button>
+            <button class="um-theme-opt" role="option" aria-selected="false" data-theme-value="dark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                Dark
+            </button>
+        </div>
+    </div>
+    <div class="head">
+        <h1 id="title" class="title p-name">Universal Manifest v0.4 — EXT-T1</h1>
+        <h2 id="subtitle">Tier-1 Binding Profile</h2>
+        <h2><time class="dt-published" datetime="2026-06-11">11 June 2026</time></h2>
+        <dl>
+            <dt>This document:</dt>
+            <dd><a class="u-url" href="https://universalmanifest.net/spec/v0.4/ext-t1/">/spec/v0.4/ext-t1/</a></dd>
+            <dt>Document set:</dt>
+            <dd><a href="https://universalmanifest.net/spec/v0.4/">Universal Manifest v0.4 (Conformance-Tier Stack)</a></dd>
+            <dt>Latest stable version:</dt>
+            <dd><a href="https://universalmanifest.net/spec/v0.3/">https://universalmanifest.net/spec/v0.3/</a></dd>
+            <dt>History:</dt>
+            <dd><a href="https://universalmanifest.net/spec/">https://universalmanifest.net/spec/</a> (version index and changelog)</dd>
+            <dt>Editors:</dt>
+            <dd class="p-author h-card vcard">Universal Manifest Working Group</dd>
+        </dl>
+        <p class="copyright">Copyright &copy; 2026 the Contributors to the Universal Manifest Specification. This document is published under the <a href="https://www.w3.org/copyright/software-license-2023/">W3C Software and Document License</a>.</p>
+        <hr title="Separator for header">
+    </div>
+
+<nav id="toc" class="toc" role="doc-toc">
+<h2 class="toc-heading">Table of Contents</h2>
+<ul>
+<li><a href="#ext-t1-tier-1-binding-profile"
+id="toc-ext-t1-tier-1-binding-profile">EXT-T1: Tier-1 Binding
+Profile</a>
+<ul>
+<li><a href="#t10-scope-and-relationship-to-the-base"
+id="toc-t10-scope-and-relationship-to-the-base"><span
+class="secno">T1.0. </span>Scope and Relationship to the Base</a></li>
+<li><a href="#t11-holder-binding" id="toc-t11-holder-binding"><span
+class="secno">T1.1. </span>Holder Binding</a>
+<ul>
+<li><a href="#t111-per-mode-verification-procedure"
+id="toc-t111-per-mode-verification-procedure"><span
+class="secno">T1.1.1. </span>Per-Mode Verification Procedure</a></li>
+</ul></li>
+<li><a href="#t12-presentation-proof"
+id="toc-t12-presentation-proof"><span class="secno">T1.2.
+</span>Presentation Proof</a></li>
+<li><a href="#t13-liveness-attestation"
+id="toc-t13-liveness-attestation"><span class="secno">T1.3.
+</span>Liveness Attestation</a></li>
+<li><a href="#t14-stage-2-verification-sub-steps"
+id="toc-t14-stage-2-verification-sub-steps"><span class="secno">T1.4.
+</span>Stage-2 Verification Sub-Steps</a></li>
+<li><a href="#t15-claim-proof-process--end-to-end-verification-path"
+id="toc-t15-claim-proof-process--end-to-end-verification-path"><span
+class="secno">T1.5. </span>Claim Proof Process — End-to-End Verification
+Path</a>
+<ul>
+<li><a href="#t151-claimproof-verification-procedure"
+id="toc-t151-claimproof-verification-procedure"><span
+class="secno">T1.5.1. </span><code>claimProof</code> Verification
+Procedure</a></li>
+<li><a href="#t152-seven-step-verification-chain"
+id="toc-t152-seven-step-verification-chain"><span class="secno">T1.5.2.
+</span>Seven-Step Verification Chain</a></li>
+<li><a href="#t153-key-purpose-requirements"
+id="toc-t153-key-purpose-requirements"><span class="secno">T1.5.3.
+</span>Key Purpose Requirements</a></li>
+<li><a href="#t154-trust-policy-vs-cryptographic-verification"
+id="toc-t154-trust-policy-vs-cryptographic-verification"><span
+class="secno">T1.5.4. </span>Trust Policy vs. Cryptographic
+Verification</a></li>
+</ul></li>
+<li><a href="#t16-security-considerations"
+id="toc-t16-security-considerations"><span class="secno">T1.6.
+</span>Security Considerations</a>
+<ul>
+<li><a href="#t161-bbs-pseudonym-scope"
+id="toc-t161-bbs-pseudonym-scope"><span class="secno">T1.6.1.
+</span>BBS+ Pseudonym Scope</a></li>
+<li><a href="#t162-zk-proof-system-trusted-setup"
+id="toc-t162-zk-proof-system-trusted-setup"><span class="secno">T1.6.2.
+</span>ZK Proof System Trusted Setup</a></li>
+<li><a href="#t163-reciprocal-control-limitations"
+id="toc-t163-reciprocal-control-limitations"><span class="secno">T1.6.3.
+</span>Reciprocal Control Limitations</a></li>
+<li><a href="#t164-backwards-compatibility-v03-manifests"
+id="toc-t164-backwards-compatibility-v03-manifests"><span
+class="secno">T1.6.4. </span>Backwards Compatibility (v0.3
+manifests)</a></li>
+</ul></li>
+<li><a href="#references" id="toc-references">References</a></li>
+</ul></li>
+</ul>
+</nav>
+<blockquote>
+<p><strong>Restructured per the Conformance-Tier Stack strategy
+(owner-selected, audit 2026-06-11). DRAFT for review.</strong></p>
+<p>This is a <strong>companion profile</strong> to the <a
+href="/spec/v0.4/core/">Universal Manifest v0.4
+Base specification</a>. It specifies the credential-binding mechanics
+that turn the Base's <strong>Tier-1 requirement</strong> into running
+code. Read the <a href="/spec/v0.4/core/">Base</a>
+first; this document assumes its terminology, envelope, and evaluation
+sequence.</p>
+</blockquote>
+<section id="ext-t1-tier-1-binding-profile" class="level1">
+<h1>EXT-T1: Tier-1 Binding Profile</h1>
+<p><strong>Companion to:</strong> <a
+href="/spec/v0.4/core/">Base specification</a>
+(Tier-0 / Tier-1 Core). <strong>Registry categories:</strong>
+<code>binding</code>, <code>trust</code>. <strong>Status:</strong>
+Production-candidate normative content (carried forward and extended
+from v0.3); not PREVIEW.</p>
+<section id="t10-scope-and-relationship-to-the-base" class="level2">
+<h2><span class="secno">T1.0. </span>Scope and Relationship to the
+Base</h2>
+<p>The Base specification <em>requires</em>, for any claim relied upon
+at Tier 1 or above, a verified <code>holderBinding</code> (<a
+href="/spec/v0.4/core/#tiered-trust-model">Base
+§6.4.2</a>, <a
+href="/spec/v0.4/core/#holder-behavior">Base
+§4.2</a>), and it carries the binding <em>field surface</em> on claims
+(<a
+href="/spec/v0.4/core/#claims-array-schema">Base
+§1.4.3</a>) and on receipts (<a
+href="/spec/v0.4/core/#credential-binding-status-fields">Base
+§3.3.1.1</a>). This profile specifies the <em>mechanics</em> the Base
+names:</p>
+<ul>
+<li><strong>Holder binding</strong> (T1.1) — proving the presenting
+subject is the credentialed holder, in three modes.</li>
+<li><strong>Presentation proof</strong> (T1.2) — proof-of-possession
+binding a presentation to a specific verifier and moment.</li>
+<li><strong>Liveness attestation</strong> (T1.3) — evidence of recent
+interactive human authentication.</li>
+<li><strong>Stage-2 verification sub-steps</strong> (T1.4) — how the
+above weave into the Verify stage of the evaluation sequence.</li>
+<li><strong>The end-to-end claim-proof verification path</strong> (T1.5)
+— the seven-step chain that ties outer-signature, claim-issuer, and
+attester key-authorization together, and the <code>claimProof</code>
+verification procedure.</li>
+<li><strong>Security considerations and backwards compatibility</strong>
+(T1.6).</li>
+</ul>
+<p>This profile is <strong>OPTIONAL to implement, but REQUIRED for any
+implementation claiming Tier 1 or higher assurance</strong> (<a
+href="/spec/v0.4/core/#optional-feature-matrix">Base
+§4.7</a>). An evaluator that does not implement it records the binding
+statuses as <code>"absent"</code> and caps every relied-upon claim at
+Tier 0.</p>
+<p>Non-goals: this profile does not define the Tier-2 cryptographic
+cross-DID proof (<a href="/spec/v0.4/ext-t2/">EXT-T2</a>)
+or the Tier-3 ceremony (<a
+href="/spec/v0.4/ext-t3/">EXT-T3</a>); it specifies the Tier-1
+layer those tiers build upon.</p>
+</section>
+<section id="t11-holder-binding" class="level2">
+<h2><span class="secno">T1.1. </span>Holder Binding</h2>
+<p>Manifests without <code>holderBinding</code> on their claims MUST NOT
+be treated as providing identity assurance above Tier 0, regardless of
+the trust tier declared by the holder. Every claim intended to be relied
+upon at Tier 1 or above MUST carry <code>holderBinding</code>.</p>
+<p>The <code>holderBinding</code> object supports three modes:</p>
+<ul>
+<li><code>"sd-jwt-kb"</code> — SD-JWT Key Binding per [<a
+href="#references">RFC9901</a>]. The credential contains a
+<code>cnf</code> (confirmation) claim ([<a
+href="#references">RFC7800</a>]) with a JWK Thumbprint ([<a
+href="#references">RFC7638</a>]) binding the credential to a specific
+holder key. The <code>cnfThumbprint</code> field is REQUIRED when this
+mode is used. <strong>This is the mandatory-to-implement
+baseline.</strong></li>
+<li><code>"bbs-holder-commitment"</code> — BBS+ holder binding per the
+W3C Data Integrity BBS Cryptosuites. The issuer commits to a
+holder-private key during credential issuance; the holder derives a
+zero-knowledge proof demonstrating possession of the bound key without
+revealing it. Presentations are unlinkable. The
+<code>pseudonymScope</code> field is OPTIONAL; when present it enables
+scope-exclusive pseudonyms per verifier. RECOMMENDED for
+privacy-sensitive deployments.</li>
+<li><code>"reciprocal-control"</code> — Direct DID binding. Both the
+manifest subject and the bound DID sign the same challenge (the manifest
+<code>@id</code>). The <code>boundDid</code>, <code>subjectProof</code>,
+and <code>boundDidProof</code> fields are REQUIRED.</li>
+</ul>
+<section id="t111-per-mode-verification-procedure" class="level3">
+<h3><span class="secno">T1.1.1. </span>Per-Mode Verification
+Procedure</h3>
+<p>For each mode, the evaluator performs the following verification
+during Stage-2 sub-step 2a (<a
+href="#t14-stage-2-verification-sub-steps">T1.4</a>):</p>
+<p><strong><code>sd-jwt-kb</code>.</strong></p>
+<ol type="1">
+<li>Locate the SD-JWT and its Key Binding JWT (KB-JWT) in the claim's
+<code>claimProof</code>.</li>
+<li>Confirm the credential's <code>cnf</code> JWK thumbprint ([<a
+href="#references">RFC7638</a>]) equals the declared
+<code>cnfThumbprint</code>.</li>
+<li>Validate the KB-JWT signature with the confirmed holder key.</li>
+<li>Confirm the KB-JWT <code>aud</code> equals the presentation
+<code>audience</code> and its <code>nonce</code> equals the presentation
+<code>challenge</code> (<a href="#t12-presentation-proof">T1.2</a>), and
+that its <code>sd_hash</code> covers the disclosed credential.</li>
+<li>On any failure, record <code>holderBindingStatus: "failed"</code>
+and cap the claim at Tier 0.</li>
+</ol>
+<p><strong><code>bbs-holder-commitment</code>.</strong> The binding
+carries the REQUIRED fields <code>commitment</code> (the issuer's
+commitment to the holder secret) and <code>proofValue</code> (the
+holder's zero-knowledge proof of possession), and the OPTIONAL
+<code>pseudonymScope</code> ([<a href="#references">VC-DI-BBS</a>]).</p>
+<ol type="1">
+<li>Verify the BBS+ derived <code>proofValue</code> demonstrates
+possession of the secret committed in <code>commitment</code>, against
+the issuer's BLS12-381 public key.</li>
+<li>If <code>pseudonymScope</code> is present, confirm the pseudonym is
+bound to that scope (and not reused across verifiers — <a
+href="#t161-bbs-pseudonym-scope">T1.6.1</a>).</li>
+<li>On failure, record <code>holderBindingStatus: "failed"</code> and
+cap the claim at Tier 0.</li>
+</ol>
+<p><strong><code>reciprocal-control</code>.</strong> Confirm
+<code>subjectProof</code> and <code>boundDidProof</code> are each valid
+signatures over the manifest <code>@id</code> by the manifest
+<code>subject</code> key and the <code>boundDid</code> key respectively;
+on failure record <code>holderBindingStatus: "failed"</code>. (See the
+limitation in <a
+href="#t163-reciprocal-control-limitations">T1.6.3</a>.)</p>
+<p>Verifying an <code>sd-jwt-kb</code> binding presupposes an
+interactive presentation: step 4 compares the KB-JWT <code>aud</code>
+and <code>nonce</code> against the <code>audience</code> and
+<code>challenge</code> of the presentation (<a
+href="#t12-presentation-proof">T1.2</a>). In non-interactive contexts
+(offline or cached presentation), holder binding at Tier 1 or above is
+carried by the <code>bbs-holder-commitment</code> or
+<code>reciprocal-control</code> modes, which verify without a
+verifier-issued challenge.</p>
+<p>The receipt field <code>holderBindingStatus</code> records the
+outcome as one of <code>"verified"</code>, <code>"failed"</code>,
+<code>"unsupported-mode"</code>, or <code>"absent"</code> (<a
+href="/spec/v0.4/core/#credential-binding-status-fields">Base
+§3.3.1.1</a>); <code>"absent"</code> indicates the claim carried no
+<code>holderBinding</code>.</p>
+</section>
+</section>
+<section id="t12-presentation-proof" class="level2">
+<h2><span class="secno">T1.2. </span>Presentation Proof</h2>
+<p>The <code>presentationProof</code> field at the manifest root
+provides proof-of-possession at verification time, binding the manifest
+to a specific verifier and moment. It prevents manifest replay.</p>
+<p>When presenting a manifest in response to a verifier-issued challenge
+(an <em>interactive presentation</em>), the presenter MUST include a
+<code>presentationProof</code> containing:</p>
+<ul>
+<li><code>proofType</code> — One of <code>"sd-jwt-kb"</code>,
+<code>"bbs-derived"</code>, or <code>"did-auth"</code>.</li>
+<li><code>challenge</code> — The verifier-issued nonce. MUST be unique
+per presentation request.</li>
+<li><code>audience</code> — The verifier's identifier (DID or origin).
+MUST match the requesting verifier.</li>
+<li><code>created</code> — RFC 3339 timestamp of proof generation.</li>
+<li><code>proofValue</code> — Base64url-encoded proof (KB-JWT, BBS+
+derived proof, or DID Auth signature).</li>
+</ul>
+<p><code>presentationProof</code> is excluded from the manifest signing
+input (removed alongside <code>signature</code> in step 2 of <a
+href="/spec/v0.4/core/#signing-input-procedure">Base
+§1.6.3</a>). Its <code>proofValue</code> MUST be computed over the
+concatenation of: the manifest's signing-input hash (SHA-256 of the <a
+href="/spec/v0.4/core/#signing-input-procedure">Base
+§1.6.3</a> canonical bytes, as its 32 raw bytes), then the UTF-8 bytes
+of <code>challenge</code>, <code>audience</code>, and
+<code>created</code>, in that order, per the mechanics of the declared
+<code>proofType</code> (KB-JWT per [<a href="#references">RFC9901</a>];
+BBS+ derived proof per [<a href="#references">VC-DI-BBS</a>]; DID Auth
+signature per [<a href="#references">DID-CORE</a>]). Binding the proof
+to the signing-input hash ties the presentation to the exact signed
+manifest without requiring the holder to re-sign per presentation.</p>
+<p>A manifest presented without a <code>presentationProof</code> is
+valid only for offline or cached identity display, not for interactive
+verification. When the evaluator itself issued a challenge for this
+presentation and <code>presentationProof</code> is absent, the evaluator
+MUST treat the manifest as replay-suspect, MUST NOT accept it for
+interactive verification, and records
+<code>presentationProofStatus: "missing-required"</code>. The receipt
+field <code>presentationProofStatus</code> is one of
+<code>"verified"</code>, <code>"failed"</code>,
+<code>"missing-required"</code>, or <code>"absent"</code>.</p>
+</section>
+<section id="t13-liveness-attestation" class="level2">
+<h2><span class="secno">T1.3. </span>Liveness Attestation</h2>
+<p>A <code>livenessAttestation</code> proves human presence at
+<code>attestedAt</code>. It does <strong>not</strong> prove human
+presence at verification time. Evaluators MUST NOT treat a stale
+liveness attestation as equivalent to current human presence.</p>
+<p>Four freshness classes are defined. An attestation past its
+<code>validUntil</code> is <code>"unknown"</code> regardless of
+<code>attestedAt</code>; otherwise the classes are evaluated in the
+order listed and the first match applies:</p>
+<ul>
+<li><code>"live"</code> — Attested within 60 seconds. Suitable for
+high-stakes transactions.</li>
+<li><code>"recent"</code> — Attested within 4 hours. Suitable for
+spatial platform entry.</li>
+<li><code>"stale"</code> — Attested more than 4 hours ago but within the
+attestation's <code>validUntil</code>. Evaluators SHOULD require
+re-attestation for sensitive operations.</li>
+<li><code>"unknown"</code> — No liveness attestation present (default
+for offline mode), or an attestation whose <code>validUntil</code> has
+passed. An attestation past its <code>validUntil</code> MUST be treated
+as <code>"unknown"</code>.</li>
+</ul>
+<p>The <code>livenessAttestation</code> is a root-level member of the
+manifest (carried among the optional credential-binding members of the
+abstract data model — <a
+href="/spec/v0.4/ext-opt/">EXT-OPT</a>). When present it MUST
+contain <code>proofType</code> (a string identifying the liveness
+method, e.g. <code>"webauthn-uv"</code>; extensible via the profile
+registry — <a href="/spec/v0.4/ext-opt/">EXT-OPT</a>),
+<code>attestedAt</code> (RFC 3339, when human presence was attested),
+<code>validUntil</code> (RFC 3339, after which the attestation is
+<code>"unknown"</code>), and <code>proofValue</code> (Base64url-encoded;
+MUST be computed over the UTF-8 bytes of the manifest
+<code>subject</code> concatenated with the UTF-8 bytes of
+<code>attestedAt</code>, signed by the attesting authenticator or
+platform key). It MAY contain <code>method</code> (the authentication
+method, copied into the receipt), <code>userVerified</code> (boolean,
+copied into the receipt), and <code>attester</code> (the DID of the
+attesting authority).</p>
+<p>WebAuthn user-verification (a WebAuthn Level 3 [<a
+href="#references">WEBAUTHN</a>] assertion with the user-verified flag
+set, <code>proofType: "webauthn-uv"</code>) is the RECOMMENDED liveness
+method. Evaluators verifying a <code>livenessAttestation</code> MUST
+validate <code>proofValue</code> against the named
+<code>proofType</code>'s mechanics before treating the attestation's
+freshness class as evidence of human presence. The receipt field
+<code>livenessStatus</code> is an object containing
+<code>freshnessClass</code> (one of <code>"live"</code>,
+<code>"recent"</code>, <code>"stale"</code>, <code>"unknown"</code>)
+and, when present, the <code>method</code> and <code>userVerified</code>
+values copied from the attestation.</p>
+</section>
+<section id="t14-stage-2-verification-sub-steps" class="level2">
+<h2><span class="secno">T1.4. </span>Stage-2 Verification Sub-Steps</h2>
+<p>When the manifest relies on the credential-binding mechanisms of this
+profile for Tier 1 or higher assurance, the evaluator MUST perform the
+following sub-steps as part of the <strong>Verify</strong> stage (<a
+href="/spec/v0.4/core/#stage-2-verify">Base
+§3.1.2</a>). Each sub-step records its outcome in the credential-binding
+receipt fields (<a
+href="/spec/v0.4/core/#credential-binding-status-fields">Base
+§3.3.1.1</a>). Evaluators that do not implement credential binding skip
+these sub-steps and record the corresponding statuses as
+<code>"absent"</code>.</p>
+<ol type="1">
+<li><strong>(2a) Holder-binding verification.</strong> For each claim
+carrying <code>holderBinding</code> (<a
+href="#t11-holder-binding">T1.1</a>), verify the binding according to
+its <code>mode</code>. Record <code>holderBindingStatus</code>. A claim
+relied upon for assurance whose holder binding fails or is absent MUST
+NOT be granted trust above Tier 0.</li>
+<li><strong>(2b) Presentation-proof verification.</strong> If the
+manifest carries a <code>presentationProof</code> (<a
+href="#t12-presentation-proof">T1.2</a>), verify that
+<code>challenge</code> matches the verifier-issued nonce,
+<code>audience</code> matches this verifier, and <code>proofValue</code>
+validates over the signing-input hash, <code>challenge</code>,
+<code>audience</code>, and <code>created</code>. Record
+<code>presentationProofStatus</code>. A failed presentation proof MUST
+cause the manifest to be treated as replay-suspect and rejected for
+interactive verification. When the evaluator issued a challenge and no
+<code>presentationProof</code> is present, the evaluator MUST treat the
+absence identically to a failed proof, record
+<code>presentationProofStatus: "missing-required"</code>, and reject the
+manifest for interactive verification.</li>
+<li><strong>(2c) Liveness-attestation verification.</strong> If a
+<code>livenessAttestation</code> (<a
+href="#t13-liveness-attestation">T1.3</a>) is present, verify its proof
+and compute its <code>freshnessClass</code> from
+<code>attestedAt</code>. Record <code>livenessStatus</code>. Evaluators
+MUST NOT treat a <code>stale</code> or <code>unknown</code> freshness
+class as current human presence.</li>
+<li><strong>(2d) Cross-DID binding-proof verification.</strong> For each
+<code>identity.crossDidBinding</code> claim (<a
+href="/spec/v0.4/core/#identitycrossdidbinding-claim">Base
+§6.4.4</a>), verify the attester authorization (when attester-asserted)
+and any Tier 2 <code>bindingProof</code> (<a
+href="/spec/v0.4/ext-t2/">EXT-T2</a>) or Tier 3
+<code>ceremonyProof</code> (<a
+href="/spec/v0.4/ext-t3/">EXT-T3</a>) per the claim-proof
+process (<a
+href="#t15-claim-proof-process--end-to-end-verification-path">T1.5</a>).
+Record each result in <code>crossDidBindingStatus</code>.</li>
+</ol>
+<p>These sub-steps are the normative record of how the binding mechanics
+weave into the evaluation sequence; the binding modes and proof
+procedures they invoke are defined in this profile and in <a
+href="/spec/v0.4/ext-t2/">EXT-T2</a> / <a
+href="/spec/v0.4/ext-t3/">EXT-T3</a>.</p>
+</section>
+<section id="t15-claim-proof-process--end-to-end-verification-path"
+class="level2">
+<h2><span class="secno">T1.5. </span>Claim Proof Process — End-to-End
+Verification Path</h2>
+<p>This is the normative end-to-end procedure an evaluator follows to
+determine whether a claim carried in a manifest is trustworthy at Tier 1
+or above. It ties together the outer manifest signature verification (<a
+href="/spec/v0.4/core/#signature-profile-a-jcs--ed25519">Base
+§1.6</a>), the <code>claimProof</code> field (<a
+href="/spec/v0.4/core/#claimsclaimproof-field">Base
+§6.4.3</a>), and the cross-DID binding attestation (<a
+href="/spec/v0.4/core/#identitycrossdidbinding-claim">Base
+§6.4.4</a>) into a single verification chain.</p>
+<section id="t151-claimproof-verification-procedure" class="level3">
+<h3><span class="secno">T1.5.1. </span><code>claimProof</code>
+Verification Procedure</h3>
+<p>When claiming Tier 1 assurance or higher, the evaluator MUST perform
+the verification steps below; at Tier 0 these checks are OPTIONAL.</p>
+<ul>
+<li>When <code>claimProof</code> is present as an <strong>embedded
+object</strong>, the evaluator MUST verify the VP proof chain: (a) the
+VC signature validates to the stated issuer, (b) the VP signature
+validates to the holder, (c) the holder DID matches the manifest
+subject.</li>
+<li>When present as a <strong>URI string</strong>, the evaluator MAY
+fetch the VP for verification when network access is available.
+Evaluators that cannot resolve the URI SHOULD record the claim as
+<code>"unverified"</code> with a reason such as
+<code>um:reason:trust:claimproof-unresolved</code>, rather than
+<code>"verified"</code>.</li>
+<li>When <code>claimProof</code> is an <strong>array</strong>, each
+entry is independently verified; the claim is backed by the conjunction
+of all valid proofs.</li>
+</ul>
+<p>VPs used as <code>claimProof</code> SHOULD include domain (audience
+binding) and challenge (nonce) parameters to prevent cross-manifest
+replay. Evaluators MUST enforce size limits of at most 50 KB per
+embedded VP and at most 500 KB total VP payload across all claims in one
+manifest, and MUST document any stricter limit in their conformance
+claim.</p>
+</section>
+<section id="t152-seven-step-verification-chain" class="level3">
+<h3><span class="secno">T1.5.2. </span>Seven-Step Verification
+Chain</h3>
+<p>For each claim requiring Tier 1 or higher trust, the evaluator MUST
+execute the following seven-step procedure:</p>
+<ol type="1">
+<li><strong>Verify outer manifest signature</strong> per <a
+href="/spec/v0.4/core/#signature-profile-a-jcs--ed25519">Base
+§1.6</a>. If the signature is invalid, the entire manifest is
+rejected.</li>
+<li><strong>Confirm manifest signing key authorization.</strong> Resolve
+the manifest <code>subject</code> DID document. Confirm that the signing
+key (referenced via <code>signature.keyRef</code>) appears in the
+subject's DID document under the <code>authentication</code> or
+<code>assertionMethod</code> verification relationship, per [<a
+href="#references">DID-CORE</a>] §5.3. If the manifest signing key is
+not authorized for the subject, the evaluator MUST record this as a
+verification failure.</li>
+<li><strong>Resolve the claim issuer DID.</strong> For each claim
+carrying <code>claimProof</code>, resolve the
+<code>claims[].issuer</code> DID document per W3C DID Resolution.</li>
+<li><strong>Verify the claim proof chain.</strong> If
+<code>claimProof</code> is present:
+<ol type="1">
+<li>Identify the proof type. If <code>proofType</code> is absent, infer
+from the proof structure.</li>
+<li>Verify the proof material per the declared proof type, following the
+VP proof-chain verification in <a
+href="#t151-claimproof-verification-procedure">T1.5.1</a>.</li>
+<li>If <code>verificationMethod</code> is present, resolve the URI to
+the issuer's DID document. Confirm the key appears under the
+<code>assertionMethod</code> verification relationship. This is the
+key-authorization step: it proves the signing key was authorized by the
+stated issuer DID to issue credentials. (See [<a
+href="#references">DID-CORE</a>] §5.3 and [<a
+href="#references">VC-DATA-MODEL</a>] §6.)</li>
+<li>If <code>statusRef</code> is present on the proof entry, check
+revocation status per the statusRef resolution schema (<a
+href="/spec/v0.4/ext-opt/">EXT-OPT</a>).</li>
+<li>If <code>claimProof</code> is an array, each entry is independently
+verified; the claim is backed by the conjunction of all valid
+proofs.</li>
+</ol></li>
+<li><strong>Verify attester key authorization</strong> (for
+attester-asserted <code>identity.crossDidBinding</code> claims; skipped
+when the binding carries only a cryptographic <code>bindingProof</code>
+or <code>ceremonyProof</code>, whose verification is defined in <a
+href="/spec/v0.4/ext-t2/">EXT-T2</a> and <a
+href="/spec/v0.4/ext-t3/">EXT-T3</a>). Resolve the
+<code>attester</code> DID document. Confirm the attester's signing key
+appears under the <code>assertionMethod</code> verification
+relationship. Confirm the attester is on the evaluator's configurable
+trust list per <a
+href="/spec/v0.4/core/#identitycrossdidbinding-claim">Base
+§6.4.4</a>.</li>
+<li><strong>Confirm key revocation status.</strong> For all signing keys
+encountered in steps 1–5 (manifest signer, claim issuer, attester),
+confirm that no key relied upon has been revoked, to the extent
+revocation information is available. Key revocation is determined per
+key source: for DID-based keys, the verification-method state in the
+key's DID document; for keys carried by a credential, the proof entry's
+own <code>statusRef</code>. This is distinct from the manifest-instance
+status resolved via <code>signature.statusRef</code>. Inner key
+revocation (claim-issuer and attester keys) SHOULD be checked when
+revocation information is available.</li>
+<li><strong>Compose per-claim outcomes.</strong> Aggregate the
+verification outcomes into the manifest's trust decision per <a
+href="/spec/v0.4/core/#requiredtrusttier-declaration">Base
+§6.4.5</a> (<code>requiredTrustTier</code> floors) and emit the receipt
+per <a
+href="/spec/v0.4/core/#structured-receipts">Base
+§3.3</a>.</li>
+</ol>
+</section>
+<section id="t153-key-purpose-requirements" class="level3">
+<h3><span class="secno">T1.5.3. </span>Key Purpose Requirements</h3>
+<p>For each step that names a verification relationship, the evaluator
+MUST confirm the signing key appears under the matching W3C DID Core
+verification relationship:</p>
+<ul>
+<li><strong>Manifest signature:</strong> <code>authentication</code> or
+<code>assertionMethod</code> on the manifest subject's DID
+document.</li>
+<li><strong>VC issuance (claimProof embedded VP):</strong>
+<code>assertionMethod</code> on the VC issuer's DID document.</li>
+<li><strong>Cross-DID binding attestation:</strong>
+<code>assertionMethod</code> on the attester's DID document.</li>
+<li><strong>Agent delegation signing:</strong>
+<code>capabilityDelegation</code> on the delegator's DID document (<a
+href="/spec/v0.4/core/#agent-delegation">Base
+§6.5</a>).</li>
+</ul>
+</section>
+<section id="t154-trust-policy-vs-cryptographic-verification"
+class="level3">
+<h3><span class="secno">T1.5.4. </span>Trust Policy vs. Cryptographic
+Verification</h3>
+<p>The verification chain separates two concerns that MUST NOT be
+conflated:</p>
+<ul>
+<li><strong>Cryptographic verification</strong> (steps 1–2, 4–6):
+mathematical proof that signatures are valid and keys are authorized.
+Deterministic.</li>
+<li><strong>Trust policy</strong> (step 5 trust list, step 7
+composition): which DIDs and attesters the evaluator trusts. Local
+configuration. The specification MUST NOT mandate a centralized trust
+registry; each evaluator defines its own trust policy.</li>
+</ul>
+<p><strong>Non-normative note:</strong> OMATrust's Key Binding
+attestation type operationalizes the key-authorization pattern for the
+EVM ecosystem. UM cites W3C DID Core and VCDM 2.0 as the normative
+sources for the verification-relationship model.</p>
+</section>
+</section>
+<section id="t16-security-considerations" class="level2">
+<h2><span class="secno">T1.6. </span>Security Considerations</h2>
+<section id="t161-bbs-pseudonym-scope" class="level3">
+<h3><span class="secno">T1.6.1. </span>BBS+ Pseudonym Scope</h3>
+<p>If <code>pseudonymScope</code> is reused across verifiers,
+cross-verifier correlation becomes possible. Issuers SHOULD generate
+unique scope URIs per verifier relationship. Evaluators MUST NOT use a
+shared pseudonym scope for multiple independent verifier
+relationships.</p>
+</section>
+<section id="t162-zk-proof-system-trusted-setup" class="level3">
+<h3><span class="secno">T1.6.2. </span>ZK Proof System Trusted
+Setup</h3>
+<p>Tier 2 profiles using Groth16 require a trusted setup ceremony (<a
+href="/spec/v0.4/ext-t2/">EXT-T2</a>). The ceremony
+parameters MUST be publicly auditable. Verifiers MUST verify proofs
+against the published verification key, not against a key provided by
+the prover.</p>
+</section>
+<section id="t163-reciprocal-control-limitations" class="level3">
+<h3><span class="secno">T1.6.3. </span>Reciprocal Control
+Limitations</h3>
+<p>Reciprocal control (two DIDs signing the same challenge) proves the
+same entity or cooperating entities control both keys. It does
+<strong>not</strong> prove they are the same natural person. For
+<code>sameSubject</code> assurance, combine reciprocal control with
+issuer-attested binding (Tier 1) or linked-secret proof (Tier 2 — <a
+href="/spec/v0.4/ext-t2/">EXT-T2</a>).</p>
+</section>
+<section id="t164-backwards-compatibility-v03-manifests" class="level3">
+<h3><span class="secno">T1.6.4. </span>Backwards Compatibility (v0.3
+manifests)</h3>
+<p>v0.4 evaluators encountering a v0.3 manifest (no
+<code>holderBinding</code>, no <code>presentationProof</code>, no
+<code>livenessAttestation</code>) MUST:</p>
+<ol type="1">
+<li>Parse and process the manifest through the six-stage evaluation
+sequence.</li>
+<li>Record <code>holderBindingStatus: "absent"</code> in the
+receipt.</li>
+<li>Record <code>presentationProofStatus: "absent"</code> in the
+receipt.</li>
+<li>Record <code>livenessStatus.freshnessClass: "unknown"</code> in the
+receipt.</li>
+<li>Cap the effective trust tier at Tier 0 regardless of
+<code>requiredTrustTier</code> declarations.</li>
+</ol>
+<p>A v0.3 manifest that declares no manifest-level
+<code>requiredTrustTier</code> (or declares Tier 0) is accepted but
+flagged as "unbound" at Tier 0; evaluators decide their own policy for
+unbound manifests. Where a v0.3 manifest declares a manifest-level
+<code>requiredTrustTier</code> that cannot be satisfied because binding
+material is absent, <a
+href="/spec/v0.4/core/#requiredtrusttier-declaration">Base
+§6.4.5</a> governs the outcome: the manifest is processed with outcome
+<code>rejected</code> for trust-gated use, or
+<code>accepted-with-warnings</code> for display-only use, per local
+policy. Capping the effective trust tier at Tier 0 (step 5) does not by
+itself reject the manifest; the declared floor does.</p>
+<p>v0.4 evaluators SHOULD emit an
+<code>um:reason:trust:unbound-claims</code> warning in the receipt when
+processing manifests without holder binding. <em>(Worked example:
+unbound-claims warning — see <a
+href="/spec/v0.4/cookbook/">Cookbook</a>.)</em></p>
+</section>
+</section>
+<section id="references" class="level2">
+<h2>References</h2>
+<p>Cited in this profile (full descriptors in the published
+artifact):</p>
+<ul>
+<li><strong>[RFC9901]</strong> SD-JWT (Selective Disclosure for JWTs),
+incl. Key Binding JWT.</li>
+<li><strong>[RFC7800]</strong> Proof-of-Possession Key Semantics for
+JWTs (<code>cnf</code>).</li>
+<li><strong>[RFC7638]</strong> JSON Web Key (JWK) Thumbprint.</li>
+<li><strong>[VC-DI-BBS]</strong> Verifiable Credentials Data Integrity
+BBS Cryptosuites.</li>
+<li><strong>[DID-CORE]</strong> Decentralized Identifiers (DIDs) v1.0.
+<a
+href="https://www.w3.org/TR/did-core/">https://www.w3.org/TR/did-core/</a></li>
+<li><strong>[VC-DATA-MODEL]</strong> Verifiable Credentials Data Model
+v2.0. <a
+href="https://www.w3.org/TR/vc-data-model-2.0/">https://www.w3.org/TR/vc-data-model-2.0/</a></li>
+<li><strong>[WEBAUTHN]</strong> Web Authentication: An API for accessing
+Public Key Credentials, Level 3.</li>
+</ul>
+<hr />
+<p><em>Companion to the <a
+href="/spec/v0.4/core/">Base specification</a>.
+For Tier-2 cryptographic binding, see <a
+href="/spec/v0.4/ext-t2/">EXT-T2</a>. For worked examples,
+see the <a href="/spec/v0.4/cookbook/">Cookbook</a>.</em></p>
+</section>
+</section>
+
+    <script>
+        (function(){
+            var root = document.documentElement;
+            var btn = document.getElementById('um-theme-btn');
+            var popover = document.getElementById('um-theme-popover');
+            var opts = popover.querySelectorAll('.um-theme-opt');
+            var icons = {
+                system: document.getElementById('um-theme-icon-system'),
+                light: document.getElementById('um-theme-icon-light'),
+                dark: document.getElementById('um-theme-icon-dark')
+            };
+            var KEY = 'um-spec-theme';
+
+            function getStored() {
+                var v = localStorage.getItem(KEY);
+                return (v === 'light' || v === 'dark') ? v : 'system';
+            }
+
+            function applyTheme(t) {
+                root.setAttribute('data-theme', t);
+                localStorage.setItem(KEY, t);
+                for (var k in icons) {
+                    icons[k].style.display = (k === t) ? '' : 'none';
+                }
+                for (var i = 0; i < opts.length; i++) {
+                    var active = opts[i].getAttribute('data-theme-value') === t;
+                    opts[i].classList.toggle('is-active', active);
+                    opts[i].setAttribute('aria-selected', active ? 'true' : 'false');
+                }
+            }
+
+            function openPopover() {
+                popover.classList.add('is-open');
+                btn.setAttribute('aria-expanded', 'true');
+            }
+
+            function closePopover() {
+                popover.classList.remove('is-open');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (popover.classList.contains('is-open')) {
+                    closePopover();
+                } else {
+                    openPopover();
+                }
+            });
+
+            for (var i = 0; i < opts.length; i++) {
+                opts[i].addEventListener('click', function(e) {
+                    applyTheme(this.getAttribute('data-theme-value'));
+                    closePopover();
+                });
+            }
+
+            document.addEventListener('click', function(e) {
+                if (!popover.contains(e.target) && e.target !== btn) {
+                    closePopover();
+                }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closePopover();
+            });
+
+            applyTheme(getStored());
+        })();
+    </script>
+</body>
+</html>

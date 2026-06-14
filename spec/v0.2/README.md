@@ -96,7 +96,7 @@ See `/docs/security/THREAT-MODEL.md` section 8 for operational guidance.
 - **Minimal disclosure**: Include only necessary claims/consents; consider selective disclosure for sensitive data
 - **Transport security**: Resolve manifests over HTTPS to prevent eavesdropping
 
-#### Private data handling model (WO-0143)
+#### Private data handling model
 
 v0.2 supports two valid privacy paths:
 
