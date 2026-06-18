@@ -652,7 +652,7 @@
     <div class="head">
         <h1 id="title" class="title p-name">Universal Manifest v0.4 — EXT-OPT</h1>
         <h2 id="subtitle">Optional-Feature Profiles</h2>
-        <h2><time class="dt-published" datetime="2026-06-11">11 June 2026</time></h2>
+        <h2><time class="dt-published" datetime="2026-06-16">16 June 2026</time></h2>
         <dl>
             <dt>This document:</dt>
             <dd><a class="u-url" href="https://universalmanifest.net/spec/v0.4/ext-opt/">/spec/v0.4/ext-opt/</a></dd>
@@ -758,6 +758,9 @@ id="toc-o43-paired-receipt-correlation"><span class="secno">O4.3.
 <li><a href="#o44-transport-independence"
 id="toc-o44-transport-independence"><span class="secno">O4.4.
 </span>Transport Independence</a></li>
+<li><a href="#o45-unlock-window" id="toc-o45-unlock-window"><span
+class="secno">O4.5. </span>Unlock Window
+<span class="preview-tag">PREVIEW</span></a></li>
 </ul></li>
 <li><a href="#o5-federation" id="toc-o5-federation"><span
 class="secno">O5. </span>Federation
@@ -1245,12 +1248,40 @@ lifecycle); <code>facet-processed</code>, <code>facet-sealed</code>,
 outcomes); <code>avatar-retrieved</code>,
 <code>avatar-substituted</code> (presence/avatar disclosure outcomes;
 presence is a locator, not authorization);
+<code>facet-key-rotated</code>, <code>facet-key-shredded</code>
+(facet-encryption key-lifecycle events — <a
+href="/spec/v0.4/core/#per-facet-cryptographic-isolation">Base
+§2.3.5</a>); <code>session-unlocked</code> (the opening of an unlock
+window — <a href="#o45-unlock-window">O4.5</a>);
 <code>session-completed</code> (session terminal event). This is a
 registry, not a closed enumeration: new classes are added through the
 profile registration mechanism (<a
 href="#o6-profile-registration-mechanism">O6</a>). Evaluators
 encountering an unrecognized <code>eventType</code> MUST preserve the
 event but MUST NOT act on it.</p>
+<p>Key-lifecycle and unlock events MAY carry an OPTIONAL
+<code>facetKeyRef</code> field identifying the affected facet-encryption
+key by its <code>kid</code> as an <strong>identifier, never key
+material</strong>. <code>facetKeyRef</code> is distinct from
+<code>signature.keyRef</code> (the signature-verification key URI) and
+from the receipt <code>keyRefResolution</code> field — distinct
+referents, distinct names. A <code>facet-key-shredded</code> event
+records the emitter's <strong>assertion and timing</strong> of key
+destruction, <strong>not</strong> cryptographic proof that copies are
+gone; consumers MUST NOT treat it as retroactive revocation (paralleling
+the Sealed-Entry Forward Secrecy discipline, <a
+href="/spec/v0.4/core/#private-data-handling-derived-writes-and-honest-limits">Base
+§7.2</a>). Key-rotation/shred histories are bounded by the
+<code>events</code> array limits of the Base resource limits (<a
+href="/spec/v0.4/core/#resource-limits">Base
+§6.3</a>: maximum array length 1,000 entries / maximum manifest size 1
+MB), so an evaluator is not forced into unbounded replay. Key-lifecycle
+events are subject to Receipt Minimization (<a
+href="/spec/v0.4/core/#privacy-considerations">Base
+§7</a>: carry only <code>facetKeyRef</code> as an identifier, minimum
+detail) and SHOULD ride session-scoped-signed receipt chains (<a
+href="#o31-chain-integrity">O3.1</a>), so the shred/rotation stream is
+not a long-lived cross-interaction correlator.</p>
 </section>
 <section id="o33-structured-reason-registry" class="level3">
 <h3><span class="secno">O3.3. </span>Structured Reason Registry</h3>
@@ -1259,6 +1290,8 @@ statuses, and events) SHOULD be drawn from a structured reason registry
 using <code>um:reason:&lt;category&gt;:&lt;code&gt;</code> naming (for
 example <code>um:reason:consent:withdrawn</code>,
 <code>um:reason:crypto:no-decryption-key</code>,
+<code>um:reason:crypto:key-rotated</code>,
+<code>um:reason:crypto:key-shredded</code>,
 <code>um:reason:trust:tier-unsupported</code>). Structured reasons make
 receipts machine-comparable. Free-text reasons remain valid where no
 registry code applies. New reason codes are registered through the
@@ -1352,6 +1385,67 @@ channels: local transports (NFC, BLE, QR scan), network transports
 (HTTPS, WebSocket), or hybrids. Transport-specific bindings MAY be
 defined in profile documents. The session object MUST NOT assume any
 specific transport capability.</p>
+</section>
+<section id="o45-unlock-window" class="level3">
+<h3><span class="secno">O4.5. </span>Unlock Window
+<span class="preview-tag">PREVIEW</span></h3>
+<p>An <strong>unlock window</strong> is a time-bounded grant that opens
+a holder-enumerated set of facets for a single subject. It is
+<strong>not</strong> a <code>um:BilateralSession</code> (<a
+href="#o41-session-object">O4.1</a>): it has no
+<code>participants</code>, no <code>exchangeId</code>, and is a
+single-subject construct. An unlock window is a recognized composition
+of an existing consent carrying <code>unlock.window</code> in its
+<code>scope</code> (dot form, per the agent-delegation scope convention
+of <a href="#o7-agent-delegation-scope-registry">O7</a>), with
+<code>grantedAt</code>, <code>expiresAt</code>, an optional
+<code>withdrawnAt</code>, and the enumerated facet set. It is not a new
+manifest object.</p>
+<p>An unlock window MUST be sound on the following axes:</p>
+<ol type="1">
+<li><strong>Bounded / enumerated facet set.</strong> The window MUST
+explicitly enumerate the facet set it opens (by <code>@id</code>). It
+MUST NOT open an unbounded or implicit set. This prevents the "one
+ceremony unlocks everything" anti-pattern that per-facet isolation (<a
+href="/spec/v0.4/core/#per-facet-cryptographic-isolation">Base
+§2.3.5</a>) exists to prevent.</li>
+<li><strong>Never lowers a per-facet floor or isolation.</strong> The
+window MUST NOT lower or bypass any per-facet
+<code>requiredLiveness</code> floor (<a
+href="/spec/v0.4/ext-t1/#t131-per-facet-liveness-floor-requiredliveness">EXT-T1
+§T1.3.1</a>) or any isolation obligation (<a
+href="/spec/v0.4/core/#per-facet-cryptographic-isolation">Base
+§2.3.5</a>). A facet whose floor is unmet stays withheld even inside the
+window.</li>
+<li><strong>Re-attestation on freshness decay.</strong> When the opening
+liveness attestation's <code>freshnessClass</code> degrades below a
+facet's floor during the window, the window MUST require re-attestation
+for that facet; a single attestation MUST NOT grant a window outliving
+its freshness class.</li>
+<li><strong>Anti-replay binding.</strong> The window MUST bind to a
+fresh <code>presentationProof</code> / nonce (<a
+href="/spec/v0.4/ext-t1/#t12-presentation-proof">EXT-T1
+§T1.2</a>), with audience binding, so static signed bytes cannot be
+replayed to re-open a window. This is the same anti-replay primitive a
+write inside the window reuses; a write is additionally per-write
+replay-guarded (<a
+href="/spec/v0.4/core/#stage-4-consent">Base
+§3.1.4</a>).</li>
+<li><strong>Fail closed on unobservable lifetime conditions.</strong>
+Idle-timeout and lock-on-sleep are runtime-only conditions the receipt
+cannot prove; only
+<code>grantedAt</code>/<code>expiresAt</code>/<code>withdrawnAt</code>
+are auditable bounds. Where a lifetime condition is unobservable, the
+evaluator MUST fail closed. The window bounds the <em>authorization
+window</em>, not in-use plaintext (see the in-use-plaintext note, <a
+href="/spec/v0.4/core/#private-data-handling-derived-writes-and-honest-limits">Base
+§7.2</a>).</li>
+<li><strong>Receipt-side liveness reference.</strong> The opening
+ceremony is recorded as a <code>session-unlocked</code> event in the
+typed event vocabulary (<a href="#o32-typed-event-vocabulary">O3.2</a>),
+referencing the opening liveness attestation — not a new consent member.
+This keeps the unlock window member-free on the consent object.</li>
+</ol>
 <p><em>(Worked example: bilateral session object — see <a
 href="/spec/v0.4/cookbook/">Cookbook</a>.)</em></p>
 <p><strong>Note (working-group):</strong> Whether the session model

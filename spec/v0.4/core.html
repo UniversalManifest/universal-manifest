@@ -652,7 +652,7 @@
     <div class="head">
         <h1 id="title" class="title p-name">Universal Manifest v0.4 — Base Specification</h1>
         <h2 id="subtitle">Tier-0 / Tier-1 Core · Working Draft (Preview)</h2>
-        <h2><time class="dt-published" datetime="2026-06-11">11 June 2026</time></h2>
+        <h2><time class="dt-published" datetime="2026-06-16">16 June 2026</time></h2>
         <dl>
             <dt>This document:</dt>
             <dd><a class="u-url" href="https://universalmanifest.net/spec/v0.4/core/">/spec/v0.4/core/</a></dd>
@@ -803,6 +803,10 @@ class="secno">2.3.2. </span>JWE Structure</a></li>
 class="secno">2.3.3. </span>Key Rotation</a></li>
 <li><a href="#recipient-revocation" id="toc-recipient-revocation"><span
 class="secno">2.3.4. </span>Recipient Revocation</a></li>
+<li><a href="#per-facet-cryptographic-isolation"
+id="toc-per-facet-cryptographic-isolation"><span class="secno">2.3.5.
+</span>Per-Facet Cryptographic Isolation
+<span class="preview-tag">PREVIEW</span></a></li>
 </ul></li>
 <li><a href="#jwe-algorithm-constraints"
 id="toc-jwe-algorithm-constraints"><span class="secno">2.4. </span>JWE
@@ -955,6 +959,10 @@ Considerations</a>
 id="toc-selective-disclosure-dual-track-model"><span class="secno">7.1.
 </span>Selective Disclosure: Dual-Track Model
 <span class="preview-tag">PREVIEW</span></a></li>
+<li><a href="#private-data-handling-derived-writes-and-honest-limits"
+id="toc-private-data-handling-derived-writes-and-honest-limits"><span
+class="secno">7.2. </span>Private-Data Handling: Derived Writes and
+Honest Limits <span class="preview-tag">PREVIEW</span></a></li>
 </ul></li>
 <li><a href="#federation" id="toc-federation"><span class="secno">8.
 </span>Federation <span class="preview-tag">PREVIEW</span></a></li>
@@ -1874,6 +1882,50 @@ retains the ability to decrypt manifest instances it already holds
 revocation MUST rely on the manifest TTL and revocation status, not on
 the encryption layer.</p>
 </section>
+<section id="per-facet-cryptographic-isolation" class="level3">
+<h3><span class="secno">2.3.5. </span>Per-Facet Cryptographic Isolation
+<span class="preview-tag">PREVIEW</span></h3>
+<p>A deployment <em>claims per-facet isolation</em> for a named set of
+encrypted facets when it represents — in its conformance claim, in a
+profile it implements, or to a relying party — that a party able to
+decrypt one facet in the set is not thereby able to decrypt another. The
+obligation binds <strong>only a deployment that makes the
+claim</strong>; it does not outlaw shared-key encryption in general. The
+claim is carried as a conformance-claim flag and adds no manifest wire
+member, keeping isolation in symmetry with the discipline (<a
+href="/spec/v0.4/ext-t1/#t13-liveness-attestation">EXT-T1
+§T1.3</a>) that an <em>identifier is not a proof</em>.</p>
+<p>Under an isolation claim, the following structurally-checkable
+invariants apply across the declared isolated set:</p>
+<ul>
+<li><strong>No shared decryption-authorizing <code>kid</code>.</strong>
+The same <code>recipients[].header.kid</code> MUST NOT authorize
+decryption of more than one facet in the isolated set. The comparison is
+across <code>facets[].entity.recipients[].header.kid</code> for the
+facets in the declared set.</li>
+<li><strong>No shared <code>(CEK, IV)</code>.</strong> Two isolated
+facets MUST NOT reuse an initialization vector; identical
+<code>iv</code> across two facets in the set is a violation (IV reuse
+under a shared content-encryption key is catastrophic for
+<code>A256GCM</code>). The comparison is across
+<code>facets[].entity.iv</code> for the facets in the declared set.</li>
+</ul>
+<p>These two are a cross-field structural rule of the same kind as the
+trust-tier floor check (<a
+href="#requiredtrusttier-declaration">§6.4.5</a>).</p>
+<p><strong>Residual gap (necessary, not sufficient).</strong> Distinct
+<code>kid</code> strings and distinct <code>iv</code> values are
+NECESSARY but <strong>not sufficient</strong> for true key isolation.
+Because <code>kid</code> is opaque, two distinct <code>kid</code>s can
+still name HKDF- or HD-derived children of one root secret; an evaluator
+<strong>cannot</strong> verify true key isolation or true
+derivation-labeling from manifest bytes. True isolation depends on
+deployment key custody and derivation that Universal Manifest does not
+attest. This residual is declarable and audited, never eliminated. The
+cryptographic property itself — that a grant to decrypt facet A yields
+no plaintext for facet B — is a behavioral property outside the
+structural conformance suite.</p>
+</section>
 </section>
 <section id="jwe-algorithm-constraints" class="level2">
 <h2><span class="secno">2.4. </span>JWE Algorithm Constraints</h2>
@@ -2026,6 +2078,50 @@ condition is violated/unenforceable → <code>"consent-denied"</code>
 a matching entry is expired or withdrawn → <code>"consent-denied"</code>
 with consent status <code>"expired"</code> or
 <code>"withdrawn"</code>.</p>
+<p><strong>Write authorization.</strong>
+<span class="preview-tag">PREVIEW</span> A write, update, or append to a
+facet is a distinct authorized operation, governed by a
+<strong>target-facet write-consent</strong>. The evaluator MUST NOT
+write unless a write operation is literally present in the governing
+consent's <code>scope</code> (consistent with the
+fail-closed-on-unrecognized-scope rule, <a
+href="#consents-array-schema">§1.4.4</a>), the <code>purpose</code>
+matches, and the consent is active. The governing consent is the one
+whose <code>facetRef</code> matches the <em>target</em> facet's
+<code>@id</code>. Absent such a consent, the evaluator MUST fail closed:
+it refuses the write and records <code>"consent-missing"</code> (no
+governing entry) or <code>"consent-denied"</code> with
+<code>"scope-mismatch"</code> (entry exists, write verb not in
+<code>scope</code>). Write authorization is <strong>not a new pipeline
+stage</strong>: it reuses this Stage-4 consent-matching machinery,
+applied at write time rather than only over the projected-facet read
+pass. New consent-<code>scope</code> operation tokens follow the
+<code>&lt;domain&gt;.&lt;capability&gt;</code> dot convention of the
+agent-delegation scope registry (<a
+href="/spec/v0.4/ext-opt/">EXT-OPT</a>); legacy bare-word verbs
+(<code>read</code>/<code>display</code>/<code>cache</code>/<code>process</code>/<code>forward</code>)
+remain valid, so a <code>scope</code> such as
+<code>["read", "write.update"]</code> carries intentional mixed
+punctuation.</p>
+<p>When a write would <strong>create</strong> a facet that is not yet
+present (for example, durable agent memory — see <a
+href="#private-data-handling-derived-writes-and-honest-limits">§7.2</a>),
+there is no <code>@id</code> for any existing
+<code>consents[].facetRef</code> to match, so under the plain Stage-4
+rule the write is <code>"consent-missing"</code> and MUST be refused
+(fail closed). To authorize creation, the deployment MUST
+<strong>pre-declare</strong> a consent whose <code>facetRef</code> names
+the intended target facet <code>@id</code> (the holder commits the
+target <code>@id</code> ahead of the write). Write-replay protection
+uses the same anti-replay model as a presentation proof (<a
+href="/spec/v0.4/ext-t1/">EXT-T1</a>): a write operation MUST
+carry a per-write nonce, or the evaluator MUST dedupe writes; a write
+performed under an unlock window (<a
+href="/spec/v0.4/ext-opt/">EXT-OPT</a>) MUST still be
+individually replay-guarded. A successful write is recorded with the
+receipt facet status <code>"written"</code> (<a
+href="#receipt-fields">§3.3.1</a>); a denied write reuses
+<code>"consent-denied"</code>/<code>"consent-missing"</code>.</p>
 </section>
 <section id="stage-5-compose" class="level3">
 <h3><span class="secno">3.1.5. </span>Stage 5: Compose</h3>
@@ -2104,15 +2200,17 @@ the manifest has zero facets). Each entry is a per-facet status object
 with <code>facetId</code> (matching the facet's <code>@id</code>),
 <code>status</code> (<code>"processed"</code>, <code>"opaque"</code>,
 <code>"consent-denied"</code>, <code>"consent-missing"</code>,
-<code>"trustTierUnsupported"</code>, or <code>"not-projected"</code>),
-an OPTIONAL <code>name</code>, and an OPTIONAL <code>reason</code>.
-<code>"trustTierUnsupported"</code> records a facet withheld because its
-<code>requiredTrustTier</code> cannot be verified (<a
-href="#requiredtrusttier-declaration">§6.4.5</a>).
-<code>"not-projected"</code> indicates the evaluator's local policy
-expected a specific facet absent from the presented manifest; it is
-OPTIONAL and applies only when the evaluator has prior knowledge of the
-subject's schema.</p>
+<code>"trustTierUnsupported"</code>, <code>"not-projected"</code>, or
+<code>"written"</code>), an OPTIONAL <code>name</code>, and an OPTIONAL
+<code>reason</code>. <code>"trustTierUnsupported"</code> records a facet
+withheld because its <code>requiredTrustTier</code> cannot be verified
+(<a href="#requiredtrusttier-declaration">§6.4.5</a>).
+<code>"written"</code> records a successful write authorized under the
+write-consent rule (<a href="#stage-4-consent">§3.1.4</a>); reads keep
+<code>"processed"</code>. <code>"not-projected"</code> indicates the
+evaluator's local policy expected a specific facet absent from the
+presented manifest; it is OPTIONAL and applies only when the evaluator
+has prior knowledge of the subject's schema.</p>
 <p>A receipt SHOULD include, when applicable, the following fields (the
 receipt <em>field surface</em> a Tier-0/Tier-1 evaluator records):
 <code>revocationStatus</code> (<code>"active"</code> /
@@ -2215,6 +2313,17 @@ bilateral <em>field surface</em> it depends on: <code>exchangeId</code>
 and <code>evaluatorId</code> on receipts (<a
 href="#receipt-fields">§3.3.1</a>), and the bilateral-exchange security
 model (<a href="#bilateral-exchange">§6.4.6</a>).</p>
+<p>A distinct single-subject construct, the <strong>unlock
+window</strong> — a time-bounded grant opening a holder-enumerated set
+of facets, explicitly <em>not</em> a <code>um:BilateralSession</code> —
+is also specified in <a href="/spec/v0.4/ext-opt/">EXT-OPT</a>.
+An unlock window never lowers a per-facet <code>requiredLiveness</code>
+floor (<a
+href="/spec/v0.4/ext-t1/#t13-liveness-attestation">EXT-T1
+§T1.3</a>) or a per-facet isolation obligation (<a
+href="#per-facet-cryptographic-isolation">§2.3.5</a>), and a write
+performed under one is individually replay-guarded (<a
+href="#stage-4-consent">§3.1.4</a>).</p>
 <hr />
 </section>
 </section>
@@ -2805,6 +2914,18 @@ requires it for Tier 1+ (<a href="#tiered-trust-model">§6.4.2</a>, <a
 href="#holder-behavior">§4.2</a>), and carries its field surface on
 claims (<a href="#claims-array-schema">§1.4.3</a>) and receipts (<a
 href="#credential-binding-status-fields">§3.3.1.1</a>).</p>
+<p>A facet MAY additionally declare an OPTIONAL
+<strong><code>requiredLiveness</code></strong> floor — a per-facet
+minimum liveness freshness (and optional user-verification requirement)
+that gates processing of that facet. It is a sibling of the optional
+<code>requiredTrustTier</code> facet member (<a
+href="#umfacet-module">§2.1</a>) but, unlike the closed integer
+<code>requiredTrustTier</code>, is a compound object (a freshness class
+plus a boolean). Its shape, the floor comparison order, and the
+fail-closed sequencing are specified in <a
+href="/spec/v0.4/ext-t1/#t13-liveness-attestation">EXT-T1
+§T1.3</a>; the floor is enforced in the Consent stage (<a
+href="#stage-4-consent">§3.1.4</a>) and recorded in the receipt.</p>
 </section>
 <section id="post-quantum-signatures" class="level2">
 <h2><span class="secno">6.7. </span>Post-Quantum Signatures
@@ -2951,6 +3072,101 @@ establishes Track A as the baseline selective-disclosure behavior
 consistent with holder-controlled projection above; the full dual-track
 model, and Track B's unlinkable-proof mechanics, are specified in <a
 href="/spec/v0.4/ext-t2/">EXT-T2</a>.</p>
+</section>
+<section id="private-data-handling-derived-writes-and-honest-limits"
+class="level2">
+<h2><span class="secno">7.2. </span>Private-Data Handling: Derived
+Writes and Honest Limits <span class="preview-tag">PREVIEW</span></h2>
+<p><strong>Terminology.</strong> A <em>sensitivity label</em> ranks how
+sensitive a facet's content is. A set of labels equipped with a
+<em>partial order</em> (some pairs comparable, some not) forms a lattice
+fragment; the <em>join</em> of two labels is their <em>least upper
+bound</em> — the least-sensitive label that is at least as sensitive as
+both. A <em>join-semilattice</em> is an ordering in which a join is
+always defined for every pair. To <em>down-label</em> is to assign an
+output a label less sensitive than its sources — the move this section
+prohibits.</p>
+<p><strong>Derived-write monotonicity.</strong> This is a new construct
+analogous in spirit to the most-specific-key down-label prohibition of
+the derived-variant sensor consent rule (<a
+href="/spec/v0.4/ext-opt/#o91-derived-variant-sensor-consent-vocabulary">EXT-OPT
+§O9.1</a>), not a generalization of it. Where a profile supplies a facet
+sensitivity ordering, an evaluator that produces an output derived from
+one or more source facets MUST assign that output <strong>at least the
+join</strong> of the source labels, MUST NOT write a derived output into
+a lower-sensitivity facet unless it re-gates the write under a consent
+valid for the output label, and MUST NOT silently down-label; otherwise
+it discards the output. A profile that supplies a sensitivity ordering
+MUST supply a join-semilattice (a least upper bound is always defined),
+<strong>or</strong>, where no join is defined for a pair of labels, the
+evaluator MUST fail closed — assign the maximal element or discard the
+derived write. Behavior for incomparable labels is thus defined.</p>
+<p><strong>Precedence with the sensor specificity rule.</strong> When a
+sensor-derived write is governed by <em>both</em> the most-specific-key
+specificity rule (<a
+href="/spec/v0.4/ext-opt/#o91-derived-variant-sensor-consent-vocabulary">EXT-OPT
+§O9.1</a>) and this join rule, they compose and the write MUST satisfy
+both: the join governs the <em>output label</em> assigned to the written
+facet, while the specificity rule governs <em>which consent key
+authorizes the source sensor read</em> that feeds the derivation. The
+two rules act on different objects (output label vs. source-read
+authorization), so there is no precedence conflict.</p>
+<p><strong>Agent-derived memory.</strong> When a profile designates a
+facet as durable agent-memory, a store of agent-derived memory retained
+across sessions is a <strong>facet</strong> under Universal Manifest,
+not a separate primitive, and is governed by consent like any other
+facet. A write into it is a derived write and MUST carry at least the
+join of the labels of the source facets that contributed to it (for a
+sensor-derived write, the precedence rule above applies). Reading the
+memory facet is an ordinary consent-gated read of <em>that</em> facet at
+<em>its</em> recorded write-time-join label and confers <strong>no
+implicit grant</strong> on any source facet. Memory content MUST NOT be
+used to satisfy or bypass any source facet's consent or floor, and
+<strong>re-derivation from memory is itself a derived operation</strong>
+subject to this section. Creating the memory facet by writing is
+authorized through the pre-declared write-consent mechanism (<a
+href="#stage-4-consent">§3.1.4</a>).</p>
+<p><strong>Receipt-as-derived-output.</strong> A receipt is itself a
+derived output. This section and Receipt Minimization (above) apply to
+receipts: <code>subjectRef</code>/<code>reason</code> MUST carry only
+opaque identifiers, never source-facet content, and a receipt's
+effective sensitivity is the join of the facets it records. This closes
+the receipt-chain laundering vector. Forwarding re-presents signed
+manifest bytes and adds no derivation; a derived output retains the
+label assigned at write time, and later forwarding does not launder that
+label (consistent with Manifest Forwarding, <a
+href="/spec/v0.4/ext-opt/">EXT-OPT</a>).</p>
+<p><strong>Honest limits (residual risk — bounded and audited, never
+eliminated).</strong></p>
+<ul>
+<li><strong>Off-by-default derived-write protection.</strong>
+Derived-write monotonicity is a producer-internal behavior with
+<strong>no wire-checkable evidence</strong>, and <strong>absent a
+profile-supplied ordering there is NO protection</strong> (the
+protection is off by default). A consuming evaluator cannot verify from
+manifest bytes that a producer actually applied the join.</li>
+<li><strong>Consent withdrawal is forward-only.</strong> Consent
+withdrawal (<a href="#consents-array-schema">§1.4.4</a>) governs only
+<em>future</em> processing of the governed facet. It does not relabel,
+revoke, or erase outputs already derived under a then-valid consent, nor
+already-written agent memory.</li>
+<li><strong>Shred is assertion, not erasure.</strong> A
+<code>facet-key-shredded</code> event (<a
+href="/spec/v0.4/ext-opt/#o32-typed-event-vocabulary">EXT-OPT
+§O3.2</a>) is the emitter's assertion and timing of key destruction, not
+cryptographic proof copies are gone; it is not retroactive
+revocation.</li>
+<li><strong>In-use plaintext.</strong> Once a facet is decrypted for an
+authorized use, the plaintext is in use; no manifest mechanism
+eliminates in-use plaintext risk. An unlock window bounds the
+authorization window, not in-use plaintext (<a
+href="/spec/v0.4/ext-opt/">EXT-OPT</a>).</li>
+<li><strong>Unverifiable key isolation.</strong> Distinct
+<code>kid</code>/<code>iv</code> are necessary but not sufficient for
+true key isolation; true isolation depends on deployment key custody
+that is not attestable from manifest bytes (<a
+href="#per-facet-cryptographic-isolation">§2.3.5</a>).</li>
+</ul>
 <hr />
 </section>
 </section>

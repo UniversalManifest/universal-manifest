@@ -110,6 +110,10 @@
         "description": { "type": "string" },
         "ref": { "type": "string" },
         "requiredTrustTier": { "$ref": "#/$defs/trustTier" },
+        "requiredLiveness": {
+          "$ref": "#/$defs/requiredLiveness",
+          "description": "OPTIONAL per-facet liveness floor (Section 6.6.3)."
+        },
         "encryptionProfile": { "const": "jwe-inline-v1" },
         "entity": {
           "oneOf": [
@@ -417,14 +421,31 @@
     },
     "livenessAttestation": {
       "type": "object",
-      "description": "Liveness attestation per v0.4 Section 6.6.3.",
-      "required": ["attestedAt"],
+      "description": "Liveness attestation per v0.4 Section 6.6.3. proofType, attestedAt, validUntil, and proofValue are REQUIRED; userVerified and attester are OPTIONAL.",
+      "required": ["proofType", "attestedAt", "validUntil", "proofValue"],
       "properties": {
+        "proofType": { "type": "string", "minLength": 1, "description": "Identifies the liveness method (e.g. 'webauthn-uv'); extensible via the profile registry." },
         "attestedAt": { "type": "string", "format": "date-time" },
         "validUntil": { "type": "string", "format": "date-time" },
-        "method": { "type": "string" }
+        "proofValue": { "type": "string", "minLength": 1, "description": "Base64url proof computed over the UTF-8 bytes of subject || attestedAt." },
+        "method": { "type": "string" },
+        "userVerified": { "type": "boolean", "description": "Whether user verification (biometric/PIN) was performed. Absent is treated as false for floor purposes (Section 6.6.3)." },
+        "attester": { "type": "string", "description": "DID of the attesting authority." }
       },
       "additionalProperties": true
+    },
+    "requiredLiveness": {
+      "type": "object",
+      "description": "Per-facet liveness floor per v0.4 Section 6.6.3. A compound (freshness class plus a boolean), NOT a mirror of the closed-integer requiredTrustTier.",
+      "required": ["minFreshness"],
+      "properties": {
+        "minFreshness": {
+          "enum": ["live", "recent", "stale"],
+          "description": "Minimum freshness class, ordered live > recent > stale. 'unknown' is not a valid floor value."
+        },
+        "userVerified": { "type": "boolean", "description": "When true, the floor additionally requires the attestation's userVerified to be true. Default false." }
+      },
+      "additionalProperties": false
     },
     "bilateralSession": {
       "type": "object",

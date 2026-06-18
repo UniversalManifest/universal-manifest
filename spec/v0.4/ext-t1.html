@@ -652,7 +652,7 @@
     <div class="head">
         <h1 id="title" class="title p-name">Universal Manifest v0.4 — EXT-T1</h1>
         <h2 id="subtitle">Tier-1 Binding Profile</h2>
-        <h2><time class="dt-published" datetime="2026-06-11">11 June 2026</time></h2>
+        <h2><time class="dt-published" datetime="2026-06-16">16 June 2026</time></h2>
         <dl>
             <dt>This document:</dt>
             <dd><a class="u-url" href="https://universalmanifest.net/spec/v0.4/ext-t1/">/spec/v0.4/ext-t1/</a></dd>
@@ -691,7 +691,18 @@ id="toc-t12-presentation-proof"><span class="secno">T1.2.
 </span>Presentation Proof</a></li>
 <li><a href="#t13-liveness-attestation"
 id="toc-t13-liveness-attestation"><span class="secno">T1.3.
-</span>Liveness Attestation</a></li>
+</span>Liveness Attestation</a>
+<ul>
+<li><a href="#t131-per-facet-liveness-floor-requiredliveness"
+id="toc-t131-per-facet-liveness-floor-requiredliveness"><span
+class="secno">T1.3.1. </span>Per-Facet Liveness Floor
+(<code>requiredLiveness</code>)
+<span class="preview-tag">PREVIEW</span></a></li>
+<li><a href="#t132-authenticator-provenance"
+id="toc-t132-authenticator-provenance"><span class="secno">T1.3.2.
+</span>Authenticator Provenance
+<span class="preview-tag">PREVIEW</span></a></li>
+</ul></li>
 <li><a href="#t14-stage-2-verification-sub-steps"
 id="toc-t14-stage-2-verification-sub-steps"><span class="secno">T1.4.
 </span>Stage-2 Verification Sub-Steps</a></li>
@@ -984,6 +995,86 @@ freshness class as evidence of human presence. The receipt field
 <code>"recent"</code>, <code>"stale"</code>, <code>"unknown"</code>)
 and, when present, the <code>method</code> and <code>userVerified</code>
 values copied from the attestation.</p>
+<section id="t131-per-facet-liveness-floor-requiredliveness"
+class="level3">
+<h3><span class="secno">T1.3.1. </span>Per-Facet Liveness Floor
+(<code>requiredLiveness</code>)
+<span class="preview-tag">PREVIEW</span></h3>
+<p>A facet MAY declare a <code>requiredLiveness</code> floor (the
+OPTIONAL facet member named in <a
+href="/spec/v0.4/core/#credential-binding-security-considerations">Base
+§6.6</a>). Its value is an <strong>object</strong>, because a liveness
+floor is a freshness class <strong>plus</strong> a boolean — a compound,
+unlike the closed integer <code>requiredTrustTier</code>:</p>
+<ul>
+<li><code>minFreshness</code> — REQUIRED; one of <code>"live"</code>,
+<code>"recent"</code>, <code>"stale"</code>, ordered <code>live</code>
+&gt; <code>recent</code> &gt; <code>stale</code>. <code>"unknown"</code>
+is <strong>not</strong> a valid floor value (a floor of
+<code>"unknown"</code> would be vacuous).</li>
+<li><code>userVerified</code> — OPTIONAL boolean; default
+<code>false</code>. When <code>true</code>, the floor additionally
+requires the attestation's <code>userVerified</code> to be
+<code>true</code>.</li>
+</ul>
+<p>The floor comparison order is <code>live</code> &gt;
+<code>recent</code> &gt; <code>stale</code> &gt; <code>unknown</code>. A
+facet carrying <code>requiredLiveness</code> MUST NOT be processed
+unless a <strong>validated</strong> <code>livenessAttestation</code>
+yields a <code>freshnessClass</code> at least as fresh as
+<code>minFreshness</code>, and — when <code>userVerified: true</code> is
+required — the attestation's <code>userVerified</code> is
+<code>true</code>. Enforcement is sequenced in the Consent stage (<a
+href="/spec/v0.4/core/#stage-4-consent">Base
+§3.1.4</a>) and recorded in the receipt.</p>
+<p>The floor is <strong>fail-closed</strong>:</p>
+<ul>
+<li><strong><code>userVerified</code> absent ≡
+<code>false</code>.</strong> For a floor requiring
+<code>userVerified: true</code>, an attestation lacking
+<code>userVerified: true</code> (including absent) MUST fail the
+floor.</li>
+<li><strong>Proof validation before freshness.</strong> An attestation
+whose <code>proofValue</code> does not validate under its
+<code>proofType</code> MUST be treated as <code>"unknown"</code> for
+floor purposes regardless of <code>attestedAt</code>; the floor check is
+sequenced strictly after proof validation, so a forged-but-fresh-looking
+attestation cannot bypass the floor.</li>
+<li><strong>Absent or expired root attestation ⇒ no floor
+satisfied.</strong> If the root <code>livenessAttestation</code> is
+absent, or evaluates to <code>freshnessClass: "unknown"</code> because
+it is past its <code>validUntil</code>, then <strong>no</strong>
+<code>requiredLiveness</code> floor is satisfied — including a
+<code>minFreshness: "stale"</code> floor — and the facet is withheld.
+Because <code>unknown</code> is ordered lowest, no floor value can be
+met by an <code>unknown</code> root attestation.</li>
+</ul>
+<p>A <code>requiredLiveness</code> floor is orthogonal to
+<code>requiredTrustTier</code>: it can only <em>raise</em> the unlock
+bar for its facet and never lowers any trust-tier floor.</p>
+</section>
+<section id="t132-authenticator-provenance" class="level3">
+<h3><span class="secno">T1.3.2. </span>Authenticator Provenance
+<span class="preview-tag">PREVIEW</span></h3>
+<p>The <code>userVerified</code> flag proves a user-verification
+<em>gesture occurred</em>; it does <strong>not</strong> prove the
+provenance of the authenticator (a synced/exportable credential and a
+device-bound/non-exportable credential can both set
+<code>userVerified: true</code>), nor <em>which</em> human acted
+(subject-binding is holder binding, not this flag). The bare
+<code>userVerified</code> flag MUST NOT be relied on as evidence of
+hardware provenance. A deployment requiring a device-bound authenticator
+MUST express that requirement through <code>deviceAttestation</code> (<a
+href="/spec/v0.4/ext-opt/#o92-two-component-devices-schema">EXT-OPT
+§O9.2</a> — the actual hardware-provenance structure),
+<strong>not</strong> through the liveness <code>proofType</code> (which
+names the method only); evaluators SHOULD additionally consult WebAuthn
+backup-eligibility / backup-state (BE/BS) flags where available. The
+receipt echoes whichever provenance signal the floor actually relied on:
+a device-bound requirement enforced via <code>deviceAttestation</code>
+is recorded as such, and the existing <code>livenessStatus</code> echo
+covers the liveness side.</p>
+</section>
 </section>
 <section id="t14-stage-2-verification-sub-steps" class="level2">
 <h2><span class="secno">T1.4. </span>Stage-2 Verification Sub-Steps</h2>
