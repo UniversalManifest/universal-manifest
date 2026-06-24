@@ -88,8 +88,7 @@
             margin: 0;
             min-height: 100vh;
             overflow-y: auto;
-            padding: 1rem 1.25rem 3.5rem;
-            padding-left: 1rem;
+            padding: 1rem 1.1rem 3.5rem 1.25rem;
             position: fixed;
             right: auto;
             top: 0 !important;
@@ -106,37 +105,76 @@
             margin: 0 0 0.8rem;
             text-transform: uppercase;
         }
-        .toc ol {
-            counter-reset: item;
+        /* The pandoc TOC is emitted as nested <ul> (not <ol>); the authoritative
+           section number is the heading's own <span class="secno"> that pandoc
+           clones into each link. We therefore DROP the old CSS ::before counter
+           (it doubled the numbering) and render the secno as the single source
+           of truth. Selectors below cover both ul and ol so they actually hit. */
+        .toc ol,
+        .toc ul {
             list-style: none;
             margin: 0;
             padding-left: 0;
         }
         .toc li {
-            counter-increment: item;
             display: block;
             margin: 0.1rem 0;
         }
         .toc li > a {
             color: #1f2a36;
-            display: flex;
+            display: block;
             font-weight: 600;
-            gap: 0.35rem;
-            line-height: 1.25;
+            line-height: 1.3;
+            overflow-wrap: anywhere;
             padding: 0.18rem 0;
             text-decoration: none;
         }
-        .toc li > a::before {
-            content: counters(item, ".") ".";
-            flex: 0 0 auto;
+        /* The heading's section number, cloned into the TOC link by pandoc.
+           Keep it as a quiet inline lead-in with a clean gap before the title.
+           The W3C-WD stylesheet gives .secno a large NEGATIVE left margin (to
+           hang numbers in the body's left gutter); inside the narrow TOC that
+           pulls them off the left edge, so we zero it here. */
+        .toc li > a .secno {
+            color: #45525f;
+            display: inline;
             font-variant-numeric: tabular-nums;
+            font-weight: 600;
+            margin-left: 0 !important;
+            margin-right: 0.1rem !important;
+            padding: 0 !important;
+        }
+        /* Inline code in headings leaks into the TOC; render it as plain label
+           text (no monospace, no red, no box) so it reads as part of the title
+           and wraps with it instead of stacking word-by-word. */
+        .toc li > a code {
+            background: none;
+            border: none;
+            color: inherit;
+            font-family: inherit;
+            font-size: inherit;
+            padding: 0;
+        }
+        /* Cookbook "Tier N" annotation (post-processed from a trailing
+           "— <em>Tier N</em>"): a small, dimmed, inline marker — never a float,
+           never a dangling em-dash. */
+        .toc li > a .toc-tier {
+            color: #6a7682;
+            font-size: 0.82em;
+            font-style: normal;
+            font-weight: 500;
             white-space: nowrap;
         }
-        .toc ol ol {
-            margin: 0.12rem 0 0.25rem;
-            padding-left: 1rem;
+        /* Defensive: the PREVIEW badge is stripped from TOC links by the render
+           post-process; if one ever slips through, keep it inert (never a full
+           badge that overflows/clips the row). */
+        .toc li > a .preview-tag {
+            display: none;
         }
-        .toc ol ol li > a {
+        .toc :is(ol, ul) :is(ol, ul) {
+            margin: 0.12rem 0 0.25rem;
+            padding-left: 0.85rem;
+        }
+        .toc :is(ol, ul) :is(ol, ul) li > a {
             font-weight: 500;
         }
         .toc a.toc-active {
@@ -439,6 +477,8 @@
             }
             html[data-theme="system"] .toc h2 { color: #C9D1D9; }
             html[data-theme="system"] .toc li > a { color: #C9D1D9; }
+            html[data-theme="system"] .toc li > a .secno { color: #8B949E; }
+            html[data-theme="system"] .toc li > a .toc-tier { color: #8B949E; }
             html[data-theme="system"] .toc a.toc-active { color: #58A6FF; }
             html[data-theme="system"] html body #toc-nav a,
             html[data-theme="system"] html body #toc-nav a#toc-toggle,
@@ -554,6 +594,8 @@
         }
         html[data-theme="dark"] .toc h2 { color: #C9D1D9; }
         html[data-theme="dark"] .toc li > a { color: #C9D1D9; }
+        html[data-theme="dark"] .toc li > a .secno { color: #8B949E; }
+        html[data-theme="dark"] .toc li > a .toc-tier { color: #8B949E; }
         html[data-theme="dark"] .toc a.toc-active { color: #58A6FF; }
         html[data-theme="dark"] html body #toc-nav a,
         html[data-theme="dark"] html body #toc-nav a#toc-toggle,
@@ -651,8 +693,8 @@
     </div>
     <div class="head">
         <h1 id="title" class="title p-name">Universal Manifest v0.4 — Base Specification</h1>
-        <h2 id="subtitle">Tier-0 / Tier-1 Core · Working Draft (Preview)</h2>
-        <h2><time class="dt-published" datetime="2026-06-16">16 June 2026</time></h2>
+        <h2 id="subtitle">Tier-0 / Tier-1 Core</h2>
+        <h2><time class="dt-published" datetime="2026-06-23">23 June 2026</time></h2>
         <dl>
             <dt>This document:</dt>
             <dd><a class="u-url" href="https://universalmanifest.net/spec/v0.4/core/">/spec/v0.4/core/</a></dd>
@@ -692,7 +734,7 @@ class="secno">1. </span>Universal Manifest</a>
 <li><a href="#manifest-classes-and-the-polymorphic-envelope"
 id="toc-manifest-classes-and-the-polymorphic-envelope"><span
 class="secno">1.0.1. </span>Manifest Classes and the Polymorphic
-Envelope <span class="preview-tag">PREVIEW</span></a></li>
+Envelope</a></li>
 <li><a href="#examples" id="toc-examples"><span class="secno">1.1.
 </span>Examples</a></li>
 <li><a href="#core-identity-members"
@@ -745,11 +787,9 @@ id="toc-consents-array-schema"><span class="secno">1.4.4.
 id="toc-pointers-array-schema"><span class="secno">1.4.5.
 </span><code>pointers</code> Array Schema</a></li>
 <li><a href="#devices-array-schema" id="toc-devices-array-schema"><span
-class="secno">1.4.6. </span><code>devices</code> Array Schema
-<span class="preview-tag">PREVIEW</span></a></li>
+class="secno">1.4.6. </span><code>devices</code> Array Schema</a></li>
 <li><a href="#actorstate-member" id="toc-actorstate-member"><span
-class="secno">1.4.7. </span><code>actorState</code> member
-<span class="preview-tag">PREVIEW</span></a></li>
+class="secno">1.4.7. </span><code>actorState</code> member</a></li>
 </ul></li>
 <li><a href="#signature-integrity" id="toc-signature-integrity"><span
 class="secno">1.5. </span>Signature Integrity</a>
@@ -805,8 +845,7 @@ class="secno">2.3.3. </span>Key Rotation</a></li>
 class="secno">2.3.4. </span>Recipient Revocation</a></li>
 <li><a href="#per-facet-cryptographic-isolation"
 id="toc-per-facet-cryptographic-isolation"><span class="secno">2.3.5.
-</span>Per-Facet Cryptographic Isolation
-<span class="preview-tag">PREVIEW</span></a></li>
+</span>Per-Facet Cryptographic Isolation</a></li>
 </ul></li>
 <li><a href="#jwe-algorithm-constraints"
 id="toc-jwe-algorithm-constraints"><span class="secno">2.4. </span>JWE
@@ -851,16 +890,14 @@ class="secno">3.3. </span>Structured Receipts</a>
 class="secno">3.3.1. </span>Receipt Fields</a></li>
 <li><a href="#receipt-as-a-first-class-manifest-class"
 id="toc-receipt-as-a-first-class-manifest-class"><span
-class="secno">3.3.2. </span>Receipt as a First-Class Manifest Class
-<span class="preview-tag">PREVIEW</span></a></li>
+class="secno">3.3.2. </span>Receipt as a First-Class Manifest Class</a></li>
 </ul></li>
 <li><a href="#statusref-resolution-schema"
 id="toc-statusref-resolution-schema"><span class="secno">3.4.
 </span>statusRef Resolution Schema</a></li>
 <li><a href="#bilateral-session-model"
 id="toc-bilateral-session-model"><span class="secno">3.5.
-</span>Bilateral Session Model
-<span class="preview-tag">PREVIEW</span></a></li>
+</span>Bilateral Session Model</a></li>
 </ul></li>
 <li><a href="#conformance" id="toc-conformance"><span class="secno">4.
 </span>Conformance</a>
@@ -938,16 +975,13 @@ class="secno">6.6. </span>Credential Binding Security
 Considerations</a></li>
 <li><a href="#post-quantum-signatures"
 id="toc-post-quantum-signatures"><span class="secno">6.7.
-</span>Post-Quantum Signatures
-<span class="preview-tag">PREVIEW</span></a></li>
+</span>Post-Quantum Signatures</a></li>
 <li><a href="#category-trust-and-trustweight"
 id="toc-category-trust-and-trustweight"><span class="secno">6.8.
-</span>Category Trust and <code>trustWeight</code>
-<span class="preview-tag">PREVIEW</span></a></li>
+</span>Category Trust and <code>trustWeight</code></a></li>
 <li><a href="#cryptographic-requirements-summary"
 id="toc-cryptographic-requirements-summary"><span class="secno">6.9.
-</span>Cryptographic Requirements Summary
-<span class="preview-tag">PREVIEW</span></a></li>
+</span>Cryptographic Requirements Summary</a></li>
 <li><a href="#context-integrity" id="toc-context-integrity"><span
 class="secno">6.10. </span>Context Integrity</a></li>
 </ul></li>
@@ -957,15 +991,14 @@ Considerations</a>
 <ul>
 <li><a href="#selective-disclosure-dual-track-model"
 id="toc-selective-disclosure-dual-track-model"><span class="secno">7.1.
-</span>Selective Disclosure: Dual-Track Model
-<span class="preview-tag">PREVIEW</span></a></li>
+</span>Selective Disclosure: Dual-Track Model</a></li>
 <li><a href="#private-data-handling-derived-writes-and-honest-limits"
 id="toc-private-data-handling-derived-writes-and-honest-limits"><span
 class="secno">7.2. </span>Private-Data Handling: Derived Writes and
-Honest Limits <span class="preview-tag">PREVIEW</span></a></li>
+Honest Limits</a></li>
 </ul></li>
 <li><a href="#federation" id="toc-federation"><span class="secno">8.
-</span>Federation <span class="preview-tag">PREVIEW</span></a></li>
+</span>Federation</a></li>
 <li><a href="#acknowledgements"
 id="toc-acknowledgements">Acknowledgements</a></li>
 <li><a href="#references" id="toc-references"><span class="secno">9.
@@ -993,8 +1026,6 @@ B. Versioned Context Document (Normative Reference)</a></li>
 </ul>
 </nav>
 <blockquote>
-<p><strong>Restructured per the Conformance-Tier Stack strategy
-(owner-selected, audit 2026-06-11). DRAFT for review.</strong></p>
 <p>This is the <strong>Base</strong> of the Universal Manifest v0.4
 document set: everything required to build and verify a conformant
 <strong>Tier-0 / Tier-1</strong> evaluator and holder. It is
@@ -1018,9 +1049,8 @@ href="/spec/v0.4/cookbook/">Cookbook</a></p>
 </blockquote>
 <section id="universal-manifest-v04-specification--base" class="level1">
 <h1>Universal Manifest v0.4 Specification — Base</h1>
-<p><strong>Working Draft — Preview.</strong> 10 June 2026.</p>
 <p>This version: <a
-href="https://universalmanifest.net/spec/v0.4-preview/">https://universalmanifest.net/spec/v0.4-preview/</a>
+href="https://universalmanifest.net/spec/v0.4/core/">https://universalmanifest.net/spec/v0.4/core/</a>
 Latest stable version: <a
 href="https://universalmanifest.net/spec/v0.3/">https://universalmanifest.net/spec/v0.3/</a>
 History: <a
@@ -1030,11 +1060,11 @@ Contributors to the Universal Manifest Specification, published under
 the <a href="https://www.w3.org/copyright/software-license-2023/">W3C
 Software and Document License</a>.</p>
 <blockquote>
-<p><strong>Working Draft — Preview.</strong> This document is not
-stable. It carries all normative content from v0.3 forward and adds
-Tier-0/Tier-1 baseline content for v0.4. Sections marked
-<span class="preview-tag">PREVIEW</span> are not final and may change.
-For the current stable specification, see <a
+<p>This document carries all normative content from v0.3 forward and
+adds Tier-0/Tier-1 baseline content for v0.4. Sections marked
+<span class="preview-tag">PREVIEW</span> cover features still under
+working-group development and may change. For the current stable
+specification, see <a
 href="https://universalmanifest.net/spec/v0.3/">Universal Manifest
 v0.3</a>.</p>
 </blockquote>
@@ -1072,12 +1102,13 @@ only when, they appear in ALL CAPITALS, as shown here.</p>
 </section>
 <section id="status-of-this-document" class="level2">
 <h2>Status of This Document</h2>
-<p><strong>This is a Working Draft — Preview.</strong> It is not stable.
-Universal Manifest v0.4 builds on the stable v0.3 specification, which
-established the evaluation contract, the six-stage evaluation sequence,
-encrypted inline facets, structured receipts, and the normative baseline
-for cross-DID binding, <code>requiredTrustTier</code>, and agent
-delegation. Version 0.4 is the production-candidate milestone.</p>
+<p>Universal Manifest v0.4 builds on the stable v0.3 specification,
+which established the evaluation contract, the six-stage evaluation
+sequence, encrypted inline facets, structured receipts, and the
+normative baseline for cross-DID binding,
+<code>requiredTrustTier</code>, and agent delegation. Version 0.4 is the
+production-candidate milestone; v0.3 remains the stable published
+reference.</p>
 <p>This <strong>Base</strong> document carries the Tier-0/Tier-1
 conformance surface. Features that a conformance claim <em>adds</em>
 above Tier 1, and capabilities orthogonal to the tier ladder, live in
@@ -1803,7 +1834,18 @@ facet object MAY contain <code>name</code> (a human-readable display
 label), <code>ref</code> (a URI routing to the facet's authoritative
 source), and <code>requiredTrustTier</code> (integer 0–3 overriding the
 manifest-level trust tier for this facet; can only raise the floor; see
-<a href="#requiredtrusttier-declaration">§6.4.5</a>).</p>
+<a href="#requiredtrusttier-declaration">§6.4.5</a>). A facet MAY
+additionally carry the OPTIONAL <code>requiredLiveness</code> floor (a
+compound liveness-freshness floor — <a
+href="#credential-binding-security-considerations">§6.6</a>, <a
+href="/spec/v0.4/ext-t1/#t131-per-facet-liveness-floor-requiredliveness">EXT-T1
+§T1.3.1</a>) and the OPTIONAL <code>requiredAssuranceClass</code> floor
+(a closed authenticator-assurance enum <code>software</code> &lt;
+<code>hardware-uv</code> &lt; <code>hardware-bound</code>, default
+<code>software</code>, can only raise — <a
+href="#credential-binding-security-considerations">§6.6</a>, <a
+href="/spec/v0.4/ext-t1/#t133-locked-tier-portable-unlock-profile-umprofiletrustlocked-tier-portable-unlock">EXT-T1
+§T1.3.3</a>) <span class="preview-tag">PREVIEW</span>.</p>
 <p>Facets are identified by <code>@id</code> for consent matching and
 receipt recording. The <code>name</code> field is a display label and
 MUST NOT be used as a unique identifier.</p>
@@ -2200,11 +2242,19 @@ the manifest has zero facets). Each entry is a per-facet status object
 with <code>facetId</code> (matching the facet's <code>@id</code>),
 <code>status</code> (<code>"processed"</code>, <code>"opaque"</code>,
 <code>"consent-denied"</code>, <code>"consent-missing"</code>,
-<code>"trustTierUnsupported"</code>, <code>"not-projected"</code>, or
+<code>"trustTierUnsupported"</code>,
+<code>"assuranceInsufficient"</code>, <code>"not-projected"</code>, or
 <code>"written"</code>), an OPTIONAL <code>name</code>, and an OPTIONAL
 <code>reason</code>. <code>"trustTierUnsupported"</code> records a facet
 withheld because its <code>requiredTrustTier</code> cannot be verified
 (<a href="#requiredtrusttier-declaration">§6.4.5</a>).
+<code>"assuranceInsufficient"</code> records a facet withheld because
+the asserted/achieved authenticator assurance class is below the facet's
+<code>requiredAssuranceClass</code> floor (the locked-tier
+portable-unlock profile — <a
+href="/spec/v0.4/ext-t1/#t133-locked-tier-portable-unlock-profile-umprofiletrustlocked-tier-portable-unlock">EXT-T1
+§T1.3.3</a>); the facet's existence may be visible but its content is
+never released, parallel to <code>"trustTierUnsupported"</code>.
 <code>"written"</code> records a successful write authorized under the
 write-consent rule (<a href="#stage-4-consent">§3.1.4</a>); reads keep
 <code>"processed"</code>. <code>"not-projected"</code> indicates the
@@ -2245,13 +2295,25 @@ specified in <a href="/spec/v0.4/ext-t1/">EXT-T1</a>), the
 receipt SHOULD record their outcomes using
 <code>holderBindingStatus</code>, <code>presentationProofStatus</code>,
 <code>livenessStatus</code>, <code>crossDidBindingStatus</code>, and
-<code>effectiveTrustTier</code>. Evaluators that do not implement
-credential binding omit these fields; their absence is equivalent to
-<code>"absent"</code>. <strong><code>effectiveTrustTier</code> is the
-highest trust tier the evaluator actually verified</strong> for the
-claims it relied on, per <a href="#tiered-trust-model">§6.4.2</a>; a
-claim without a verified <code>holderBinding</code> contributes at most
-Tier 0. <code>effectiveTrustTier</code> is independent of the declared
+<code>effectiveTrustTier</code>. When a facet carries a
+<code>requiredAssuranceClass</code> floor (the locked-tier
+portable-unlock profile — <a
+href="/spec/v0.4/ext-t1/#t133-locked-tier-portable-unlock-profile-umprofiletrustlocked-tier-portable-unlock">EXT-T1
+§T1.3.3</a>), the receipt SHOULD additionally record
+<code>assuranceStatus</code> — an object echoing the
+<code>assertedClass</code> (one of <code>"software"</code>,
+<code>"hardware-uv"</code>, <code>"hardware-bound"</code>) the unlock
+gesture actually reached, and <code>met</code> (a boolean: whether it
+satisfied the facet's floor). This extends the consent-record lineage
+with the authenticator-strength dimension, beside the existing
+<code>livenessStatus</code> freshness echo. Evaluators that do not
+implement credential binding omit these fields; their absence is
+equivalent to <code>"absent"</code>.
+<strong><code>effectiveTrustTier</code> is the highest trust tier the
+evaluator actually verified</strong> for the claims it relied on, per <a
+href="#tiered-trust-model">§6.4.2</a>; a claim without a verified
+<code>holderBinding</code> contributes at most Tier 0.
+<code>effectiveTrustTier</code> is independent of the declared
 <code>requiredTrustTier</code>; the evaluator MUST NOT act on any item
 whose <code>requiredTrustTier</code> exceeds the
 <code>effectiveTrustTier</code> it achieved. Recording both makes the
@@ -2926,6 +2988,21 @@ fail-closed sequencing are specified in <a
 href="/spec/v0.4/ext-t1/#t13-liveness-attestation">EXT-T1
 §T1.3</a>; the floor is enforced in the Consent stage (<a
 href="#stage-4-consent">§3.1.4</a>) and recorded in the receipt.</p>
+<p>A facet MAY also declare an OPTIONAL
+<strong><code>requiredAssuranceClass</code></strong> floor — a per-facet
+minimum <em>authenticator assurance class</em> (a closed, UM-neutral
+ordered enum <code>software</code> &lt; <code>hardware-uv</code> &lt;
+<code>hardware-bound</code>, default <code>software</code>) that, like
+<code>requiredTrustTier</code>, can only raise the bar and is
+fail-closed (a facet below its floor is withheld, recorded
+<code>assuranceInsufficient</code> — <a
+href="#receipt-fields">§3.3.1</a>). It is another sibling of the
+<code>requiredTrustTier</code> facet member (<a
+href="#umfacet-module">§2.1</a>) and is orthogonal to it (no formal
+mapping between trust tier and assurance class). It is part of the
+locked-tier portable-unlock profile and is specified in <a
+href="/spec/v0.4/ext-t1/#t133-locked-tier-portable-unlock-profile-umprofiletrustlocked-tier-portable-unlock">EXT-T1
+§T1.3.3</a>.</p>
 </section>
 <section id="post-quantum-signatures" class="level2">
 <h2><span class="secno">6.7. </span>Post-Quantum Signatures
@@ -3292,6 +3369,7 @@ href="/spec/v0.4/cookbook/">Cookbook</a>.)</em></p>
 href="/spec/v0.4/ext-t1/">EXT-T1</a>. For concrete payloads, see
 the <a href="/spec/v0.4/cookbook/">Cookbook</a>.</em></p>
 </section>
+    <script src="/spec/spec-reader.js" defer></script>
 
     <script>
         (function(){

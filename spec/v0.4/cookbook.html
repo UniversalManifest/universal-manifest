@@ -88,8 +88,7 @@
             margin: 0;
             min-height: 100vh;
             overflow-y: auto;
-            padding: 1rem 1.25rem 3.5rem;
-            padding-left: 1rem;
+            padding: 1rem 1.1rem 3.5rem 1.25rem;
             position: fixed;
             right: auto;
             top: 0 !important;
@@ -106,37 +105,76 @@
             margin: 0 0 0.8rem;
             text-transform: uppercase;
         }
-        .toc ol {
-            counter-reset: item;
+        /* The pandoc TOC is emitted as nested <ul> (not <ol>); the authoritative
+           section number is the heading's own <span class="secno"> that pandoc
+           clones into each link. We therefore DROP the old CSS ::before counter
+           (it doubled the numbering) and render the secno as the single source
+           of truth. Selectors below cover both ul and ol so they actually hit. */
+        .toc ol,
+        .toc ul {
             list-style: none;
             margin: 0;
             padding-left: 0;
         }
         .toc li {
-            counter-increment: item;
             display: block;
             margin: 0.1rem 0;
         }
         .toc li > a {
             color: #1f2a36;
-            display: flex;
+            display: block;
             font-weight: 600;
-            gap: 0.35rem;
-            line-height: 1.25;
+            line-height: 1.3;
+            overflow-wrap: anywhere;
             padding: 0.18rem 0;
             text-decoration: none;
         }
-        .toc li > a::before {
-            content: counters(item, ".") ".";
-            flex: 0 0 auto;
+        /* The heading's section number, cloned into the TOC link by pandoc.
+           Keep it as a quiet inline lead-in with a clean gap before the title.
+           The W3C-WD stylesheet gives .secno a large NEGATIVE left margin (to
+           hang numbers in the body's left gutter); inside the narrow TOC that
+           pulls them off the left edge, so we zero it here. */
+        .toc li > a .secno {
+            color: #45525f;
+            display: inline;
             font-variant-numeric: tabular-nums;
+            font-weight: 600;
+            margin-left: 0 !important;
+            margin-right: 0.1rem !important;
+            padding: 0 !important;
+        }
+        /* Inline code in headings leaks into the TOC; render it as plain label
+           text (no monospace, no red, no box) so it reads as part of the title
+           and wraps with it instead of stacking word-by-word. */
+        .toc li > a code {
+            background: none;
+            border: none;
+            color: inherit;
+            font-family: inherit;
+            font-size: inherit;
+            padding: 0;
+        }
+        /* Cookbook "Tier N" annotation (post-processed from a trailing
+           "— <em>Tier N</em>"): a small, dimmed, inline marker — never a float,
+           never a dangling em-dash. */
+        .toc li > a .toc-tier {
+            color: #6a7682;
+            font-size: 0.82em;
+            font-style: normal;
+            font-weight: 500;
             white-space: nowrap;
         }
-        .toc ol ol {
-            margin: 0.12rem 0 0.25rem;
-            padding-left: 1rem;
+        /* Defensive: the PREVIEW badge is stripped from TOC links by the render
+           post-process; if one ever slips through, keep it inert (never a full
+           badge that overflows/clips the row). */
+        .toc li > a .preview-tag {
+            display: none;
         }
-        .toc ol ol li > a {
+        .toc :is(ol, ul) :is(ol, ul) {
+            margin: 0.12rem 0 0.25rem;
+            padding-left: 0.85rem;
+        }
+        .toc :is(ol, ul) :is(ol, ul) li > a {
             font-weight: 500;
         }
         .toc a.toc-active {
@@ -439,6 +477,8 @@
             }
             html[data-theme="system"] .toc h2 { color: #C9D1D9; }
             html[data-theme="system"] .toc li > a { color: #C9D1D9; }
+            html[data-theme="system"] .toc li > a .secno { color: #8B949E; }
+            html[data-theme="system"] .toc li > a .toc-tier { color: #8B949E; }
             html[data-theme="system"] .toc a.toc-active { color: #58A6FF; }
             html[data-theme="system"] html body #toc-nav a,
             html[data-theme="system"] html body #toc-nav a#toc-toggle,
@@ -554,6 +594,8 @@
         }
         html[data-theme="dark"] .toc h2 { color: #C9D1D9; }
         html[data-theme="dark"] .toc li > a { color: #C9D1D9; }
+        html[data-theme="dark"] .toc li > a .secno { color: #8B949E; }
+        html[data-theme="dark"] .toc li > a .toc-tier { color: #8B949E; }
         html[data-theme="dark"] .toc a.toc-active { color: #58A6FF; }
         html[data-theme="dark"] html body #toc-nav a,
         html[data-theme="dark"] html body #toc-nav a#toc-toggle,
@@ -652,7 +694,7 @@
     <div class="head">
         <h1 id="title" class="title p-name">Universal Manifest v0.4 — Cookbook</h1>
         <h2 id="subtitle">Worked Examples · Informative</h2>
-        <h2><time class="dt-published" datetime="2026-06-16">16 June 2026</time></h2>
+        <h2><time class="dt-published" datetime="2026-06-23">23 June 2026</time></h2>
         <dl>
             <dt>This document:</dt>
             <dd><a class="u-url" href="https://universalmanifest.net/spec/v0.4/cookbook/">/spec/v0.4/cookbook/</a></dd>
@@ -681,30 +723,27 @@ class="secno">1. </span>The minimal envelope</a>
 <ul>
 <li><a href="#example-1--minimal-universal-manifest-payload--tier-0"
 id="toc-example-1--minimal-universal-manifest-payload--tier-0">Example 1
-— Minimal Universal Manifest payload — <em>Tier 0</em></a></li>
+— Minimal Universal Manifest payload <span class="toc-tier">Tier 0</span></a></li>
 </ul></li>
 <li><a href="#structural-members" id="toc-structural-members"><span
 class="secno">2. </span>Structural members</a>
 <ul>
 <li><a href="#example-2--base-claim-object--tier-0--tier-1"
 id="toc-example-2--base-claim-object--tier-0--tier-1">Example 2 — Base
-claim object — <em>Tier 0 → Tier 1</em></a></li>
+claim object <span class="toc-tier">Tier 0 → Tier 1</span></a></li>
 <li><a href="#example-3--consent-entry--tier-0"
-id="toc-example-3--consent-entry--tier-0">Example 3 — Consent entry —
-<em>Tier 0</em></a></li>
+id="toc-example-3--consent-entry--tier-0">Example 3 — Consent entry <span class="toc-tier">Tier 0</span></a></li>
 <li><a
 href="#example-4--derived-variant-sensor-consent-with-purpose-binding--tier-0-"
 id="toc-example-4--derived-variant-sensor-consent-with-purpose-binding--tier-0-">Example
-4 — Derived-variant sensor consent with purpose binding — <em>Tier
-0</em> — <span class="preview-tag">PREVIEW</span></a></li>
+4 — Derived-variant sensor consent with purpose binding <span class="toc-tier">Tier
+0</span></a></li>
 <li><a href="#example-5--device-entry-with-both-components--tier-0-"
 id="toc-example-5--device-entry-with-both-components--tier-0-">Example 5
-— Device entry with both components — <em>Tier 0</em> —
-<span class="preview-tag">PREVIEW</span></a></li>
+— Device entry with both components <span class="toc-tier">Tier 0</span></a></li>
 <li><a href="#example-6--actorstate-with-an-agent-executor--tier-0-"
 id="toc-example-6--actorstate-with-an-agent-executor--tier-0-">Example 6
-— actorState with an agent executor — <em>Tier 0</em> —
-<span class="preview-tag">PREVIEW</span></a></li>
+— actorState with an agent executor <span class="toc-tier">Tier 0</span></a></li>
 </ul></li>
 <li><a href="#signing-and-encryption"
 id="toc-signing-and-encryption"><span class="secno">3. </span>Signing
@@ -712,16 +751,16 @@ and encryption</a>
 <ul>
 <li><a href="#example-7--signature-profile-a-object--tier-0"
 id="toc-example-7--signature-profile-a-object--tier-0">Example 7 —
-Signature Profile A object — <em>Tier 0</em></a></li>
+Signature Profile A object <span class="toc-tier">Tier 0</span></a></li>
 <li><a href="#example-8--plaintext-facet-with-all-fields--tier-0"
 id="toc-example-8--plaintext-facet-with-all-fields--tier-0">Example 8 —
-Plaintext facet with all fields — <em>Tier 0</em></a></li>
+Plaintext facet with all fields <span class="toc-tier">Tier 0</span></a></li>
 <li><a href="#example-9--plaintext-entity--tier-0"
 id="toc-example-9--plaintext-entity--tier-0">Example 9 — Plaintext
-entity — <em>Tier 0</em></a></li>
+entity <span class="toc-tier">Tier 0</span></a></li>
 <li><a href="#example-10--facet-with-jwe-inline-encryption--tier-0"
 id="toc-example-10--facet-with-jwe-inline-encryption--tier-0">Example 10
-— Facet with JWE inline encryption — <em>Tier 0</em></a></li>
+— Facet with JWE inline encryption <span class="toc-tier">Tier 0</span></a></li>
 </ul></li>
 <li><a href="#receipts-the-lifecycle-output"
 id="toc-receipts-the-lifecycle-output"><span class="secno">4.
@@ -729,23 +768,21 @@ id="toc-receipts-the-lifecycle-output"><span class="secno">4.
 <ul>
 <li><a href="#example-11--structured-receipt--tier-0"
 id="toc-example-11--structured-receipt--tier-0">Example 11 — Structured
-receipt — <em>Tier 0</em></a></li>
+receipt <span class="toc-tier">Tier 0</span></a></li>
 <li><a
 href="#example-12--chained-receipt-manifest-with-typed-events--tier-0-"
 id="toc-example-12--chained-receipt-manifest-with-typed-events--tier-0-">Example
-12 — Chained receipt manifest with typed events — <em>Tier 0</em> —
-<span class="preview-tag">PREVIEW</span></a></li>
+12 — Chained receipt manifest with typed events <span class="toc-tier">Tier 0</span></a></li>
 <li><a href="#example-13--statusref-response--tier-0-revocation-aware"
 id="toc-example-13--statusref-response--tier-0-revocation-aware">Example
-13 — statusRef response — <em>Tier 0</em> (revocation-aware)</a></li>
+13 — statusRef response <span class="toc-tier">Tier 0</span> (revocation-aware)</a></li>
 </ul></li>
 <li><a href="#sessions" id="toc-sessions"><span class="secno">5.
 </span>Sessions</a>
 <ul>
 <li><a href="#example-14--bilateral-session-object--tier-0-"
 id="toc-example-14--bilateral-session-object--tier-0-">Example 14 —
-Bilateral session object — <em>Tier 0</em> —
-<span class="preview-tag">PREVIEW</span></a></li>
+Bilateral session object <span class="toc-tier">Tier 0</span></a></li>
 </ul></li>
 <li><a href="#trust-tiers-climbing-the-ladder"
 id="toc-trust-tiers-climbing-the-ladder"><span class="secno">6.
@@ -753,21 +790,19 @@ id="toc-trust-tiers-climbing-the-ladder"><span class="secno">6.
 <ul>
 <li><a href="#example-15--cross-did-binding-claim--tier-1"
 id="toc-example-15--cross-did-binding-claim--tier-1">Example 15 —
-Cross-DID binding claim — <em>Tier 1</em></a></li>
+Cross-DID binding claim <span class="toc-tier">Tier 1</span></a></li>
 <li><a
 href="#example-16--manifest-with-requiredtrusttier--tier-1-floor-tier-2-on-a-claim"
 id="toc-example-16--manifest-with-requiredtrusttier--tier-1-floor-tier-2-on-a-claim">Example
-16 — Manifest with requiredTrustTier — <em>Tier 1 floor, Tier 2 on a
-claim</em></a></li>
+16 — Manifest with requiredTrustTier <span class="toc-tier">Tier 1 floor, Tier 2 on a
+claim</span></a></li>
 <li><a
 href="#example-17--tier-2-cross-did-binding-with-linked-secret-proof--tier-2-"
 id="toc-example-17--tier-2-cross-did-binding-with-linked-secret-proof--tier-2-">Example
-17 — Tier 2 cross-DID binding with linked-secret proof — <em>Tier 2</em>
-— <span class="preview-tag">PREVIEW</span></a></li>
+17 — Tier 2 cross-DID binding with linked-secret proof <span class="toc-tier">Tier 2</span></a></li>
 <li><a href="#example-18--tier-3-ceremony-proof--tier-3-"
 id="toc-example-18--tier-3-ceremony-proof--tier-3-">Example 18 — Tier 3
-ceremony proof — <em>Tier 3</em> —
-<span class="preview-tag">PREVIEW</span></a></li>
+ceremony proof <span class="toc-tier">Tier 3</span></a></li>
 </ul></li>
 <li><a href="#delegation-and-migration"
 id="toc-delegation-and-migration"><span class="secno">7.
@@ -775,17 +810,16 @@ id="toc-delegation-and-migration"><span class="secno">7.
 <ul>
 <li><a href="#example-19--agent-delegation-pointer--tier-0"
 id="toc-example-19--agent-delegation-pointer--tier-0">Example 19 — Agent
-delegation pointer — <em>Tier 0</em></a></li>
+delegation pointer <span class="toc-tier">Tier 0</span></a></li>
 <li><a
 href="#example-20--unbound-claims-warning--tier-0-v03-compatibility"
 id="toc-example-20--unbound-claims-warning--tier-0-v03-compatibility">Example
-20 — Unbound-claims warning — <em>Tier 0</em> (v0.3
+20 — Unbound-claims warning <span class="toc-tier">Tier 0</span> (v0.3
 compatibility)</a></li>
 <li><a
 href="#example-21--dual-signature-manifest--tier-0-post-quantum-migration-"
 id="toc-example-21--dual-signature-manifest--tier-0-post-quantum-migration-">Example
-21 — Dual-signature manifest — <em>Tier 0</em> (post-quantum migration)
-— <span class="preview-tag">PREVIEW</span></a></li>
+21 — Dual-signature manifest <span class="toc-tier">Tier 0</span> (post-quantum migration)</a></li>
 </ul></li>
 <li><a href="#end-to-end-a-complete-manifest-and-its-receipt"
 id="toc-end-to-end-a-complete-manifest-and-its-receipt"><span
@@ -794,19 +828,26 @@ receipt</a>
 <ul>
 <li><a href="#example-22--complete-signed-manifest--tier-1"
 id="toc-example-22--complete-signed-manifest--tier-1">Example 22 —
-Complete signed manifest — <em>Tier 1</em></a></li>
+Complete signed manifest <span class="toc-tier">Tier 1</span></a></li>
 <li><a
 href="#example-23--receipt-produced-by-a-conformant-evaluation-of-example-22--tier-1"
 id="toc-example-23--receipt-produced-by-a-conformant-evaluation-of-example-22--tier-1">Example
-23 — Receipt produced by a conformant evaluation of Example 22 —
-<em>Tier 1</em></a></li>
+23 — Receipt produced by a conformant evaluation of Example 22 <span class="toc-tier">Tier 1</span></a></li>
+</ul></li>
+<li><a href="#locked-tier-portable-unlock"
+id="toc-locked-tier-portable-unlock"><span class="secno">9.
+</span>Locked-tier portable unlock</a>
+<ul>
+<li><a
+href="#example-24--locked-personal-data-facet-hardware-bound-preferred-unlock-gating-an-ai-delegate--tier-1-"
+id="toc-example-24--locked-personal-data-facet-hardware-bound-preferred-unlock-gating-an-ai-delegate--tier-1-">Example
+24 — Locked personal-data facet: hardware-bound-preferred unlock gating
+an AI delegate <span class="toc-tier">Tier 1</span></a></li>
 </ul></li>
 </ul></li>
 </ul>
 </nav>
 <blockquote>
-<p><strong>Restructured per the Conformance-Tier Stack strategy
-(owner-selected, audit 2026-06-11). DRAFT for review.</strong></p>
 <p>This Cookbook collects every worked example from the Universal
 Manifest v0.4 document set in one place, organized by scenario and
 <strong>tagged by the conformance tier it exercises</strong>. It is
@@ -1474,6 +1515,92 @@ valid <code>presentationProof</code> (so
 <code>presentationProofStatus</code> is <code>"verified"</code>). The
 manifest carries no <code>signature.statusRef</code>, so revocation
 status is recorded as <code>"unchecked"</code>.</p>
+</section>
+</section>
+<section id="locked-tier-portable-unlock" class="level2">
+<h2><span class="secno">9. </span>Locked-tier portable unlock</h2>
+<section
+id="example-24--locked-personal-data-facet-hardware-bound-preferred-unlock-gating-an-ai-delegate--tier-1-"
+class="level3">
+<h3>Example 24 — Locked personal-data facet: hardware-bound-preferred
+unlock gating an AI delegate — <em>Tier 1</em> —
+<span class="preview-tag">PREVIEW</span></h3>
+<p>A locked health facet conforming to the <strong>locked-tier
+portable-unlock profile</strong>
+(<code>um:profile:trust:locked-tier-portable-unlock</code> — <a
+href="/spec/v0.4/ext-t1/#t133-locked-tier-portable-unlock-profile-umprofiletrustlocked-tier-portable-unlock">EXT-T1
+§T1.3.3</a>). The facet carries both the locked liveness floor
+(<code>requiredLiveness: {minFreshness: "live", userVerified: true}</code>)
+and the new assurance-class floor
+(<code>requiredAssuranceClass: "hardware-bound"</code>). An
+unlock-window consent opens it for a single time-boxed session — with
+session-policy fields (<a
+href="/spec/v0.4/ext-opt/#o45-unlock-window">EXT-OPT §O4.5</a>)
+— so a delegated agent can read it within the window; the floors are
+never lowered by the window, and a below-floor gesture is refused with
+the receipt facet status <code>"assuranceInsufficient"</code>.</p>
+<pre class="json"><code>{
+  &quot;@context&quot;: [&quot;https://universalmanifest.net/ns/v0.4&quot;],
+  &quot;@id&quot;: &quot;urn:uuid:9c4a17e0-7b21-4e2a-9c33-0d2e4f6a8b10&quot;,
+  &quot;@type&quot;: [&quot;um:Manifest&quot;],
+  &quot;manifestVersion&quot;: &quot;0.4&quot;,
+  &quot;subject&quot;: &quot;did:key:z6MkAlice&quot;,
+  &quot;issuedAt&quot;: &quot;2026-06-19T09:00:00Z&quot;,
+  &quot;expiresAt&quot;: &quot;2026-06-19T21:00:00Z&quot;,
+  &quot;facets&quot;: [
+    {
+      &quot;@id&quot;: &quot;urn:uuid:facet-health-records&quot;,
+      &quot;@type&quot;: &quot;um:Facet&quot;,
+      &quot;name&quot;: &quot;Health records (locked)&quot;,
+      &quot;requiredLiveness&quot;: { &quot;minFreshness&quot;: &quot;live&quot;, &quot;userVerified&quot;: true },
+      &quot;requiredAssuranceClass&quot;: &quot;hardware-bound&quot;
+    }
+  ],
+  &quot;consents&quot;: [
+    {
+      &quot;@id&quot;: &quot;urn:uuid:consent-unlock-health-001&quot;,
+      &quot;@type&quot;: &quot;um:Consent&quot;,
+      &quot;facetRef&quot;: &quot;urn:uuid:facet-health-records&quot;,
+      &quot;scope&quot;: [&quot;read&quot;, &quot;unlock.window&quot;],
+      &quot;purpose&quot;: &quot;Open the locked health facet for an authenticated agent session&quot;,
+      &quot;grantedAt&quot;: &quot;2026-06-19T09:00:00Z&quot;,
+      &quot;expiresAt&quot;: &quot;2026-06-19T09:30:00Z&quot;,
+      &quot;unlockWindowFacets&quot;: [&quot;urn:uuid:facet-health-records&quot;],
+      &quot;idleLifetime&quot;: &quot;PT10M&quot;,
+      &quot;absoluteLifetime&quot;: &quot;PT30M&quot;,
+      &quot;lockOnSleep&quot;: true
+    }
+  ],
+  &quot;livenessAttestation&quot;: {
+    &quot;proofType&quot;: &quot;webauthn-uv&quot;,
+    &quot;attestedAt&quot;: &quot;2026-06-19T09:00:00Z&quot;,
+    &quot;validUntil&quot;: &quot;2026-06-19T09:01:00Z&quot;,
+    &quot;userVerified&quot;: true,
+    &quot;proofValue&quot;: &quot;base64url-webauthn-uv-assertion&quot;
+  },
+  &quot;signature&quot;: {
+    &quot;algorithm&quot;: &quot;Ed25519&quot;,
+    &quot;canonicalization&quot;: &quot;JCS-RFC8785&quot;,
+    &quot;keyRef&quot;: &quot;did:key:z6MkAlice#keys-1&quot;,
+    &quot;publicKeySpkiB64&quot;: &quot;MCowBQYDK2VwAyEA...&quot;,
+    &quot;created&quot;: &quot;2026-06-19T09:00:00Z&quot;,
+    &quot;value&quot;: &quot;base64url-encoded-signature-bytes&quot;
+  }
+}</code></pre>
+<p>A conformant evaluator that opens the window with a
+<strong>device-bound</strong> (hardware-bound) authenticator records, on
+the facet status, <code>"processed"</code> plus an
+<code>assuranceStatus</code> echo of
+<code>{ "assertedClass": "hardware-bound", "met": true }</code> (<a
+href="/spec/v0.4/core/#credential-binding-status-fields">Base
+§3.3.1.1</a>) and a <code>session-unlocked</code> event (<a
+href="/spec/v0.4/ext-opt/#o32-typed-event-vocabulary">EXT-OPT
+§O3.2</a>). The <strong>same</strong> manifest presented with only a
+software-class unlock is refused: the facet status is
+<code>"assuranceInsufficient"</code> (content never released), with a
+<code>session-unlock-refused</code> event carrying
+<code>um:reason:trust:assurance-insufficient</code>. The assurance floor
+and the liveness floor compose; the unlock window lowers neither.</p>
 <hr />
 <p><em>Informative companion to the <a
 href="/spec/v0.4/core/">Base specification</a>.
@@ -1481,6 +1608,7 @@ Examples illustrate; the normative documents bind.</em></p>
 </section>
 </section>
 </section>
+    <script src="/spec/spec-reader.js" defer></script>
 
     <script>
         (function(){

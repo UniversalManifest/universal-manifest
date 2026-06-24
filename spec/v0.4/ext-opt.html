@@ -88,8 +88,7 @@
             margin: 0;
             min-height: 100vh;
             overflow-y: auto;
-            padding: 1rem 1.25rem 3.5rem;
-            padding-left: 1rem;
+            padding: 1rem 1.1rem 3.5rem 1.25rem;
             position: fixed;
             right: auto;
             top: 0 !important;
@@ -106,37 +105,76 @@
             margin: 0 0 0.8rem;
             text-transform: uppercase;
         }
-        .toc ol {
-            counter-reset: item;
+        /* The pandoc TOC is emitted as nested <ul> (not <ol>); the authoritative
+           section number is the heading's own <span class="secno"> that pandoc
+           clones into each link. We therefore DROP the old CSS ::before counter
+           (it doubled the numbering) and render the secno as the single source
+           of truth. Selectors below cover both ul and ol so they actually hit. */
+        .toc ol,
+        .toc ul {
             list-style: none;
             margin: 0;
             padding-left: 0;
         }
         .toc li {
-            counter-increment: item;
             display: block;
             margin: 0.1rem 0;
         }
         .toc li > a {
             color: #1f2a36;
-            display: flex;
+            display: block;
             font-weight: 600;
-            gap: 0.35rem;
-            line-height: 1.25;
+            line-height: 1.3;
+            overflow-wrap: anywhere;
             padding: 0.18rem 0;
             text-decoration: none;
         }
-        .toc li > a::before {
-            content: counters(item, ".") ".";
-            flex: 0 0 auto;
+        /* The heading's section number, cloned into the TOC link by pandoc.
+           Keep it as a quiet inline lead-in with a clean gap before the title.
+           The W3C-WD stylesheet gives .secno a large NEGATIVE left margin (to
+           hang numbers in the body's left gutter); inside the narrow TOC that
+           pulls them off the left edge, so we zero it here. */
+        .toc li > a .secno {
+            color: #45525f;
+            display: inline;
             font-variant-numeric: tabular-nums;
+            font-weight: 600;
+            margin-left: 0 !important;
+            margin-right: 0.1rem !important;
+            padding: 0 !important;
+        }
+        /* Inline code in headings leaks into the TOC; render it as plain label
+           text (no monospace, no red, no box) so it reads as part of the title
+           and wraps with it instead of stacking word-by-word. */
+        .toc li > a code {
+            background: none;
+            border: none;
+            color: inherit;
+            font-family: inherit;
+            font-size: inherit;
+            padding: 0;
+        }
+        /* Cookbook "Tier N" annotation (post-processed from a trailing
+           "— <em>Tier N</em>"): a small, dimmed, inline marker — never a float,
+           never a dangling em-dash. */
+        .toc li > a .toc-tier {
+            color: #6a7682;
+            font-size: 0.82em;
+            font-style: normal;
+            font-weight: 500;
             white-space: nowrap;
         }
-        .toc ol ol {
-            margin: 0.12rem 0 0.25rem;
-            padding-left: 1rem;
+        /* Defensive: the PREVIEW badge is stripped from TOC links by the render
+           post-process; if one ever slips through, keep it inert (never a full
+           badge that overflows/clips the row). */
+        .toc li > a .preview-tag {
+            display: none;
         }
-        .toc ol ol li > a {
+        .toc :is(ol, ul) :is(ol, ul) {
+            margin: 0.12rem 0 0.25rem;
+            padding-left: 0.85rem;
+        }
+        .toc :is(ol, ul) :is(ol, ul) li > a {
             font-weight: 500;
         }
         .toc a.toc-active {
@@ -439,6 +477,8 @@
             }
             html[data-theme="system"] .toc h2 { color: #C9D1D9; }
             html[data-theme="system"] .toc li > a { color: #C9D1D9; }
+            html[data-theme="system"] .toc li > a .secno { color: #8B949E; }
+            html[data-theme="system"] .toc li > a .toc-tier { color: #8B949E; }
             html[data-theme="system"] .toc a.toc-active { color: #58A6FF; }
             html[data-theme="system"] html body #toc-nav a,
             html[data-theme="system"] html body #toc-nav a#toc-toggle,
@@ -554,6 +594,8 @@
         }
         html[data-theme="dark"] .toc h2 { color: #C9D1D9; }
         html[data-theme="dark"] .toc li > a { color: #C9D1D9; }
+        html[data-theme="dark"] .toc li > a .secno { color: #8B949E; }
+        html[data-theme="dark"] .toc li > a .toc-tier { color: #8B949E; }
         html[data-theme="dark"] .toc a.toc-active { color: #58A6FF; }
         html[data-theme="dark"] html body #toc-nav a,
         html[data-theme="dark"] html body #toc-nav a#toc-toggle,
@@ -652,7 +694,7 @@
     <div class="head">
         <h1 id="title" class="title p-name">Universal Manifest v0.4 — EXT-OPT</h1>
         <h2 id="subtitle">Optional-Feature Profiles</h2>
-        <h2><time class="dt-published" datetime="2026-06-16">16 June 2026</time></h2>
+        <h2><time class="dt-published" datetime="2026-06-23">23 June 2026</time></h2>
         <dl>
             <dt>This document:</dt>
             <dd><a class="u-url" href="https://universalmanifest.net/spec/v0.4/ext-opt/">/spec/v0.4/ext-opt/</a></dd>
@@ -726,8 +768,7 @@ id="toc-o25-status-endpoint-conformance"><span class="secno">O2.5.
 </ul></li>
 <li><a href="#o3-receipt-as-a-first-class-manifest-class"
 id="toc-o3-receipt-as-a-first-class-manifest-class"><span
-class="secno">O3. </span>Receipt as a First-Class Manifest Class
-<span class="preview-tag">PREVIEW</span></a>
+class="secno">O3. </span>Receipt as a First-Class Manifest Class</a>
 <ul>
 <li><a href="#o31-chain-integrity" id="toc-o31-chain-integrity"><span
 class="secno">O3.1. </span>Chain Integrity</a></li>
@@ -744,8 +785,7 @@ class="secno">O3.4. </span>Transparency-Log Anchoring
 </ul></li>
 <li><a href="#o4-bilateral-session-model"
 id="toc-o4-bilateral-session-model"><span class="secno">O4.
-</span>Bilateral Session Model
-<span class="preview-tag">PREVIEW</span></a>
+</span>Bilateral Session Model</a>
 <ul>
 <li><a href="#o41-session-object" id="toc-o41-session-object"><span
 class="secno">O4.1. </span>Session Object</a></li>
@@ -759,28 +799,22 @@ id="toc-o43-paired-receipt-correlation"><span class="secno">O4.3.
 id="toc-o44-transport-independence"><span class="secno">O4.4.
 </span>Transport Independence</a></li>
 <li><a href="#o45-unlock-window" id="toc-o45-unlock-window"><span
-class="secno">O4.5. </span>Unlock Window
-<span class="preview-tag">PREVIEW</span></a></li>
+class="secno">O4.5. </span>Unlock Window</a></li>
 </ul></li>
 <li><a href="#o5-federation" id="toc-o5-federation"><span
-class="secno">O5. </span>Federation
-<span class="preview-tag">PREVIEW</span></a></li>
+class="secno">O5. </span>Federation</a></li>
 <li><a href="#o6-profile-registration-mechanism"
 id="toc-o6-profile-registration-mechanism"><span class="secno">O6.
-</span>Profile Registration Mechanism
-<span class="preview-tag">PREVIEW</span></a></li>
+</span>Profile Registration Mechanism</a></li>
 <li><a href="#o7-agent-delegation-scope-registry"
 id="toc-o7-agent-delegation-scope-registry"><span class="secno">O7.
-</span>Agent-Delegation Scope Registry
-<span class="preview-tag">PREVIEW</span></a></li>
+</span>Agent-Delegation Scope Registry</a></li>
 <li><a href="#o8-category-trust-and-trustweight"
 id="toc-o8-category-trust-and-trustweight"><span class="secno">O8.
-</span>Category Trust and <code>trustWeight</code>
-<span class="preview-tag">PREVIEW</span></a></li>
+</span>Category Trust and <code>trustWeight</code></a></li>
 <li><a href="#o9-extended-structural-schemas"
 id="toc-o9-extended-structural-schemas"><span class="secno">O9.
-</span>Extended Structural Schemas
-<span class="preview-tag">PREVIEW</span></a>
+</span>Extended Structural Schemas</a>
 <ul>
 <li><a href="#o91-derived-variant-sensor-consent-vocabulary"
 id="toc-o91-derived-variant-sensor-consent-vocabulary"><span
@@ -795,23 +829,19 @@ id="toc-o93-actorstate-member"><span class="secno">O9.3.
 </ul></li>
 <li><a href="#o10-cryptographic-requirements-summary"
 id="toc-o10-cryptographic-requirements-summary"><span class="secno">O10.
-</span>Cryptographic Requirements Summary
-<span class="preview-tag">PREVIEW</span></a></li>
+</span>Cryptographic Requirements Summary</a></li>
 <li><a href="#o11-optional-feature-matrix-consolidated"
 id="toc-o11-optional-feature-matrix-consolidated"><span
 class="secno">O11. </span>Optional-Feature Matrix
 (consolidated)</a></li>
 <li><a href="#appendix-oa-manifest-class-registry-snapshot"
 id="toc-appendix-oa-manifest-class-registry-snapshot">Appendix OA.
-Manifest Class Registry Snapshot
-<span class="preview-tag">PREVIEW</span></a></li>
+Manifest Class Registry Snapshot</a></li>
 <li><a href="#references" id="toc-references">References</a></li>
 </ul></li>
 </ul>
 </nav>
 <blockquote>
-<p><strong>Restructured per the Conformance-Tier Stack strategy
-(owner-selected, audit 2026-06-11). DRAFT for review.</strong></p>
 <p>This is a <strong>companion profile</strong> to the <a
 href="/spec/v0.4/core/">Universal Manifest v0.4
 Base specification</a>. It collects the capabilities that are
@@ -1253,6 +1283,12 @@ presence is a locator, not authorization);
 href="/spec/v0.4/core/#per-facet-cryptographic-isolation">Base
 §2.3.5</a>); <code>session-unlocked</code> (the opening of an unlock
 window — <a href="#o45-unlock-window">O4.5</a>);
+<code>session-unlock-refused</code> (an unlock or locked-facet access
+withheld because the asserted assurance class was below the facet's
+<code>requiredAssuranceClass</code> floor — <a
+href="/spec/v0.4/ext-t1/#t133-locked-tier-portable-unlock-profile-umprofiletrustlocked-tier-portable-unlock">EXT-T1
+§T1.3.3</a>; carries reason
+<code>um:reason:trust:assurance-insufficient</code>);
 <code>session-completed</code> (session terminal event). This is a
 registry, not a closed enumeration: new classes are added through the
 profile registration mechanism (<a
@@ -1292,9 +1328,10 @@ example <code>um:reason:consent:withdrawn</code>,
 <code>um:reason:crypto:no-decryption-key</code>,
 <code>um:reason:crypto:key-rotated</code>,
 <code>um:reason:crypto:key-shredded</code>,
-<code>um:reason:trust:tier-unsupported</code>). Structured reasons make
-receipts machine-comparable. Free-text reasons remain valid where no
-registry code applies. New reason codes are registered through the
+<code>um:reason:trust:tier-unsupported</code>,
+<code>um:reason:trust:assurance-insufficient</code>). Structured reasons
+make receipts machine-comparable. Free-text reasons remain valid where
+no registry code applies. New reason codes are registered through the
 profile registration mechanism (<a
 href="#o6-profile-registration-mechanism">O6</a>).</p>
 </section>
@@ -1446,6 +1483,40 @@ typed event vocabulary (<a href="#o32-typed-event-vocabulary">O3.2</a>),
 referencing the opening liveness attestation — not a new consent member.
 This keeps the unlock window member-free on the consent object.</li>
 </ol>
+<p><strong>Session-policy fields (locked-tier auditability).</strong>
+When an unlock window opens a locked-tier facet (<a
+href="/spec/v0.4/ext-t1/#t133-locked-tier-portable-unlock-profile-umprofiletrustlocked-tier-portable-unlock">EXT-T1
+§T1.3.3</a>), the unlock-window consent MAY additionally carry these
+OPTIONAL session-policy members so the time-boxed grant is auditable and
+tightly bounded:</p>
+<ul>
+<li><code>idleLifetime</code> — an ISO 8601 duration (e.g.
+<code>"PT10M"</code>) after which an idle session SHOULD re-require the
+unlock gesture;</li>
+<li><code>absoluteLifetime</code> — an ISO 8601 duration (e.g.
+<code>"PT12H"</code>) capping the window regardless of activity; it MUST
+NOT extend the consent's own <code>expiresAt</code> (the consent
+<code>expiresAt</code> remains the hard auditable bound);</li>
+<li><code>lockOnSleep</code> — a boolean; when <code>true</code>, the
+runtime SHOULD close the window when the device sleeps/locks.</li>
+</ul>
+<p>These fields <strong>state policy intent and defaults+floor, not a
+single mandated number</strong>: a conformant deployment SHOULD default
+to a short idle lifetime and a bounded absolute cap (representative
+practice: a ~10-minute idle timeout with a ~12-hour absolute cap; a
+software-class unlock that derives a key from a passphrase SHOULD use a
+memory-hard KDF — e.g. Argon2id with at least 19 MiB of memory — for the
+<code>software</code> rung). The exact minutes and KDF parameters are
+tunable policy.</p>
+<p>This is <strong>additive clarification, not a contradiction of axis
+5</strong>: <code>idleLifetime</code>, <code>absoluteLifetime</code>,
+and <code>lockOnSleep</code> are runtime-only conditions whose
+enforcement the receipt cannot prove. Axis 5 stands — only
+<code>grantedAt</code>/<code>expiresAt</code>/<code>withdrawnAt</code>
+are auditable bounds, and <strong>where a lifetime condition is
+unobservable the evaluator MUST fail closed.</strong> Declaring these
+fields commits the runtime to the policy; it does not make the runtime
+condition retroactively auditable.</p>
 <p><em>(Worked example: bilateral session object — see <a
 href="/spec/v0.4/cookbook/">Cookbook</a>.)</em></p>
 <p><strong>Note (working-group):</strong> Whether the session model
@@ -1527,10 +1598,12 @@ have a canonical identifier following
 <code>um:profile:&lt;category&gt;:&lt;name&gt;</code>. Categories:
 <code>signature</code> (e.g.,
 <code>um:profile:signature:jcs-ed25519</code>), <code>trust</code>
-(e.g., <code>um:profile:trust:zkp-bbs-linked-secret</code>),
-<code>domain</code> (domain-specific manifest class profiles, e.g.,
-<code>um:profile:domain:receipt</code>), <code>binding</code>
-(credential binding profiles, e.g.,
+(e.g., <code>um:profile:trust:zkp-bbs-linked-secret</code>,
+<code>um:profile:trust:locked-tier-portable-unlock</code> — <a
+href="/spec/v0.4/ext-t1/#t133-locked-tier-portable-unlock-profile-umprofiletrustlocked-tier-portable-unlock">EXT-T1
+§T1.3.3</a>), <code>domain</code> (domain-specific manifest class
+profiles, e.g., <code>um:profile:domain:receipt</code>),
+<code>binding</code> (credential binding profiles, e.g.,
 <code>um:profile:binding:sd-jwt-kb</code>). Each identifier MUST be
 paired with a human-readable name and version string; identifiers are
 globally unique and MUST NOT be reused after deprecation. This process
@@ -1767,8 +1840,9 @@ href="/spec/v0.4/core/#devices-array-schema">Base
 smart displays, wearable sensors) associated with the subject. v0.3
 reserved this member; v0.4 defines device entries as a
 <strong>two-component split</strong> mirroring the layered
-device-attestation models of FIDO, TPM 2.0, WebAuthn Level 3 [<a
-href="#references">WEBAUTHN</a>], Android Hardware Attestation, and
+device-attestation models of FIDO, TPM 2.0, WebAuthn [<a
+href="#references">WEBAUTHN</a>] (Level 2 as the normative anchor, with
+Level 3 refinements in progress), Android Hardware Attestation, and
 Apple DeviceCheck: a long-lived hardware provenance component and a
 session-scoped capability component. Separating them lets a session-only
 manifest advertise device capabilities without leaking a long-lived
@@ -1924,8 +1998,9 @@ href="/spec/v0.4/core/#jwe-algorithm-constraints">Base
 </tr>
 <tr>
 <td><strong>Recommended</strong></td>
-<td>BBS+ signatures and BBS+ derived proofs (BLS12-381); WebAuthn Level
-3 device/liveness attestation</td>
+<td>BBS+ signatures and BBS+ derived proofs (BLS12-381); WebAuthn
+device/liveness attestation (Level 2 normative anchor, Level 3
+refinements in progress)</td>
 <td><a
 href="/spec/v0.4/ext-t2/#t21-tier-2-zkp-proof-profile">EXT-T2
 §T2.1</a>, <a
@@ -2161,6 +2236,7 @@ For worked examples, see the <a
 href="/spec/v0.4/cookbook/">Cookbook</a>.</em></p>
 </section>
 </section>
+    <script src="/spec/spec-reader.js" defer></script>
 
     <script>
         (function(){
