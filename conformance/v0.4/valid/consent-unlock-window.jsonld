@@ -1,0 +1,47 @@
+{
+  "@context": "https://universalmanifest.net/ns/v0.4",
+  "@id": "urn:uuid:40000014-0000-4000-8000-000000000014",
+  "@type": "um:Manifest",
+  "manifestVersion": "0.4",
+  "subject": "did:example:alice-v04",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "facets": [
+    {
+      "@id": "urn:um:facet:medical-records-v04",
+      "@type": "um:Facet",
+      "name": "privateHealth"
+    },
+    {
+      "@id": "urn:um:facet:financial-records-v04",
+      "@type": "um:Facet",
+      "name": "privateFinance"
+    }
+  ],
+  "consents": [
+    {
+      "@id": "urn:um:consent:unlock-window-v04",
+      "@type": "um:Consent",
+      "facetRef": "urn:um:facet:medical-records-v04",
+      "scope": [
+        "read",
+        "unlock.window"
+      ],
+      "purpose": "Open an enumerated facet set for an authenticated session",
+      "grantedAt": "2026-06-01T00:00:00.000Z",
+      "expiresAt": "2026-06-01T00:05:00.000Z",
+      "unlockWindowFacets": [
+        "urn:um:facet:medical-records-v04",
+        "urn:um:facet:financial-records-v04"
+      ]
+    }
+  ],
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:alice-v04#keys-1",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEAvWsBD/ov/5zQwtkxvssqOFz/Ejca8C0NfnAJ9z0iBZY=",
+    "value": "Gk6vbzUSe80mCnx6rcFSDVvUN0wxaQgY7iFQKOKMOSYtDeb1GEAnIhiD8oyS7p2qbW8HKxSvtQmseBvwGkPRCg"
+  }
+}

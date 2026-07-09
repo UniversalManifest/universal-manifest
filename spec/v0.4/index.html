@@ -694,7 +694,7 @@
     <div class="head">
         <h1 id="title" class="title p-name">Universal Manifest v0.4 — Document Set</h1>
         <h2 id="subtitle">Conformance-Tier Stack (Strategy B)</h2>
-        <h2><time class="dt-published" datetime="2026-06-23">23 June 2026</time></h2>
+        <h2><time class="dt-published" datetime="2026-07-05">5 July 2026</time></h2>
         <dl>
             <dt>This document:</dt>
             <dd><a class="u-url" href="https://universalmanifest.net/spec/v0.4/">/spec/v0.4/</a></dd>
@@ -771,8 +771,9 @@ map of tiers + extensions. Informative; no MUSTs.</td>
 <td><a
 href="/spec/v0.4/core/">universal-manifest-tier0-tier1-core.md</a></td>
 <td><strong>Base</strong> — everything to build a conformant
-Tier-0/Tier-1 evaluator and holder. Names advanced/optional features and
-points to the extensions for their mechanics.</td>
+Tier-0/Tier-1 evaluator and holder, including a top-level manifest
+object/field map. Names advanced/optional features and points to the
+extensions for their mechanics.</td>
 <td style="text-align: right;">~11,000</td>
 <td>Production-candidate + PREVIEW-named</td>
 </tr>
@@ -784,7 +785,7 @@ href="/spec/v0.4/ext-t1/">ext-t1-binding-profile.md</a></td>
 presentation proof, liveness, Stage-2 sub-steps, the 7-step claim-proof
 path, v0.3 backwards compat.</td>
 <td style="text-align: right;">~3,200</td>
-<td>Normative (not PREVIEW)</td>
+<td>Normative (T1.3.1–T1.3.3 PREVIEW)</td>
 </tr>
 <tr>
 <td>4</td>
@@ -800,7 +801,7 @@ BBS+ unlinkable disclosure track, post-quantum migration.</td>
 <td><a
 href="/spec/v0.4/ext-t3/">ext-t3-ceremony-profile.md</a></td>
 <td><strong>EXT-T3</strong> — Tier-3 multi-party ceremony: model,
-signer-role taxonomy, threshold-protocol guidance.</td>
+attester-role taxonomy, threshold-protocol guidance.</td>
 <td style="text-align: right;">~1,000</td>
 <td>PREVIEW</td>
 </tr>
@@ -820,7 +821,7 @@ registry.</td>
 <td>7</td>
 <td><a
 href="/spec/v0.4/cookbook/">universal-manifest-cookbook.md</a></td>
-<td><strong>Cookbook</strong> — all 23 worked examples, by scenario,
+<td><strong>Cookbook</strong> — all 24 worked examples, by scenario,
 tagged by tier. Informative.</td>
 <td style="text-align: right;">~2,600</td>
 <td>Informative</td>
@@ -856,18 +857,19 @@ requirement (moved/deferred, never silently dropped); keep the Base at
 capabilities and <em>specifying</em> them in extensions — the same
 discipline that kept v0.3 digestible.</p>
 <p><strong>Does not:</strong> reword normative meaning, change any wire
-shape, or alter conformance semantics. The base/extension
-<strong>anchor-ownership rule</strong> is retained: the Base owns every
-anchor; extensions cite the Base one-directionally.</p>
+shape, or alter conformance semantics. The <strong>anchor
+discipline</strong>: each document owns its anchors; cross-citations
+between the Base and the extensions run in both directions and are
+verified by the rendered-anchor guard.</p>
 </section>
 <section id="provenance" class="level2">
 <h2>Provenance</h2>
-<p>This set was restructured from the v0.4 monolith into the
-Conformance-Tier Stack architecture (audit 2026-06-11). Source
-restructured: <code>../universal-manifest-spec-v0.4.md</code>. Strategy
-reference:
-<code>../../../designs/2026-06-11-09-44-24Z-v0.4-chunking-strategies-audit.md</code>
-§4 (Strategy B).</p>
+<p>This set was restructured from the earlier single-file v0.4 draft
+into the Conformance-Tier Stack architecture (the "Strategy B" layout)
+in June 2026. The restructuring relocated and re-framed existing content
+into the tier-stack and added three net-new artifacts (Primer, Cookbook,
+this index); it preserved every normative requirement and changed no
+wire shape.</p>
 </section>
 </section>
     <script src="/spec/spec-reader.js" defer></script>

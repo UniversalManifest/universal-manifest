@@ -694,7 +694,7 @@
     <div class="head">
         <h1 id="title" class="title p-name">Universal Manifest — Primer</h1>
         <h2 id="subtitle">v0.4 · Informative</h2>
-        <h2><time class="dt-published" datetime="2026-06-23">23 June 2026</time></h2>
+        <h2><time class="dt-published" datetime="2026-07-05">5 July 2026</time></h2>
         <dl>
             <dt>This document:</dt>
             <dd><a class="u-url" href="https://universalmanifest.net/spec/v0.4/primer/">/spec/v0.4/primer/</a></dd>
@@ -841,6 +841,12 @@ not act on it (so unknown extensions can never change a decision). That
 single rule — <strong>preserve everything, act only on what you
 recognize</strong> — is what makes the format extensible without
 becoming brittle.</p>
+<p>For a field-by-field scan of the top-level object, see <a
+href="/spec/v0.4/core/#universal-manifest-object-at-a-glance">Base
+§1.1.1</a>. For the serialization-independent property names behind the
+JSON-LD member names, see <a
+href="/spec/v0.4/ext-opt/#o11-abstract-data-model">EXT-OPT
+§O1.1</a>.</p>
 </section>
 <section id="the-lifecycle-how-a-manifest-becomes-a-decision"
 class="level2">
@@ -985,7 +991,7 @@ shares the same cryptography, and the post-quantum migration path. Read
 this when you implement Sybil-resistant high assurance.</p></li>
 <li><p><strong><a href="/spec/v0.4/ext-t3/">Extension — Tier-3
 Multi-Party Ceremony Profile</a></strong> — the ceremony model,
-signer-role taxonomy, and threshold-protocol guidance. Read this for
+attester-role taxonomy, and threshold-protocol guidance. Read this for
 co-signed, highest-stakes deployments.</p></li>
 <li><p><strong><a href="/spec/v0.4/ext-opt/">Extension —
 Optional-Feature Profiles</a></strong> — capabilities that are not rungs

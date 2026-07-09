@@ -694,7 +694,7 @@
     <div class="head">
         <h1 id="title" class="title p-name">Universal Manifest v0.4 — EXT-T3</h1>
         <h2 id="subtitle">Tier-3 Multi-Party Ceremony Profile · Preview</h2>
-        <h2><time class="dt-published" datetime="2026-06-23">23 June 2026</time></h2>
+        <h2><time class="dt-published" datetime="2026-07-04">4 July 2026</time></h2>
         <dl>
             <dt>This document:</dt>
             <dd><a class="u-url" href="https://universalmanifest.net/spec/v0.4/ext-t3/">/spec/v0.4/ext-t3/</a></dd>
@@ -723,9 +723,9 @@ id="toc-t30-scope-and-relationship-to-the-base"><span
 class="secno">T3.0. </span>Scope and Relationship to the Base</a></li>
 <li><a href="#t31-ceremony-model" id="toc-t31-ceremony-model"><span
 class="secno">T3.1. </span>Ceremony Model</a></li>
-<li><a href="#t32-signer-role-taxonomy"
-id="toc-t32-signer-role-taxonomy"><span class="secno">T3.2.
-</span>Signer-Role Taxonomy</a></li>
+<li><a href="#t32-attester-role-taxonomy"
+id="toc-t32-attester-role-taxonomy"><span class="secno">T3.2.
+</span>Attester-Role Taxonomy</a></li>
 <li><a href="#t33-threshold-protocol-selection"
 id="toc-t33-threshold-protocol-selection"><span class="secno">T3.3.
 </span>Threshold Protocol Selection</a></li>
@@ -758,6 +758,12 @@ href="/spec/v0.4/core/">Base specification</a>,
 building on <a href="/spec/v0.4/ext-t1/">EXT-T1</a> and <a
 href="/spec/v0.4/ext-t2/">EXT-T2</a>. <strong>Registry
 category:</strong> <code>trust</code>.</p>
+<p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+"SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+"OPTIONAL" in this document are to be interpreted as described in BCP 14
+[<a href="https://www.rfc-editor.org/rfc/rfc2119">RFC 2119</a>] [<a
+href="https://www.rfc-editor.org/rfc/rfc8174">RFC 8174</a>] when, and
+only when, they appear in ALL CAPITALS, as shown here.</p>
 <section id="t30-scope-and-relationship-to-the-base" class="level2">
 <h2><span class="secno">T3.0. </span>Scope and Relationship to the
 Base</h2>
@@ -769,7 +775,7 @@ to multi-sig wallets, and reserves the <code>ceremonyProof</code> field
 on <code>identity.crossDidBinding</code> claims (<a
 href="/spec/v0.4/core/#identitycrossdidbinding-claim">Base
 §6.4.4</a>). This profile specifies the ceremony model, the
-<code>ceremonyProof</code> schema, the signer-role taxonomy,
+<code>ceremonyProof</code> schema, the attester-role taxonomy,
 threshold-protocol selection, and the verification procedure.</p>
 <p>Because trust tiers are strictly additive, a Tier-3 deployment MUST
 also implement <a href="/spec/v0.4/ext-t1/">EXT-T1</a> (Tier-1
@@ -790,18 +796,60 @@ produces a single aggregate proof represented in a
 <code>"ThresholdAttestationProof"</code>.</li>
 <li><code>threshold</code> — A string in the format
 <code>"M-of-N"</code> (e.g., <code>"3-of-5"</code>) declaring the quorum
-requirement.</li>
+requirement: <code>M</code> is the quorum, <code>N</code> the size of
+the ceremony's signing group. <code>M</code> and <code>N</code> MUST be
+positive integers with <code>M ≤ N</code>; a <code>threshold</code>
+violating this (e.g., <code>"5-of-3"</code>) is malformed.</li>
 <li><code>attesters</code> — An array of DID strings identifying the
-ceremony participants who contributed to the aggregate proof. The array
-MUST contain at least <code>M</code> entries.</li>
+ceremony participants who <em>contributed</em> to the aggregate proof.
+The array MUST contain at least <code>M</code> and at most
+<code>N</code> entries, and the entries MUST be distinct — a duplicated
+DID MUST NOT be counted toward the quorum.</li>
 <li><code>ceremonyId</code> — A globally unique URI identifying this
 ceremony instance.</li>
 <li><code>aggregateProof</code> — The aggregate proof value. The
-encoding depends on the threshold protocol used.</li>
+encoding is defined by the protocol identified in <code>protocol</code>
+(below).</li>
 </ul>
+<p>A <code>ceremonyProof</code> additionally carries:</p>
+<ul>
+<li><code>protocol</code> — <strong>REQUIRED at wire freeze</strong> (a
+design-stage candidate today; the published fixture suite predates it
+and omits it). Identifies the threshold protocol — and thereby the
+encoding and verification algorithm — that produced
+<code>aggregateProof</code>. Values are registered through the
+registration mechanism's subsidiary value registries (<a
+href="/spec/v0.4/ext-opt/#o6-profile-registration-mechanism">EXT-OPT
+§O6</a>); candidate tokens: <code>"frost-ed25519"</code> (FROST, [<a
+href="#references">RFC9591</a>]) and <code>"threshold-bbs"</code>
+(Threshold BBS+ [<a href="#references">Threshold-BBS</a>]). Without this
+discriminator an <code>aggregateProof</code> is interpretable only with
+out-of-band knowledge (contrast <code>bindingProof.cryptosuite</code> /
+<code>proofSystem</code> in <a
+href="/spec/v0.4/ext-t2/#t21-tier-2-zkp-proof-profile">EXT-T2
+§T2.1</a>); a <code>ceremonyProof</code> without <code>protocol</code>
+is therefore, until wire freeze, evaluable only by out-of-band protocol
+knowledge and is otherwise recorded <code>"trustTierUnsupported"</code>
+(<a href="#t34-verification-procedure">T3.4</a>).</li>
+</ul>
+<p>A <code>ceremonyProof</code> violating any of the MUST-contain
+structural constraints above is <strong>malformed</strong> (the absence
+of <code>protocol</code> is not a malformation before wire freeze); a
+malformed <code>ceremonyProof</code> MUST be treated as a proof that
+fails verification (<a href="#t34-verification-procedure">T3.4</a>).
+<em>(Wire note: the published <code>schema.json</code> defines the
+<code>ceremonyProof</code> slot with
+<code>type</code>/<code>threshold</code>/<code>attesters</code>/<code>ceremonyId</code>/<code>aggregateProof</code>
+and tolerates additional members; <code>protocol</code> — like
+<code>attesterRoles</code>, <a
+href="#t32-attester-role-taxonomy">T3.2</a> — is a design-stage
+candidate carried as a tolerated member until the schema is aligned at
+wire freeze, and the <code>M ≤ N</code> and distinct-entries constraints
+are normative prose until then: the published <code>threshold</code>
+pattern alone admits <code>"5-of-3"</code>.)</em></p>
 </section>
-<section id="t32-signer-role-taxonomy" class="level2">
-<h2><span class="secno">T3.2. </span>Signer-Role Taxonomy</h2>
+<section id="t32-attester-role-taxonomy" class="level2">
+<h2><span class="secno">T3.2. </span>Attester-Role Taxonomy</h2>
 <p>Ceremony participants MAY declare roles. The following roles are
 recognized:</p>
 <ul>
@@ -814,53 +862,107 @@ behalf of an organization.</li>
 <li><code>"auditor"</code> — A party who reviews the ceremony transcript
 and co-signs as a quality check.</li>
 </ul>
+<p><strong>Role carrier (candidate).</strong> Roles are declared in a
+candidate OPTIONAL <code>attesterRoles</code> member of
+<code>ceremonyProof</code>: a map from attester DID to role token, where
+each key MUST be a member of <code>attesters</code> (<a
+href="#t31-ceremony-model">T3.1</a>) and each value MUST be a role from
+the taxonomy above or a role registered through <a
+href="/spec/v0.4/ext-opt/#o6-profile-registration-mechanism">EXT-OPT
+§O6</a>. <code>attesters</code> itself remains an array of plain DID
+strings — the parallel map adds roles without changing that array's
+published shape; the two representations are reconciled at wire freeze.
+A map containing a key that is not a member of <code>attesters</code> is
+malformed, and a malformed <code>attesterRoles</code> MUST be treated as
+absent (roles undeclared).</p>
 <p>Profile documents MAY define role constraints (e.g., "at least 1
 witness and 1 custodian"). When role constraints are declared,
-evaluators MUST verify that the attester list satisfies them.</p>
+evaluators MUST verify that the declared roles satisfy them (<a
+href="#t34-verification-procedure">T3.4</a>); when
+<code>attesterRoles</code> is absent or malformed, roles are undeclared,
+an undeclared role satisfies no role constraint, and the verification
+therefore fails (fail closed). <strong>Binding:</strong> a profile that
+declares role constraints MUST also define how role declarations are
+bound into the ceremony transcript covered by
+<code>aggregateProof</code>; a role declaration not covered by the
+ceremony's signed material is unattested presenter-supplied metadata and
+MUST NOT be used to satisfy a role constraint — otherwise any presenter
+could relabel participants to satisfy a constraint the ceremony never
+established.</p>
 </section>
 <section id="t33-threshold-protocol-selection" class="level2">
 <h2><span class="secno">T3.3. </span>Threshold Protocol Selection</h2>
 <p>v0.4 defines the ceremony slot (the <code>ceremonyProof</code>
 schema) and proof format. The specific threshold protocol used to
-produce the aggregate proof is deferred to profile documents.
-Implementations MAY use any threshold protocol that produces a
-verifiable aggregate proof.</p>
+produce the aggregate proof is deferred to profile documents: the
+protocol in use is <em>identified</em> in-band by the
+<code>protocol</code> member (<a href="#t31-ceremony-model">T3.1</a>),
+while its <em>definition</em> — the <code>aggregateProof</code>
+encoding, the verification algorithm, and the ceremony-transcript
+binding (including any role binding, <a
+href="#t32-attester-role-taxonomy">T3.2</a>) — lives in the registered
+profile document behind that identifier. Implementations MAY use any
+threshold protocol that produces a verifiable aggregate proof.</p>
 <p><strong>Non-normative guidance:</strong> FROST (Flexible
 Round-Optimized Schnorr Threshold signatures, [<a
 href="#references">RFC9591</a>]) is a candidate threshold protocol for
 Ed25519-based ceremonies; it produces standard Schnorr/Ed25519
-signatures from a threshold of signers, and verifiers see a normal
-signature. Threshold BBS+ (Doerner et al. 2023) is a candidate for
-anonymous credential issuance ceremonies. Neither protocol is
-normatively required; profile documents define the binding.</p>
+signatures from a threshold of signers (FROST "signers" are UM
+"attesters" here), and verifiers see a normal signature. Threshold BBS+
+(Doerner et al. 2023) [<a href="#references">Threshold-BBS</a>] is a
+candidate for anonymous credential issuance ceremonies. Neither protocol
+is normatively required; profile documents define the binding.</p>
 </section>
 <section id="t34-verification-procedure" class="level2">
 <h2><span class="secno">T3.4. </span>Verification Procedure</h2>
 <p>When an evaluator encounters an <code>identity.crossDidBinding</code>
-claim with <code>requiredTrustTier: 3</code> and a
-<code>ceremonyProof</code>, the evaluator MUST:</p>
+claim carrying a <code>ceremonyProof</code>, the evaluator MUST apply
+the following procedure (the declared <code>requiredTrustTier</code>
+governs what the verified result must satisfy, not whether the proof is
+verified):</p>
 <ol type="1">
 <li>Parse the <code>threshold</code> string to extract <code>M</code>
-and <code>N</code>.</li>
+and <code>N</code>, and confirm they satisfy <code>M ≤ N</code> (<a
+href="#t31-ceremony-model">T3.1</a>).</li>
 <li>Verify that the <code>attesters</code> array contains at least
-<code>M</code> entries.</li>
-<li>If role constraints are declared in the profile, verify that the
-attester list satisfies them.</li>
+<code>M</code> and at most <code>N</code> distinct entries.</li>
+<li>Identify the threshold protocol from <code>protocol</code> (<a
+href="#t31-ceremony-model">T3.1</a>) when present. <code>protocol</code>
+is REQUIRED only at wire freeze (<a
+href="#t31-ceremony-model">T3.1</a>), so until then a
+<code>ceremonyProof</code> without it is evaluable only where the
+evaluator has out-of-band protocol knowledge. If the evaluator cannot
+identify the protocol, or does not implement the identified protocol, it
+MUST record <code>"trustTierUnsupported"</code> (below) rather than
+guess at the <code>aggregateProof</code> encoding.</li>
+<li>If role constraints are declared in the governing profile, verify
+that a well-formed <code>attesterRoles</code> declaration satisfies
+them, under the transcript-binding rule of <a
+href="#t32-attester-role-taxonomy">T3.2</a>.</li>
 <li>Verify the <code>aggregateProof</code> against the declared
-attesters using the threshold protocol specified by the profile.</li>
+attesters using the protocol identified in step 3, as defined by its
+registered profile document.</li>
 <li>For each attester DID, confirm the attester is on the evaluator's
 configurable trust list (per <a
 href="/spec/v0.4/core/#identitycrossdidbinding-claim">Base
 §6.4.4</a>).</li>
 <li>Record the result. A verified ceremony elevates the claim to Tier 3.
-A <code>ceremonyProof</code> that <em>fails</em> verification MUST cause
-the claim to be recorded as <code>failed</code> and treated at Tier 0,
-regardless of any accompanying attestations; only an <em>absent</em>
+A <code>ceremonyProof</code> that is malformed (<a
+href="#t31-ceremony-model">T3.1</a>) or that <em>fails</em> verification
+under this procedure MUST cause the claim to be recorded as
+<code>failed</code> and treated at Tier 0, regardless of any
+accompanying attestations; only an <em>absent</em>
 <code>ceremonyProof</code> falls back to lower-tier evaluation of
-whatever binding material is present.</li>
+whatever binding material is present. (An unsupported
+<code>protocol</code> is recorded <code>"trustTierUnsupported"</code>,
+not <code>failed</code> — the evaluator cannot verify and MUST NOT
+downgrade, per <a
+href="/spec/v0.4/core/#requiredtrusttier-declaration">Base
+§6.4.5</a>.)</li>
 </ol>
-<p>Evaluators that do not implement any Tier 3 threshold protocol MUST
-record the claim as <code>"trustTierUnsupported"</code> per <a
+<p>Evaluators that do not implement any Tier 3 threshold protocol — or
+none matching the declared <code>protocol</code> — MUST record the claim
+as <code>"trustTierUnsupported"</code> per <a
 href="/spec/v0.4/core/#requiredtrusttier-declaration">Base
 §6.4.5</a>.</p>
 <p><em>(Worked example: Tier 3 ceremony proof — see <a

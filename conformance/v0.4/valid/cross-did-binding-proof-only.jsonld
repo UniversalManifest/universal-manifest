@@ -1,0 +1,39 @@
+{
+  "@context": "https://universalmanifest.net/ns/v0.4",
+  "@type": "um:Manifest",
+  "manifestVersion": "0.4",
+  "subject": "did:example:alice-v04",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "@id": "urn:uuid:47000038-0000-4000-8000-000000000038",
+  "claims": [
+    {
+      "@id": "urn:um:claim:proof-only-binding-v04",
+      "@type": "identity.crossDidBinding",
+      "issuer": "did:example:alice-v04",
+      "boundDids": [
+        "did:example:alice-v04",
+        "did:pkh:eip155:1:0xabc"
+      ],
+      "requiredTrustTier": 2,
+      "bindingProof": {
+        "type": "ZkLinkedSecretProof",
+        "cryptosuite": "bbs-2023",
+        "proofPurpose": "authentication",
+        "proofValue": "u2V0BhVFoo",
+        "publicInputs": {
+          "commitmentA": "z3tCfoo",
+          "commitmentB": "z7dFbar"
+        }
+      }
+    }
+  ],
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:alice-v04#keys-1",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEAvWsBD/ov/5zQwtkxvssqOFz/Ejca8C0NfnAJ9z0iBZY=",
+    "value": "uIQ9cVVLiS-9qOD2izLb8V5ehnkA-vpNVMv95XkGf7z-G2YsBhuzQQHor_vAIjfFut0MENlMAUCnSBJ_ppY1Ag"
+  }
+}

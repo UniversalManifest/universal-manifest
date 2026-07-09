@@ -694,7 +694,7 @@
     <div class="head">
         <h1 id="title" class="title p-name">Universal Manifest v0.4 — Cookbook</h1>
         <h2 id="subtitle">Worked Examples · Informative</h2>
-        <h2><time class="dt-published" datetime="2026-06-23">23 June 2026</time></h2>
+        <h2><time class="dt-published" datetime="2026-07-04">4 July 2026</time></h2>
         <dl>
             <dt>This document:</dt>
             <dd><a class="u-url" href="https://universalmanifest.net/spec/v0.4/cookbook/">/spec/v0.4/cookbook/</a></dd>
@@ -973,8 +973,9 @@ class="level3">
 <h3>Example 4 — Derived-variant sensor consent with purpose binding —
 <em>Tier 0</em> — <span class="preview-tag">PREVIEW</span></h3>
 <p>A spatial-computing consent that grants only
-region-of-interest-derived gaze data, bound to a DPV purpose. Specified
-in <a
+region-of-interest-derived gaze data, bound to a DPV purpose. The sensor
+key is a consent-<code>scope</code> operation token (O9.1); no dedicated
+<code>sensorConsent</code> member exists. Specified in <a
 href="/spec/v0.4/ext-opt/#o91-derived-variant-sensor-consent-vocabulary">EXT-OPT
 §O9.1</a>.</p>
 <pre class="json"><code>{
@@ -983,8 +984,7 @@ href="/spec/v0.4/ext-opt/#o91-derived-variant-sensor-consent-vocabulary">EXT-OPT
       &quot;@id&quot;: &quot;urn:uuid:consent-gaze-roi-001&quot;,
       &quot;@type&quot;: &quot;um:Consent&quot;,
       &quot;facetRef&quot;: &quot;urn:uuid:facet-eye-roi-001&quot;,
-      &quot;scope&quot;: [&quot;read&quot;, &quot;process&quot;],
-      &quot;sensorConsent&quot;: &quot;sensor.eye.gaze.roi-derived&quot;,
+      &quot;scope&quot;: [&quot;sensor.eye.gaze.roi-derived&quot;],
       &quot;purpose&quot;: &quot;dpv:UserInterfacePersonalisation&quot;,
       &quot;grantedAt&quot;: &quot;2026-06-09T09:00:00Z&quot;,
       &quot;expiresAt&quot;: &quot;2026-06-09T18:00:00Z&quot;
@@ -1018,7 +1018,7 @@ href="/spec/v0.4/ext-opt/#o92-two-component-devices-schema">EXT-OPT
         &quot;openxrExtensions&quot;: [&quot;XR_EXT_eye_gaze_interaction&quot;],
         &quot;positioningTier&quot;: &quot;6dof&quot;,
         &quot;privacyModes&quot;: [&quot;roi-derived-only&quot;],
-        &quot;sessionSigningKey&quot;: &quot;did:key:z6MkSessionEphemeral#keys-1&quot;
+        &quot;sessionSigningKey&quot;: &quot;z6MkpTHR8VNsBxYAAWHut2Geadd9jSwuBV8xRoAnwWsdvktH&quot;
       }
     }
   ]
@@ -1354,8 +1354,7 @@ href="/spec/v0.4/ext-t1/#t164-backwards-compatibility-v03-manifests">EXT-T1
   &quot;warnings&quot;: [
     {
       &quot;code&quot;: &quot;um:reason:trust:unbound-claims&quot;,
-      &quot;message&quot;: &quot;One or more claims lack holder binding. Claims are accepted at Tier 0 assurance regardless of declared trust tier.&quot;,
-      &quot;affectedClaims&quot;: [&quot;urn:claim:poh&quot;, &quot;urn:claim:avatar-control&quot;]
+      &quot;message&quot;: &quot;Claims urn:claim:poh and urn:claim:avatar-control lack holder binding. Claims are accepted at Tier 0 assurance regardless of declared trust tier.&quot;
     }
   ]
 }</code></pre>

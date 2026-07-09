@@ -1,0 +1,28 @@
+{
+  "@context": "https://universalmanifest.net/ns/v0.4",
+  "@id": "urn:uuid:40000011-0000-4000-8000-000000000011",
+  "@type": "um:Manifest",
+  "manifestVersion": "0.4",
+  "subject": "did:example:alice-v04",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "facets": [
+    {
+      "@id": "urn:um:facet:medical-records-v04",
+      "@type": "um:Facet",
+      "name": "privateHealth",
+      "requiredLiveness": {
+        "minFreshness": "recent",
+        "userVerified": true
+      }
+    }
+  ],
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:alice-v04#keys-1",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEAvWsBD/ov/5zQwtkxvssqOFz/Ejca8C0NfnAJ9z0iBZY=",
+    "value": "TC1oN3FqpzZoPxjlylVFlBeyFK75Wczm3N2jXFEZ-eCFPEC1RfdvrVCscCK1Y991q_XOridheuWcQQjvYIvLBg"
+  }
+}

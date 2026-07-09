@@ -1,0 +1,25 @@
+{
+  "@context": "https://universalmanifest.net/ns/v0.4",
+  "@id": "urn:uuid:40000022-0000-4000-8000-000000000022",
+  "@type": "um:Manifest",
+  "manifestVersion": "0.4",
+  "subject": "did:example:alice-v04",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "facets": [
+    {
+      "@id": "urn:um:facet:medical-records-v04",
+      "@type": "um:Facet",
+      "name": "privateHealth",
+      "requiredAssuranceClass": "hardware-uv"
+    }
+  ],
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:alice-v04#keys-1",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEAvWsBD/ov/5zQwtkxvssqOFz/Ejca8C0NfnAJ9z0iBZY=",
+    "value": "0jyVwdY8eMeCqS5n0F99NjtPuE1VBsat8B64OmonG8A4yxfeoitJnoRcPb5jZlw2E2_enadbCQA_qDrrQPqWCg"
+  }
+}

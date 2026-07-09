@@ -694,7 +694,7 @@
     <div class="head">
         <h1 id="title" class="title p-name">Universal Manifest v0.4 — Base Specification</h1>
         <h2 id="subtitle">Tier-0 / Tier-1 Core</h2>
-        <h2><time class="dt-published" datetime="2026-06-23">23 June 2026</time></h2>
+        <h2><time class="dt-published" datetime="2026-07-09">9 July 2026</time></h2>
         <dl>
             <dt>This document:</dt>
             <dd><a class="u-url" href="https://universalmanifest.net/spec/v0.4/core/">/spec/v0.4/core/</a></dd>
@@ -737,6 +737,10 @@ class="secno">1.0.1. </span>Manifest Classes and the Polymorphic
 Envelope</a></li>
 <li><a href="#examples" id="toc-examples"><span class="secno">1.1.
 </span>Examples</a></li>
+<li><a href="#universal-manifest-object-at-a-glance"
+id="toc-universal-manifest-object-at-a-glance"><span
+class="secno">1.1.1. </span>Universal Manifest object at a
+glance</a></li>
 <li><a href="#core-identity-members"
 id="toc-core-identity-members"><span class="secno">1.2. </span>Core
 Identity Members</a>
@@ -894,7 +898,14 @@ class="secno">3.3.2. </span>Receipt as a First-Class Manifest Class</a></li>
 </ul></li>
 <li><a href="#statusref-resolution-schema"
 id="toc-statusref-resolution-schema"><span class="secno">3.4.
-</span>statusRef Resolution Schema</a></li>
+</span>statusRef Resolution Schema</a>
+<ul>
+<li><a
+href="#current-policy-state-resolution-before-governed-action-informative-composition"
+id="toc-current-policy-state-resolution-before-governed-action-informative-composition"><span
+class="secno">3.4.1. </span>Current Policy-State Resolution Before
+Governed Action (Informative Composition)</a></li>
+</ul></li>
 <li><a href="#bilateral-session-model"
 id="toc-bilateral-session-model"><span class="secno">3.5.
 </span>Bilateral Session Model</a></li>
@@ -989,9 +1000,15 @@ class="secno">6.10. </span>Context Integrity</a></li>
 id="toc-privacy-considerations"><span class="secno">7. </span>Privacy
 Considerations</a>
 <ul>
+<li><a href="#selective-minimum-disclosure-bounded-base-profile"
+id="toc-selective-minimum-disclosure-bounded-base-profile"><span
+class="secno">7.1. </span>Selective Minimum Disclosure: Bounded Base
+Profile</a>
+<ul>
 <li><a href="#selective-disclosure-dual-track-model"
-id="toc-selective-disclosure-dual-track-model"><span class="secno">7.1.
-</span>Selective Disclosure: Dual-Track Model</a></li>
+id="toc-selective-disclosure-dual-track-model"><span
+class="secno">7.1.1. </span>Selective Disclosure: Dual-Track Model</a></li>
+</ul></li>
 <li><a href="#private-data-handling-derived-writes-and-honest-limits"
 id="toc-private-data-handling-derived-writes-and-honest-limits"><span
 class="secno">7.2. </span>Private-Data Handling: Derived Writes and
@@ -1022,7 +1039,11 @@ id="toc-registry-change-control"><span class="secno">10.2.
 </ul></li>
 <li><a href="#appendix-b-versioned-context-document-normative-reference"
 id="toc-appendix-b-versioned-context-document-normative-reference">Appendix
-B. Versioned Context Document (Normative Reference)</a></li>
+B. Versioned Context Document (Normative Reference)</a>
+<ul>
+<li><a href="#b1-term-inclusion-rule"
+id="toc-b1-term-inclusion-rule">B.1. Term-Inclusion Rule</a></li>
+</ul></li>
 </ul>
 </nav>
 <blockquote>
@@ -1049,16 +1070,22 @@ href="/spec/v0.4/cookbook/">Cookbook</a></p>
 </blockquote>
 <section id="universal-manifest-v04-specification--base" class="level1">
 <h1>Universal Manifest v0.4 Specification — Base</h1>
-<p>This version: <a
+<p>This version (upon publication): <a
 href="https://universalmanifest.net/spec/v0.4/core/">https://universalmanifest.net/spec/v0.4/core/</a>
 Latest stable version: <a
 href="https://universalmanifest.net/spec/v0.3/">https://universalmanifest.net/spec/v0.3/</a>
 History: <a
 href="https://universalmanifest.net/spec/">https://universalmanifest.net/spec/</a>
-Editors: Universal Manifest Working Group. Copyright © 2026 the
-Contributors to the Universal Manifest Specification, published under
-the <a href="https://www.w3.org/copyright/software-license-2023/">W3C
-Software and Document License</a>.</p>
+Editor's Draft. Developed and reviewed in the OMA3 Technical Working
+Group. Copyright (c) 2026 the Universal Manifest contributors. All
+rights reserved. This Editor's Draft is under review by the OMA3
+Technical Working Group. Formal governance, IPR, patent, and license
+terms are pending and will be established with OMA3. Provisional
+license: no final license is asserted for this Editor's Draft. A license
+(for reference, the <a
+href="https://www.w3.org/copyright/software-license-2023/">W3C Software
+and Document License</a> used by the prior draft) will be established
+with OMA3 and is pending.</p>
 <blockquote>
 <p>This document carries all normative content from v0.3 forward and
 adds Tier-0/Tier-1 baseline content for v0.4. Sections marked
@@ -1172,6 +1199,13 @@ href="/spec/v0.4/ext-t2/">EXT-T2</a>).</li>
 <li><strong>Infrastructure (PREVIEW):</strong> bilateral session model,
 agent-delegation scope registry, profile registration, federation — <a
 href="/spec/v0.4/ext-opt/">EXT-OPT</a>.</li>
+<li><strong>Design-stage candidate profiles (PREVIEW, not yet on the
+wire):</strong> current policy-state resolution, asset-bound
+represented-person consent, signed referral-route attribution, and
+GeoPose primary pose values — drafted in <a
+href="/spec/v0.4/ext-opt/">EXT-OPT</a>; their candidate members
+are absent from the published schema/context and fixtures until
+finalized.</li>
 </ul>
 <p>For the v0.2→v0.3 migration path, see the <a
 href="https://universalmanifest.net/spec/v0.3/">v0.3
@@ -1189,10 +1223,11 @@ serialized through a production rule for a concrete format. It blends
 the semantic linkability of a Web Publication Manifest with the applied
 processing lifecycle of a Web App Manifest. Unless stated otherwise, the
 examples and member definitions in this section are expressed in the <a
-href="https://www.w3.org/TR/json-ld11/">JSON-LD</a> reference encoding;
-the same manifest MAY be produced in any other conformant encoding, such
-as CBOR-LD (<a href="/spec/v0.4/ext-opt/">EXT-OPT</a>), without
-changing its meaning.</p>
+href="https://www.w3.org/TR/json-ld11/">JSON-LD11</a> reference
+encoding; the same manifest MAY be produced in any other conformant
+encoding, such as CBOR-LD (<a
+href="/spec/v0.4/ext-opt/">EXT-OPT</a>), without changing its
+meaning.</p>
 <section id="terminology" class="level2">
 <h2><span class="secno">1.0. </span>Terminology</h2>
 <p>The following terms are used normatively throughout this
@@ -1324,6 +1359,103 @@ shape and signing procedure. Worked examples for every concept in this
 document are collected in the <a
 href="/spec/v0.4/cookbook/">Cookbook</a>.</p>
 </section>
+<section id="universal-manifest-object-at-a-glance" class="level2">
+<h2><span class="secno">1.1.1. </span>Universal Manifest object at a
+glance</h2>
+<p>This table is a reader aid for the top-level Universal Manifest
+object. It restates the member surface already defined in the cited
+sections and extension profiles; those detailed sections remain the
+source of the requirements.</p>
+<table>
+<thead>
+<tr>
+<th>Surface</th>
+<th>JSON-LD reference-encoding member(s)</th>
+<th>Status in v0.4</th>
+<th>Detailed definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Semantic anchors</td>
+<td><code>@context</code>, <code>@id</code>, <code>@type</code></td>
+<td>REQUIRED. <code>@type</code> MUST include
+<code>um:Manifest</code>.</td>
+<td><a href="#core-identity-members">§1.2</a>; context integrity in <a
+href="#context-integrity">§6.10</a> and <a
+href="#appendix-b-versioned-context-document-normative-reference">Appendix
+B</a>.</td>
+</tr>
+<tr>
+<td>Version, subject, and lifespan</td>
+<td><code>manifestVersion</code>, <code>subject</code>,
+<code>issuedAt</code>, <code>expiresAt</code></td>
+<td>REQUIRED.</td>
+<td><a href="#identities--lifespans">§1.3</a>.</td>
+</tr>
+<tr>
+<td>Structural payload arrays</td>
+<td><code>facets</code>, <code>claims</code>, <code>consents</code>,
+<code>pointers</code>, <code>devices</code></td>
+<td>OPTIONAL top-level members. When absent, evaluators treat them as
+empty arrays.</td>
+<td><a href="#structural-state-members">§1.4</a>; facet/entity mechanics
+in <a href="#entities-and-facets">§2</a>; trust-tier and
+agent-delegation details in <a href="#tiered-trust-model">§6.4</a> and
+<a href="#agent-delegation">§6.5</a>; device details in <a
+href="/spec/v0.4/ext-opt/">EXT-OPT</a>.</td>
+</tr>
+<tr>
+<td>Manifest-level trust floor</td>
+<td><code>requiredTrustTier</code></td>
+<td>OPTIONAL; default 0. Claim-level and facet-level floors can only
+raise this floor.</td>
+<td><a
+href="#structural-state-arrays-claims-consents-pointers-devices">§1.4.2</a>
+and <a href="#requiredtrusttier-declaration">§6.4.5</a>.</td>
+</tr>
+<tr>
+<td>Integrity proof</td>
+<td><code>signature</code></td>
+<td>REQUIRED for conformant manifests.</td>
+<td><a href="#signature-integrity">§1.5</a> and <a
+href="#signature-profile-a-jcs--ed25519">§1.6</a>.</td>
+</tr>
+<tr>
+<td>Interactive and binding proof surface</td>
+<td><code>presentationProof</code>,
+<code>livenessAttestation</code></td>
+<td>OPTIONAL members generally; REQUIRED only when the interaction or
+claimed tier requires the corresponding proof.</td>
+<td>Holder obligations in <a href="#holder-behavior">§4.2</a>; mechanics
+in <a href="/spec/v0.4/ext-t1/">EXT-T1</a>.</td>
+</tr>
+<tr>
+<td>Session actor state</td>
+<td><code>actorState</code></td>
+<td>OPTIONAL, PREVIEW.</td>
+<td><a href="#actorstate-member">§1.4.7</a> and <a
+href="/spec/v0.4/ext-opt/#o93-actorstate-member">EXT-OPT
+§O9.3</a>.</td>
+</tr>
+<tr>
+<td>Supplemental signature profiles</td>
+<td><code>postQuantumSignature</code></td>
+<td>OPTIONAL, PREVIEW; safely ignored unless the evaluator supports the
+profile.</td>
+<td>Signature-profile handling in <a
+href="#signature-profile-a-jcs--ed25519">§1.6</a>; post-quantum profile
+in <a href="/spec/v0.4/ext-t2/">EXT-T2</a>.</td>
+</tr>
+</tbody>
+</table>
+<p>For the serialization-independent abstract property table behind
+these JSON-LD member names, see <a
+href="/spec/v0.4/ext-opt/#o11-abstract-data-model">EXT-OPT
+§O1.1</a>. Supporting the JSON-LD reference encoding alone remains
+sufficient for full v0.4 conformance (<a
+href="#conformance-to-the-abstract-data-model">§4.5</a>).</p>
+</section>
 <section id="core-identity-members" class="level2">
 <h2><span class="secno">1.2. </span>Core Identity Members</h2>
 <p>Three properties — the manifest's <strong>contextReference</strong>,
@@ -1353,11 +1485,14 @@ values such as <code>um:Manifest</code> and registry identifiers such as
 <code>um:reason:</code>) expands to the IRI
 <code>https://universalmanifest.net/ns/um#</code>. The full term
 definitions for a given version are fixed by that version's context
-document, served at the versioned namespace URI; this version's context
-document, with its content hash, is reproduced in <a
+document, identified by the versioned namespace URI (and, upon
+publication, served there); this version's context document, with its
+content hash, is reproduced in <a
 href="#appendix-b-versioned-context-document-normative-reference">Appendix
 B</a> and is normative for context integrity (<a
-href="#context-integrity">§6.10</a>).</p>
+href="#context-integrity">§6.10</a>). Until publication, the normative
+copy is <code>spec/v0.4/schema.jsonld</code> in the specification
+repository.</p>
 </section>
 <section id="id-member-abstract-property-id" class="level3">
 <h3><span class="secno">1.2.2. </span><code>@id</code> member (abstract
@@ -1399,7 +1534,7 @@ stable identifier URI (e.g., a Decentralized Identifier / DID).</p>
 <p>Both <code>issuedAt</code> and <code>expiresAt</code> are REQUIRED.
 They formulate the bounding constraints (TTL) for the manifest's
 validity. All date-time values in this specification MUST conform to the
-RFC 3339 [<a href="#references">RFC3339</a>] <code>date-time</code>
+RFC 3339 [<a href="#references">RFC 3339</a>] <code>date-time</code>
 production and SHOULD use UTC (<code>Z</code>).</p>
 </section>
 </section>
@@ -1509,7 +1644,12 @@ operations (e.g., <code>"read"</code>, <code>"display"</code>,
 <code>"cache"</code>, <code>"process"</code>, <code>"forward"</code>).
 These are deployment-defined; this specification does not enumerate a
 closed set. Evaluators MUST NOT perform any operation not literally
-present in <code>scope</code> (fail closed).</li>
+present in <code>scope</code> (fail closed), except where an optional
+profile defines a strictly-narrowing implication rule that the
+deployment documents in its conformance claim (e.g. the sensor
+derivation-tier rule, <a
+href="/spec/v0.4/ext-opt/#o91-derived-variant-sensor-consent-vocabulary">EXT-OPT
+§O9.1</a>).</li>
 <li><code>purpose</code> — A string declaring the stated purpose for
 data use (e.g., <code>"session-personalization"</code>,
 <code>"age-verification"</code>). Evaluators MUST verify that their
@@ -1566,7 +1706,9 @@ types MAY define type-specific fields that replace the base
 <code>target</code> requirement. A base pointer object MAY contain
 <code>@id</code>, <code>label</code>, <code>createdAt</code>, and
 <code>expiresAt</code> (RFC 3339; evaluators SHOULD ignore expired
-pointers).</p>
+pointers — with one exception: an expired
+<code>um:agentDelegation</code> pointer is not ignored but rejects the
+manifest, <a href="#structure">§6.5.1</a>).</p>
 <p>The <code>um:agentDelegation</code> pointer type, which declares
 delegated session authority, is defined in <a
 href="#agent-delegation">§6.5</a> and replaces the base
@@ -1646,16 +1788,16 @@ Algorithm</h3>
 <p>Signature Profile A uses <strong>JSON Canonicalization
 Scheme</strong> (JCS, <a
 href="https://www.rfc-editor.org/rfc/rfc8785">RFC 8785</a>) for
-canonicalization and <strong>Ed25519</strong> [<a
-href="#references">RFC8032</a>] for signing. Signature values are
-encoded as <strong>base64url</strong> [<a
-href="#references">RFC4648</a>]. This combination provides deterministic
-signing input without JSON-LD expansion or RDF canonicalization. The
-profile is defined against the JSON-LD reference encoding and signs the
-canonical bytes of that production; other production rules either reuse
-a profile defined against the abstract model or specify their own
-byte-level signing rule (<a
-href="#abstract-data-model-and-production-rules">§1.7</a>).</p>
+canonicalization and <strong>Ed25519</strong> [<a href="#references">RFC
+8032</a>] for signing. Signature values are encoded as <strong>base64url
+without padding</strong> [<a href="#references">RFC 4648</a>] (the JOSE
+convention; verifiers MUST NOT require, and SHOULD reject, padded
+values). This combination provides deterministic signing input without
+JSON-LD expansion or RDF canonicalization. The profile is defined
+against the JSON-LD reference encoding and signs the canonical bytes of
+that production; other production rules either reuse a profile defined
+against the abstract model or specify their own byte-level signing rule
+(<a href="#abstract-data-model-and-production-rules">§1.7</a>).</p>
 </section>
 <section id="signature-shape" class="level3">
 <h3><span class="secno">1.6.2. </span>Signature Shape</h3>
@@ -1667,7 +1809,8 @@ href="#abstract-data-model-and-production-rules">§1.7</a>).</p>
 <code>"JCS-RFC8785"</code>.</li>
 <li><code>signature.keyRef</code> — URI reference to verification key
 material (recommended: DID URL or HTTPS URL). MUST be present.</li>
-<li><code>signature.value</code> — base64url-encoded Ed25519 signature
+<li><code>signature.value</code> — base64url-encoded (unpadded, <a
+href="#canonicalization-and-algorithm">§1.6.1</a>) Ed25519 signature
 over the canonical bytes.</li>
 </ul>
 <p>The following fields are OPTIONAL:</p>
@@ -1713,6 +1856,12 @@ UTF-8 byte sequence.</li>
 <li>Set the <code>signature</code> property on the manifest with the
 fields defined above.</li>
 </ol>
+<p>JCS presumes I-JSON-compatible input: the JSON-LD production consumed
+for signing MUST be an I-JSON document [<a href="#references">RFC
+7493</a>], and a document with duplicate member names MUST be rejected
+at the Arrive stage (<a href="#stage-1-arrive">§3.1.1</a>) — parser
+behavior on duplicates is otherwise implementation-defined, which would
+make the signing input ambiguous between two conformant verifiers.</p>
 <p>This yields a stable, portable verification input for any
 implementation that supports JCS + Ed25519.</p>
 </section>
@@ -1736,7 +1885,11 @@ to resolve <code>keyRef</code> (method-specific; some methods such as
 <code>publicKeySpkiB64</code> present → the resolved key MUST be
 byte-identical to the decoded <code>publicKeySpkiB64</code>; on
 mismatch, reject with <code>rejected</code> /
-<code>signatureCheck: "invalid"</code>.</li>
+<code>signatureCheck: "invalid"</code>. Because DID resolution yields
+verification keys in method-specific representations (JWK,
+multibase/multicodec), the evaluator first converts the resolved key to
+its SPKI DER encoding — equivalently, compares the raw 32-byte Ed25519
+public-key values — before the byte comparison.</li>
 <li>Resolution succeeds <strong>and</strong>
 <code>publicKeySpkiB64</code> absent → use the resolved key.</li>
 <li>Resolution unavailable (offline/unreachable) <strong>and</strong>
@@ -1893,11 +2046,20 @@ plaintext <code>@id</code> and <code>@type</code>
 (<code>um:Facet</code>) so consent matching and receipt recording
 operate normally; the sensitive content is confined to the encrypted
 payload.</p>
+<p>An encrypted facet MUST carry the facet member
+<code>encryptionProfile</code> with the value
+<code>"jwe-inline-v1"</code> (this profile's identifier). That member is
+the declaration that the facet's <code>entity</code> value is an
+encrypted payload rather than a plaintext <code>um:Entity</code>: the
+facet's <code>entity</code> value MUST be the JWE object of <a
+href="#jwe-structure">§2.3.2</a>. An evaluator recognizes an encrypted
+facet by the presence of <code>encryptionProfile: "jwe-inline-v1"</code>
+and reads its payload as a JWE accordingly.</p>
 </section>
 <section id="jwe-structure" class="level3">
 <h3><span class="secno">2.3.2. </span>JWE Structure</h3>
 <p>The encrypted payload MUST be a JWE in General JSON Serialization [<a
-href="#references">RFC7516</a>], carrying the standard JWE members
+href="#references">RFC 7516</a>], carrying the standard JWE members
 (<code>protected</code>, <code>recipients</code> with per-recipient
 <code>encrypted_key</code>, <code>iv</code>, <code>ciphertext</code>,
 <code>tag</code>). The plaintext of the JWE is the JSON serialization of
@@ -1910,19 +2072,25 @@ pair is defined in <a href="#jwe-algorithm-constraints">§2.4</a>.</p>
 <h3><span class="secno">2.3.3. </span>Key Rotation</h3>
 <p>Holders MAY rotate the content-encryption key by re-encrypting the
 payload and re-signing the manifest. A <code>rotationReason</code>
-display field MAY record why rotation occurred. Because the manifest
-signature covers the encrypted payload, any change to the ciphertext
-requires re-signing.</p>
+display field MAY record why rotation occurred, and
+<code>previousKid</code> MAY record the <code>kid</code> the current
+content-encryption key replaced — both are display/audit metadata with
+no processing semantics. Because the manifest signature covers the
+encrypted payload, any change to the ciphertext requires re-signing.</p>
 </section>
 <section id="recipient-revocation" class="level3">
 <h3><span class="secno">2.3.4. </span>Recipient Revocation</h3>
 <p>A holder revokes a recipient by re-encrypting the payload without
 that recipient's <code>encrypted_key</code> entry and re-signing.
-Forward access to subsequently issued manifests is removed; a recipient
-retains the ability to decrypt manifest instances it already holds
-(encryption is not retroactive). Deployments requiring retroactive
-revocation MUST rely on the manifest TTL and revocation status, not on
-the encryption layer.</p>
+<code>revokedRecipientKid</code> MAY record the <code>kid</code> of the
+removed recipient entry, and <code>revocationAction</code> MAY record
+the action taken (e.g. <code>"re-encrypted"</code>) — both are
+display/audit metadata with no processing semantics. Forward access to
+subsequently issued manifests is removed; a recipient retains the
+ability to decrypt manifest instances it already holds (encryption is
+not retroactive). Deployments requiring retroactive revocation MUST rely
+on the manifest TTL and revocation status, not on the encryption
+layer.</p>
 </section>
 <section id="per-facet-cryptographic-isolation" class="level3">
 <h3><span class="secno">2.3.5. </span>Per-Facet Cryptographic Isolation
@@ -1935,8 +2103,9 @@ obligation binds <strong>only a deployment that makes the
 claim</strong>; it does not outlaw shared-key encryption in general. The
 claim is carried as a conformance-claim flag and adds no manifest wire
 member, keeping isolation in symmetry with the discipline (<a
-href="/spec/v0.4/ext-t1/#t13-liveness-attestation">EXT-T1
-§T1.3</a>) that an <em>identifier is not a proof</em>.</p>
+href="/spec/v0.4/ext-t1/#t132-authenticator-provenance">EXT-T1
+§T1.3.2</a>) that a <em>gesture (or identifier) is not a proof of
+provenance</em>.</p>
 <p>Under an isolation claim, the following structurally-checkable
 invariants apply across the declared isolated set:</p>
 <ul>
@@ -2080,11 +2249,24 @@ claim.</p>
 <section id="stage-3-project" class="level3">
 <h3><span class="secno">3.1.3. </span>Stage 3: Project</h3>
 <p>The evaluator MUST extract only the facets, claims, pointers, and
-device entries relevant to its processing context. Selective disclosure
-is holder-controlled: the holder determines which facets are included in
-a given manifest instance. The evaluator MUST NOT assume the manifest
-contains the complete set of the subject's facets. Facets not included
-are not absent — they are not projected for this interaction.</p>
+device entries relevant to its processing context. This is the bounded
+v0.4 <strong>selective minimum disclosure</strong> profile: each viewer,
+verifier, system, or use case receives only the minimum information it
+is allowed or needs to see for that interaction. Selective disclosure is
+holder-controlled: the holder determines which facets are included in a
+given manifest instance, scoped by the verifier/audience, purpose, use
+case, and consent context. The holder MUST NOT include unrelated
+high-sensitivity facets merely because they exist in the holder's source
+container.</p>
+<p>The evaluator MUST NOT assume the manifest contains the complete set
+of the subject's facets. Facets not included are not absent — they are
+not projected for this interaction. This bounded Base profile
+establishes projection, consent gating, sealed-entry handling, and
+honest receipt reporting. It does <strong>not</strong> by itself claim
+per-encounter unlinkability, cover-slot indistinguishability,
+resolver-operator privacy, or absence of residual fingerprinting; those
+stronger guarantees require the Tier-2 / high-privacy tracks and
+additional conformance evidence.</p>
 </section>
 <section id="stage-4-consent" class="level3">
 <h3><span class="secno">3.1.4. </span>Stage 4: Consent</h3>
@@ -2104,21 +2286,40 @@ the consent is treated as absent.</li>
 <li>If a facet is encrypted (<a
 href="#encrypted-facets-jwe-inline-profile">§2.3</a>) and the evaluator
 lacks a decryption key, the evaluator MUST acknowledge the facet as a
-sealed entry (present but not read).</li>
+sealed entry (present but not read), recorded with the facet status
+<code>"opaque"</code> in the receipt (<a
+href="#receipt-fields">§3.3.1</a>).</li>
 <li>If no consent entry governs the facet and it is not a sealed entry,
 the evaluator MUST record the facet status as
 <code>"consent-missing"</code>.</li>
 </ul>
+<p>Per-facet floors <span class="preview-tag">PREVIEW</span> are
+evaluated together with consent in this stage: for a projected facet
+carrying a <code>requiredLiveness</code> floor (<a
+href="/spec/v0.4/ext-t1/#t131-per-facet-liveness-floor-requiredliveness">EXT-T1
+§T1.3.1</a>) or a <code>requiredAssuranceClass</code> floor (<a
+href="/spec/v0.4/ext-t1/#t133-locked-tier-portable-unlock-profile-umprofiletrustlocked-tier-portable-unlock">EXT-T1
+§T1.3.3</a>), the evaluator MUST verify the floor here and withhold the
+facet if it is unmet (recording <code>assuranceInsufficient</code> for
+an unmet assurance floor). When more than one withholding condition
+applies to the same facet, the evaluator reports the first failing gate
+in the order sealed-entry → consent → floors.</p>
 <p>Evaluators MUST NOT process facet data when required consent is
 absent, expired, or withdrawn. Consent-evaluation outcomes map to
-receipt statuses as follows: no entry matches →
-<code>"consent-missing"</code>; a matching entry exists but operation is
-not in <code>scope</code>, use is not within <code>purpose</code>, or a
-condition is violated/unenforceable → <code>"consent-denied"</code>
-(with consent status <code>"scope-mismatch"</code>,
-<code>"purpose-mismatch"</code>, or <code>"condition-violated"</code>);
-a matching entry is expired or withdrawn → <code>"consent-denied"</code>
-with consent status <code>"expired"</code> or
+receipt statuses as follows: a matching entry is satisfied (operation in
+<code>scope</code>, use within <code>purpose</code>, in-window, no unmet
+condition) → the facet is processed and its consent status is
+<code>"valid"</code>; no entry matches → <code>"consent-missing"</code>;
+a matching entry exists but operation is not in <code>scope</code>, use
+is not within <code>purpose</code>, or a condition is
+violated/unenforceable → <code>"consent-denied"</code> (with consent
+status <code>"scope-mismatch"</code>, <code>"purpose-mismatch"</code>,
+or <code>"condition-violated"</code>); a matching entry is expired or
+withdrawn → <code>"consent-denied"</code> with consent status
+<code>"expired"</code> or <code>"withdrawn"</code>. The per-consent
+<code>consentStatuses</code> values are therefore <code>"valid"</code>,
+<code>"scope-mismatch"</code>, <code>"purpose-mismatch"</code>,
+<code>"condition-violated"</code>, <code>"expired"</code>, and
 <code>"withdrawn"</code>.</p>
 <p><strong>Write authorization.</strong>
 <span class="preview-tag">PREVIEW</span> A write, update, or append to a
@@ -2144,7 +2345,14 @@ href="/spec/v0.4/ext-opt/">EXT-OPT</a>); legacy bare-word verbs
 (<code>read</code>/<code>display</code>/<code>cache</code>/<code>process</code>/<code>forward</code>)
 remain valid, so a <code>scope</code> such as
 <code>["read", "write.update"]</code> carries intentional mixed
-punctuation.</p>
+punctuation. The candidate write-verb token family is:
+<code>write.update</code> (modify an existing facet's content),
+<code>write.create</code> (bring the pre-declared target facet into
+existence — the creation path below), and <code>write.append</code> (add
+content without modifying what exists); further write verbs register
+through the scope registry (<a
+href="/spec/v0.4/ext-opt/">EXT-OPT</a>) like any other
+operation token.</p>
 <p>When a write would <strong>create</strong> a facet that is not yet
 present (for example, durable agent memory — see <a
 href="#private-data-handling-derived-writes-and-honest-limits">§7.2</a>),
@@ -2163,10 +2371,14 @@ href="/spec/v0.4/ext-opt/">EXT-OPT</a>) MUST still be
 individually replay-guarded. A successful write is recorded with the
 receipt facet status <code>"written"</code> (<a
 href="#receipt-fields">§3.3.1</a>); a denied write reuses
-<code>"consent-denied"</code>/<code>"consent-missing"</code>.</p>
+<code>"consent-denied"</code>/<code>"consent-missing"</code>. The
+transport by which a write request and its per-write nonce reach the
+evaluator is deployment/protocol-layer by design; this stage defines the
+authorization and replay-guard requirements, not the carrier.</p>
 </section>
 <section id="stage-5-compose" class="level3">
 <h3><span class="secno">3.1.5. </span>Stage 5: Compose</h3>
+
 <p>The evaluator composes the processing result into one of four outcome
 categories:</p>
 <ul>
@@ -2174,11 +2386,25 @@ categories:</p>
 requirements satisfied, signature valid.</li>
 <li><code>accepted-with-warnings</code> — accepted but one or more
 non-critical conditions were noted (e.g., revocation status could not be
-checked).</li>
+checked). An unsatisfiable manifest-level floor is <strong>not</strong>
+a non-critical condition — it produces <code>rejected</code> (below),
+not <code>accepted-with-warnings</code>.</li>
 <li><code>accepted-partial</code> — some facets processed; others
 rejected, sealed, or lacking consent.</li>
 <li><code>rejected</code> — the manifest failed a mandatory check
-(signature, freshness, structural validity, or required consent).</li>
+(signature, freshness, structural validity — including cross-field
+constraints such as a below-floor tier declaration (<a
+href="#requiredtrusttier-declaration">§6.4.5</a>) or an expired agent
+delegation (<a href="#structure">§6.5.1</a>) — or required consent), or
+an unsatisfied required floor/tier applies at the manifest level and no
+processable items remain (for example, a manifest whose only facet is
+withheld because a required assurance/liveness floor or a facet-level
+<code>requiredTrustTier</code> cannot be met — the assurance-floor case
+is exercised by
+<code>valid/manifest-locked-facet-below-floor.jsonld</code>). Whether an
+application still <em>renders</em> anything after a
+<code>rejected</code> evaluation is an application-layer choice and does
+not change the receipt outcome.</li>
 </ul>
 <p>The composed result MUST be machine-readable and MUST include
 per-facet status.</p>
@@ -2245,9 +2471,14 @@ with <code>facetId</code> (matching the facet's <code>@id</code>),
 <code>"trustTierUnsupported"</code>,
 <code>"assuranceInsufficient"</code>, <code>"not-projected"</code>, or
 <code>"written"</code>), an OPTIONAL <code>name</code>, and an OPTIONAL
-<code>reason</code>. <code>"trustTierUnsupported"</code> records a facet
-withheld because its <code>requiredTrustTier</code> cannot be verified
-(<a href="#requiredtrusttier-declaration">§6.4.5</a>).
+<code>reason</code>. <code>"opaque"</code> records a <strong>sealed
+entry</strong> — an encrypted facet the evaluator could not decrypt,
+acknowledged as present but not read (<a
+href="#encrypted-facets-jwe-inline-profile">§2.3</a>, <a
+href="#stage-4-consent">§3.1.4</a>). <code>"trustTierUnsupported"</code>
+records a facet withheld because its <code>requiredTrustTier</code>
+cannot be verified (<a
+href="#requiredtrusttier-declaration">§6.4.5</a>).
 <code>"assuranceInsufficient"</code> records a facet withheld because
 the asserted/achieved authenticator assurance class is below the facet's
 <code>requiredAssuranceClass</code> floor (the locked-tier
@@ -2269,10 +2500,13 @@ receipt <em>field surface</em> a Tier-0/Tier-1 evaluator records):
 (registry-coded); <code>keyRefResolution</code> (<code>"resolved"</code>
 / <code>"unresolved"</code>, where <code>"unresolved"</code> caps
 <code>keyRef</code>-derived identity assurance at Tier 0);
-<code>consentStatuses</code> (per-consent status objects keyed by
-<code>facetId</code>/<code>consentRef</code>);
-<code>claimStatuses</code> (per-claim status objects with
-<code>claimRef</code>, <code>status</code> ∈ {<code>"verified"</code>,
+<code>consentStatuses</code> (per-consent status objects: each entry
+carries <code>facetId</code>, <code>consentRef</code>,
+<code>status</code> — one of the <a href="#stage-4-consent">§3.1.4</a>
+per-consent values — and an OPTIONAL <code>checkedAt</code>, the RFC
+3339 time the consent was evaluated); <code>claimStatuses</code>
+(per-claim status objects with <code>claimRef</code>,
+<code>status</code> ∈ {<code>"verified"</code>,
 <code>"unverified"</code>, <code>"failed"</code>,
 <code>"unprocessable"</code>, <code>"trustTierUnsupported"</code>},
 optional <code>tier</code>/<code>reason</code>);
@@ -2284,6 +2518,21 @@ receipts produced in a bilateral session — <a
 href="/spec/v0.4/ext-opt/">EXT-OPT</a>);
 <code>receiptId</code>; and <code>receiptSignature</code> (optional,
 following Signature Profile A).</p>
+<p>When computing <code>receiptSignature</code>, apply the <a
+href="#signing-input-procedure">§1.6.3</a> signing-input procedure to
+the receipt object with <code>receiptSignature</code> taking the place
+of <code>signature</code> — it is removed from its own signing input
+(avoiding the circularity that a literal reading of §1.6.3, whose
+exclusion list names only <code>signature</code>, would otherwise create
+for a receipt that has no top-level <code>signature</code>). When a
+receipt is promoted to a first-class manifest (<a
+href="#receipt-as-a-first-class-manifest-class">§3.3.2</a>) and carries
+both a manifest <code>signature</code> and a
+<code>receiptSignature</code>, the <code>receiptSignature</code> is
+computed first and is then covered by the manifest
+<code>signature</code> (which excludes only <code>signature</code>,
+<code>presentationProof</code>, and <code>postQuantumSignature</code>,
+not <code>receiptSignature</code>).</p>
 <p>Receipt signing is RECOMMENDED for accountability use cases but is
 not required for v0.4 conformance. Unsigned receipts are valid
 evaluation outputs but provide weaker non-repudiation.</p>
@@ -2343,8 +2592,8 @@ receipts remains conformant. The chain-integrity members
 event vocabulary, the structured reason registry, the session-scoped
 signing-key authorization, and the optional transparency-log anchoring
 profile are specified in full in <a
-href="/spec/v0.4/ext-opt/">EXT-OPT</a> (Receipts-as-Class &amp;
-Status Infrastructure).</p>
+href="/spec/v0.4/ext-opt/">EXT-OPT</a> (O3, Receipt as a
+First-Class Manifest Class).</p>
 </section>
 </section>
 <section id="statusref-resolution-schema" class="level2">
@@ -2355,11 +2604,92 @@ endpoint</strong> that reports whether a manifest instance is
 <code>active</code>, <code>revoked</code>, or <code>suspended</code>.
 The HTTP resolution procedure, response schema, status semantics,
 conditional-request/caching behavior, and error taxonomy are specified
-in <a href="/spec/v0.4/ext-opt/">EXT-OPT</a> (Receipts-as-Class
-&amp; Status Infrastructure). In the Base, an evaluator that implements
+in <a href="/spec/v0.4/ext-opt/">EXT-OPT</a> (O2, statusRef
+Resolution Schema). In the Base, an evaluator that implements
 revocation-aware verification follows that protocol; an evaluator that
 does not records <code>revocationStatus: "unchecked"</code> (<a
 href="#revocation-aware-verification-extension">§1.6.6</a>).</p>
+<section
+id="current-policy-state-resolution-before-governed-action-informative-composition"
+class="level3">
+<h3><span class="secno">3.4.1. </span>Current Policy-State Resolution
+Before Governed Action (Informative Composition)</h3>
+<p><em>This subsection is informative. It names a composition of
+existing normative machinery; the requirements themselves live in the
+cited sections and are not changed here.</em></p>
+<p>Before a governed asset is used or a governed or agentic action
+proceeds, an evaluator often needs an answer to a plain-language
+question: <strong>is the consent, authorization, or status state carried
+by this manifest still current?</strong> Consent and authorization
+change over time — through renewal, withdrawal, expiry, supersession,
+and revocation — and a cached record can go stale. v0.4 resolves current
+policy state through the composition below. The composition applies to
+any governed asset or action — 3D assets, scans, media, digital
+replicas, embodied-person representations, and agentic actions alike —
+not to any single asset kind.</p>
+<ul>
+<li><strong>Freshness bounds.</strong>
+<code>issuedAt</code>/<code>expiresAt</code> TTL enforcement (<a
+href="#stage-2-verify">§3.1.2</a>) bounds how stale any carried state
+can be; an expired manifest is rejected.</li>
+<li><strong>Manifest-instance status.</strong>
+<code>signature.statusRef</code> resolution (<a
+href="#statusref-resolution-schema">§3.4</a>, <a
+href="/spec/v0.4/ext-opt/">EXT-OPT</a>) reports whether the
+manifest instance is <code>active</code>, <code>revoked</code>, or
+<code>suspended</code>, with monotonic <code>cursor</code> supersession
+and a <code>nextCheck</code> revalidation window. A superseding record
+is expressed today by revoking the old manifest instance and issuing a
+new one.</li>
+<li><strong>Per-record status.</strong> A <code>claimProof</code> entry
+may carry its own <code>statusRef</code> (<a
+href="/spec/v0.4/ext-opt/">EXT-OPT</a>), and key state is
+resolved through the key's DID document (<a
+href="#evaluator-checklist">§1.6.4</a>); manifest status, claim status,
+and key status are distinct objects of resolution and are not
+conflated.</li>
+<li><strong>Consent currency.</strong> Consent entries carry validity
+windows and withdrawal (<code>grantedAt</code> / <code>expiresAt</code>
+/ <code>withdrawnAt</code>, <a
+href="#consents-array-schema">§1.4.4</a>); expired or withdrawn consent
+is treated as absent, and processing fails closed (<a
+href="#stage-4-consent">§3.1.4</a>).</li>
+<li><strong>Delegation currency.</strong> An agent delegation expires at
+its <code>expiresAt</code> and may expose a
+<code>livenessEndpoint</code> for real-time delegation status (<a
+href="#agent-delegation">§6.5</a>); absent that endpoint, the delegation
+is static for the manifest's TTL.</li>
+<li><strong>Fail-closed / policy-gated behavior.</strong> When
+revocation status cannot be determined and local policy requires active
+status, the manifest is rejected for use (<a
+href="#revocation-aware-verification-extension">§1.6.6</a>); an
+unreachable status endpoint is recorded as <code>unchecked</code> with a
+structured reason (<a href="/spec/v0.4/ext-opt/">EXT-OPT</a>),
+and a facet whose consent cannot be verified is not processed (<a
+href="#stage-4-consent">§3.1.4</a>).</li>
+<li><strong>Receipt evidence.</strong> The receipt records the
+resolution outcome — <code>revocationStatus</code>, per-consent
+<code>consentStatuses</code>, structured reason codes, and typed events
+such as <code>consent-withdrawn</code> / <code>consent-expired</code>
+(<a href="#structured-receipts">§3.3</a>, <a
+href="/spec/v0.4/ext-opt/">EXT-OPT</a>) — so the disposition of
+a governed action is auditable.</li>
+</ul>
+<p>This composition is the bounded v0.4 behavior for current
+policy-state resolution. It does <strong>not</strong> yet define a
+unified policy-record resolution profile beyond these mechanisms — for
+example, a general supersession pointer between consent or authorization
+records, a normative policy-window taxonomy for deny (fail-closed) /
+escalate dispositions, or receipt reason codes specific to
+<code>superseded</code> and <code>escalated</code> outcomes. A candidate
+registered profile covering exactly those three pieces is drafted as the
+<strong>Current Policy-State Profile</strong> in <a
+href="/spec/v0.4/ext-opt/">EXT-OPT</a> (PREVIEW, design-stage:
+its wire shape may change and it carries no conformance tests until
+finalized); deployments MAY also carry equivalent semantics as
+profile-defined extensions through the profile registration mechanism
+(<a href="/spec/v0.4/ext-opt/">EXT-OPT</a>).</p>
+</section>
 </section>
 <section id="bilateral-session-model" class="level2">
 <h2><span class="secno">3.5. </span>Bilateral Session Model
@@ -2424,13 +2754,23 @@ claim, and facet levels.</li>
 </section>
 <section id="holder-behavior" class="level2">
 <h2><span class="secno">4.2. </span>Holder Behavior</h2>
+
 <p>Holders generating the manifest MUST assign a globally stable
 identifier URI for the <code>subject</code> (preferably an established
 DID) and a random URI for the manifest root (<code>@id</code>). To
-shield clients from unbounded trust windows, holders MUST strictly bound
-<code>expiresAt</code> to a sensible interaction lifetime (hours or
-days). Holders MUST sign every manifest prior to distribution using
-Signature Profile A (<a
+shield clients from unbounded trust windows, holders SHOULD bound
+<code>expiresAt</code> to a sensible interaction lifetime (typically
+hours or days); a "sensible" lifetime is a policy judgment, not a
+testable bound, and legitimate long-lived manifests exist (venue,
+device, registered-service, and asset-bound manifests are not re-signed
+hourly). The enforceable staleness controls remain mandatory regardless
+of window length — expiry checking (<a
+href="#stage-2-verify">§3.1.2</a>), revocation via
+<code>statusRef</code> (<a
+href="#revocation-aware-verification-extension">§1.6.6</a>), and
+freshness checks — and an evaluator MAY reject an over-long window by
+local policy. Holders MUST sign every manifest prior to distribution
+using Signature Profile A (<a
 href="#signature-profile-a-jcs--ed25519">§1.6</a>) or a subsequent
 normative profile.</p>
 <p>For local-first deployments where evaluators may verify without
@@ -2474,11 +2814,17 @@ malformed artifacts like missing contexts or expired manifests).
 Implementations claiming v0.4 conformance MUST satisfy the normative
 requirements of this specification. The standalone conformance suite is
 the canonical evidence mechanism; implementations SHOULD publish their
-suite results and claimed level per <a
-href="https://universalmanifest.net/conformance/v0.4/">https://universalmanifest.net/conformance/v0.4/</a>.
-The v0.4 suite extends the v0.3 suite with tests for newly normative
-features; preview sections have no conformance tests until their designs
-are finalized.</p>
+suite results and claimed level per the conformance profile that, upon
+publication, will be served at <a
+href="https://universalmanifest.net/conformance/v0.4/">https://universalmanifest.net/conformance/v0.4/</a>
+(until then, the suite lives at <code>conformance/v0.4/</code> in the
+specification repository). The v0.4 suite extends the v0.3 suite with
+tests for newly normative features. Design-stage preview profiles
+(EXT-OPT O2.6/O12/O13/O14) have no conformance tests until finalized;
+other PREVIEW features may carry structural (shape-only) fixtures while
+their enforcement profiles remain PREVIEW, as itemized in the
+conformance summary (<code>spec/v0.4/CONFORMANCE.md</code> §9 in the
+specification repository — the two-grade PREVIEW policy).</p>
 </section>
 <section id="conformance-to-the-abstract-data-model" class="level2">
 <h2><span class="secno">4.5. </span>Conformance to the Abstract Data
@@ -2549,6 +2895,19 @@ href="/spec/v0.4/ext-t1/">EXT-T1</a>)</td>
 claims at Tier 0.</td>
 </tr>
 <tr>
+<td>Per-facet floors (<code>requiredLiveness</code>,
+<code>requiredAssuranceClass</code> — <a
+href="/spec/v0.4/ext-t1/#t131-per-facet-liveness-floor-requiredliveness">EXT-T1
+§T1.3.1</a> / <a
+href="/spec/v0.4/ext-t1/#t133-locked-tier-portable-unlock-profile-umprofiletrustlocked-tier-portable-unlock">§T1.3.3</a>)
+<span class="preview-tag">PREVIEW</span></td>
+<td>OPTIONAL (PREVIEW)</td>
+<td>A facet carrying a floor MUST be withheld (recorded
+<code>assuranceInsufficient</code>, or the unmet-liveness status), never
+processed, by an evaluator that does not implement floor enforcement —
+fail closed.</td>
+</tr>
+<tr>
 <td>CBOR-LD encoding (<a
 href="/spec/v0.4/ext-opt/">EXT-OPT</a>)</td>
 <td>OPTIONAL</td>
@@ -2617,7 +2976,7 @@ selective-disclosure track, and post-quantum signature migration.</td>
 <tr>
 <td><a href="/spec/v0.4/ext-t3/">EXT-T3 — Tier-3 Multi-Party
 Ceremony Profile</a></td>
-<td>The multi-party ceremony model, signer-role taxonomy, and
+<td>The multi-party ceremony model, attester-role taxonomy, and
 threshold-protocol guidance.</td>
 <td><code>trust</code></td>
 </tr>
@@ -2629,7 +2988,10 @@ CBOR-LD, statusRef protocol, receipts-as-class, bilateral sessions,
 federation, profile registration, <code>trustWeight</code>/category
 trust, extended
 <code>devices</code>/<code>actorState</code>/sensor-consent schemas,
-crypto-requirements summary, class registry snapshot.</td>
+crypto-requirements summary, class registry snapshot, and the
+design-stage candidate profiles for current policy-state resolution,
+asset-bound represented-person consent, signed referral-route
+attribution, and GeoPose primary pose values.</td>
 <td><code>domain</code>, <code>signature</code>, all</td>
 </tr>
 <tr>
@@ -2721,8 +3083,15 @@ requires a verified <code>holderBinding</code> on each claim relied
 upon</strong> (<a href="/spec/v0.4/ext-t1/">EXT-T1</a>):
 <code>claimProof</code> proves issuance, while
 <code>holderBinding</code> proves the presenting subject is the
-credentialed holder. Suitable for medium-stakes use cases (social
-identity, reputation, basic access control). <em>(Binding mechanics: <a
+credentialed holder. (Exception: on an
+<code>identity.crossDidBinding</code> claim whose <code>boundDids</code>
+includes the manifest <code>subject</code>, presenter binding is
+established by the subject-signature key-authorization check together
+with attester or proof verification, so a separate
+<code>holderBinding</code> is OPTIONAL on such claims — <a
+href="/spec/v0.4/ext-t1/#t11-holder-binding">EXT-T1 §T1.1</a>.)
+Suitable for medium-stakes use cases (social identity, reputation, basic
+access control). <em>(Binding mechanics: <a
 href="/spec/v0.4/ext-t1/">EXT-T1</a>.)</em></p>
 <p><strong>Tier 2 — Cryptographic binding.</strong> Medium friction.
 Cross-DID control is cryptographically proven via zero-knowledge proof,
@@ -2739,6 +3108,15 @@ model: <a href="/spec/v0.4/ext-t3/">EXT-T3</a>.)</em></p>
 threat model. Evaluators MUST NOT extend trust from one DID in a
 manifest to another DID in the same manifest unless binding proof
 material (Tier 1 or Tier 2) is present for that specific DID pair.</p>
+<p><em>Informative: the trust tiers grade binding strength — how
+strongly a claim is cryptographically tied to the presenting subject —
+not identity-proofing assurance. They are not equivalents of Levels of
+Assurance or of the NIST SP 800-63 IAL/AAL classes, and a tier MUST NOT
+be reported as satisfying such a level. (An orthogonal
+<code>requiredAssuranceClass</code> floor grades authenticator strength;
+its informative crosswalk to external assurance frameworks is in <a
+href="/spec/v0.4/ext-t1/#t133-locked-tier-portable-unlock-profile-umprofiletrustlocked-tier-portable-unlock">EXT-T1
+§T1.3.3</a>.)</em></p>
 </section>
 <section id="claimsclaimproof-field" class="level3">
 <h3><span class="secno">6.4.3. </span><code>claims[].claimProof</code>
@@ -2747,8 +3125,9 @@ Field</h3>
 claim object, carrying proof material demonstrating claim issuance to
 the manifest subject. This field enables Tier 1 verification. It is
 named <code>claimProof</code> rather than <code>evidence</code> to avoid
-collision with the W3C Verifiable Credentials Data Model v2.0
-<code>evidence</code> property.</p>
+collision with the W3C Verifiable Credentials Data Model v2.0 [<a
+href="#references">VC-DATA-MODEL</a>] <code>evidence</code>
+property.</p>
 <p><code>claimProof</code> MAY be a <strong>string</strong> (URI
 reference to a VP or attestation endpoint), an <strong>object</strong>
 (an embedded VP, attestation proof, or proof entry), or an
@@ -2761,7 +3140,8 @@ proof entry MAY carry <code>proofType</code> (RECOMMENDED values:
 <code>VerifiablePresentation</code>, <code>DataIntegrityProof</code>,
 <code>sd-jwt-kb</code>, <code>pop-jws</code>,
 <code>evidence-pointer</code>; if absent, inferred from structure) and
-<code>proofPurpose</code> (per W3C DID Core §5.3; if absent, assume
+<code>proofPurpose</code> (per W3C DID Core §5.3 [<a
+href="#references">DID-CORE</a>]; if absent, assume
 <code>assertionMethod</code>). Proof entries MAY contain additional
 properties (<code>@type</code>, <code>verifiableCredential</code>,
 <code>proofValue</code>, <code>verificationMethod</code>,
@@ -2841,7 +3221,11 @@ facet applies to that facet only.</li>
 evaluator can only verify at Tier 1, the evaluator MUST treat that claim
 as unverified. If absent, the default is 0. The manifest-level value
 sets the floor; claim/facet-level values can only raise it, not lower
-it.</p>
+it. A claim- or facet-level <code>requiredTrustTier</code> lower than
+the manifest-level value is a cross-field structural violation:
+evaluators MUST reject the manifest (<code>rejected</code>), exactly as
+for other structural-validity failures (<a
+href="#stage-5-compose">§3.1.5</a>).</p>
 <p>If a manifest, claim, or facet specifies a
 <code>requiredTrustTier</code> for which the evaluator has no
 implemented verification profile (e.g., Tier 3, where the ceremony
@@ -2854,7 +3238,8 @@ claims, <code>facetStatuses</code> for facets, and
 MUST NOT downgrade to a lower tier. The overall outcome is
 <code>"accepted-partial"</code> if other items can still be processed,
 or <code>"rejected"</code> if the unsupported tier applies at the
-manifest level.</p>
+manifest level or no processable items remain (<a
+href="#stage-5-compose">§3.1.5</a>).</p>
 <p><em>(Worked example: manifest with requiredTrustTier — see <a
 href="/spec/v0.4/cookbook/">Cookbook</a>.)</em></p>
 </section>
@@ -2897,7 +3282,7 @@ zero-knowledge proof profiles (Profile 2A: BBS+ linked-secret; Profile
 carried in the <code>bindingProof</code> field. Specified in <a
 href="/spec/v0.4/ext-t2/">EXT-T2</a>.</li>
 <li><strong>§6.4.8 Tier 3 Multi-Party Ceremony (PREVIEW)</strong> — the
-ceremony model, signer-role taxonomy, and threshold-protocol guidance,
+ceremony model, attester-role taxonomy, and threshold-protocol guidance,
 carried in the <code>ceremonyProof</code> field. Specified in <a
 href="/spec/v0.4/ext-t3/">EXT-T3</a>.</li>
 <li><strong>§6.4.9 Claim Proof Process — End-to-End Verification
@@ -2925,14 +3310,21 @@ automated process) acting on the subject's behalf.</p>
 <code>"human-delegate"</code>), <code>delegatedBy</code> (the DID of the
 delegating subject; MUST match the manifest <code>subject</code>),
 <code>delegatedAt</code> (RFC 3339, when delegation was granted), and
-<code>expiresAt</code> (RFC 3339; evaluators MUST reject expired
-delegations). It MAY contain <code>delegateId</code> (the DID/identifier
-of the delegate; REQUIRED whenever the delegation is intended to be
-exercised), <code>scope</code> (an array of capability strings the
-delegate may exercise), and <code>livenessEndpoint</code> (a URI for
-real-time liveness/delegation status). <strong>Delegation defaults fail
-closed:</strong> when <code>scope</code> is absent or empty, evaluators
-MUST treat the delegation as granting <em>no</em> capabilities; when
+<code>expiresAt</code> (RFC 3339). An expired delegation is a structural
+violation of the delegation pointer: evaluators MUST NOT honor it, and
+MUST reject the manifest (<code>rejected</code>) rather than process it
+with the delegation ignored — an expired grant of authority is not
+safely severable from a manifest presented under it (<a
+href="#stage-5-compose">§3.1.5</a>). This is an explicit exception to
+the base-pointer rule that expired pointers are ignored (<a
+href="#pointers-array-schema">§1.4.5</a>). It MAY contain
+<code>delegateId</code> (the DID/identifier of the delegate; REQUIRED
+whenever the delegation is intended to be exercised), <code>scope</code>
+(an array of capability strings the delegate may exercise), and
+<code>livenessEndpoint</code> (a URI for real-time liveness/delegation
+status). <strong>Delegation defaults fail closed:</strong> when
+<code>scope</code> is absent or empty, evaluators MUST treat the
+delegation as granting <em>no</em> capabilities; when
 <code>delegateId</code> is absent, evaluators MUST NOT attribute the
 delegation to any specific agent and MUST NOT grant delegated authority
 on its basis. A delegation pointer referenced by
@@ -2975,7 +3367,18 @@ href="/spec/v0.4/ext-t1/">EXT-T1</a>.</strong> The Base names it,
 requires it for Tier 1+ (<a href="#tiered-trust-model">§6.4.2</a>, <a
 href="#holder-behavior">§4.2</a>), and carries its field surface on
 claims (<a href="#claims-array-schema">§1.4.3</a>) and receipts (<a
-href="#credential-binding-status-fields">§3.3.1.1</a>).</p>
+href="#credential-binding-status-fields">§3.3.1.1</a>). One
+signature-coverage property deserves explicit statement: within a
+<code>livenessAttestation</code>, the <code>validUntil</code>,
+<code>method</code>, and <code>userVerified</code> members are covered
+by the holder's manifest signature, not by the attester's proof (<a
+href="/spec/v0.4/ext-t1/#t13-liveness-attestation">EXT-T1
+§T1.3</a>); an evaluator MUST treat them as holder-asserted except where
+the declared <code>proofType</code>'s mechanics attest them.
+<em>(Working-group wire-freeze rider, recorded for the schema-lock
+decision set: fold <code>validUntil</code> into the attester-signed
+content so the attestation's validity window is
+attester-controlled.)</em></p>
 <p>A facet MAY additionally declare an OPTIONAL
 <strong><code>requiredLiveness</code></strong> floor — a per-facet
 minimum liveness freshness (and optional user-verification requirement)
@@ -3137,9 +3540,31 @@ under GDPR or equivalent frameworks MUST conduct their own assessment
 for cross-DID binding operations, cross-border attester data flows, and
 mandatory binding requirements.</li>
 </ul>
-<section id="selective-disclosure-dual-track-model" class="level2">
-<h2><span class="secno">7.1. </span>Selective Disclosure: Dual-Track
-Model <span class="preview-tag">PREVIEW</span></h2>
+<section id="selective-minimum-disclosure-bounded-base-profile"
+class="level2">
+<h2><span class="secno">7.1. </span>Selective Minimum Disclosure:
+Bounded Base Profile</h2>
+<p>Selective minimum disclosure means each viewer, verifier, system, or
+use case receives only the minimum information it is allowed or needs to
+see. In v0.4, the bounded Base profile is the combination of
+holder-controlled projection (<a href="#stage-3-project">§3.1.3</a>),
+consent gating (<a href="#stage-4-consent">§3.1.4</a>), sealed-entry
+handling (<a href="#encrypted-facets-jwe-inline-profile">§2.3</a>), and
+honest receipt reporting (<a href="#structured-receipts">§3.3</a>). A
+holder builds a manifest instance for the interaction; an evaluator
+processes only the projected items; and unprojected facets are not
+evidence of absence.</p>
+<p>This bounded profile is sufficient to state the core Universal
+Manifest privacy requirement in v0.4 without pretending the harder
+privacy properties are solved. It does <strong>not</strong> guarantee
+verifier-verifier unlinkability, issuer-verifier unlinkability,
+cover-slot indistinguishability, resolver-operator privacy, or
+resistance to all residual fingerprinting. Deployments that need those
+stronger properties MUST use the higher-privacy tracks below and make a
+matching conformance claim.</p>
+<section id="selective-disclosure-dual-track-model" class="level3">
+<h3><span class="secno">7.1.1. </span>Selective Disclosure: Dual-Track
+Model <span class="preview-tag">PREVIEW</span></h3>
 <p>Manifest-level selective disclosure is offered along two tracks:
 <strong>Track A (baseline)</strong> — SD-JWT-style selective disclosure,
 the interoperable default — and <strong>Track B</strong> — BBS+
@@ -3149,6 +3574,7 @@ establishes Track A as the baseline selective-disclosure behavior
 consistent with holder-controlled projection above; the full dual-track
 model, and Track B's unlinkable-proof mechanics, are specified in <a
 href="/spec/v0.4/ext-t2/">EXT-T2</a>.</p>
+</section>
 </section>
 <section id="private-data-handling-derived-writes-and-honest-limits"
 class="level2">
@@ -3176,8 +3602,48 @@ valid for the output label, and MUST NOT silently down-label; otherwise
 it discards the output. A profile that supplies a sensitivity ordering
 MUST supply a join-semilattice (a least upper bound is always defined),
 <strong>or</strong>, where no join is defined for a pair of labels, the
-evaluator MUST fail closed — assign the maximal element or discard the
-derived write. Behavior for incomparable labels is thus defined.</p>
+evaluator MUST fail closed — assign the output a label that is an upper
+bound of all the source labels, or discard the derived write; where the
+ordering defines no such upper bound (an ordering need not have a top
+element), the output MUST be discarded. Behavior for incomparable labels
+is thus defined.</p>
+
+<p><strong>Profile-supplied ordering (supply model).</strong> A facet
+sensitivity ordering is supplied by a <strong>registered
+profile</strong> (<a
+href="/spec/v0.4/ext-opt/#o6-profile-registration-mechanism">EXT-OPT
+§O6</a>) — never by the manifest under evaluation. The profile's
+specification publishes the ordering as two parts:
+<strong><code>labels</code></strong> — the finite set of label strings —
+and <strong><code>order</code></strong> — a set of covering pairs
+<code>[a, b]</code>, each stating that label <code>a</code> is ordered
+strictly below label <code>b</code>; the effective ordering is the
+<strong>reflexive–transitive closure</strong> of those pairs, which MUST
+be a partial order (the closure admits no cycle) and SHOULD be a
+join-semilattice (otherwise the fail-closed branch above governs each
+join-less pair). Deployments implementing this section pin the profile's
+ordering exactly as they pin the context document (the <a
+href="/spec/v0.4/ext-opt/#o17-context-integrity-production-detail">EXT-OPT
+§O1.7</a> discipline): resolve and fix it at configuration time from the
+profile's versioned registry entry, never fetch it from an untrusted
+resolver at evaluation time — offline operation is preserved.
+<strong>Label binding:</strong> facets bind to labels by a mapping
+defined by the profile or by the deployment configuration operating
+under it (for example, by facet <code>name</code>, by entity
+<code>@type</code>, or by an explicit per-deployment table); no v0.4
+facet member carries a label — a per-facet label member is a wire-freeze
+decision. A source facet the mapping assigns no label yields no join for
+any pair that includes it, so a derivation reading it fails closed under
+the rule above. <strong>Trust posture:</strong> the ordering polices the
+producer's own derived-write behavior, and an artifact MUST NOT supply
+the lattice that polices it — producers and evaluators MUST NOT source
+the operative ordering from any member of the manifest under evaluation.
+<em>(Transitional wire note: the published v0.4 context and fixture
+suite still carry a manifest-level <code>facetSensitivityOrdering</code>
+member from an earlier draft of this design; it is transitional, is
+scheduled to come off the wire before the schema locks (see the
+conformance summary), and MUST NOT be used as the operative
+ordering.)</em></p>
 <p><strong>Precedence with the sensor specificity rule.</strong> When a
 sensor-derived write is governed by <em>both</em> the most-specific-key
 specificity rule (<a
@@ -3291,6 +3757,8 @@ Algorithm (EdDSA). <a
 href="https://www.rfc-editor.org/rfc/rfc8032">https://www.rfc-editor.org/rfc/rfc8032</a></li>
 <li><strong>[RFC 8785]</strong> JSON Canonicalization Scheme (JCS). <a
 href="https://www.rfc-editor.org/rfc/rfc8785">https://www.rfc-editor.org/rfc/rfc8785</a></li>
+<li><strong>[RFC 7493]</strong> The I-JSON Message Format. <a
+href="https://www.rfc-editor.org/rfc/rfc7493">https://www.rfc-editor.org/rfc/rfc7493</a></li>
 <li><strong>[RFC 4648]</strong> The Base16, Base32, and Base64 Data
 Encodings. <a
 href="https://www.rfc-editor.org/rfc/rfc4648">https://www.rfc-editor.org/rfc/rfc4648</a></li>
@@ -3324,12 +3792,27 @@ href="/spec/v0.4/ext-opt/">EXT-OPT</a>.</p>
 <h1><span class="secno">10. </span>IANA Considerations</h1>
 <section id="media-type-registrations" class="level2">
 <h2><span class="secno">10.1. </span>Media Type Registrations</h2>
+
 <p>This specification registers the media type
-<code>application/manifest+ld+json</code> for the JSON-LD reference
-encoding of a Universal Manifest, with the versioned context namespace
-as the controlling vocabulary. The compact-encoding media type for
-CBOR-LD is registered with the CBOR-LD production rule in <a
+<code>application/um+ld+json</code> for the JSON-LD reference encoding
+of a Universal Manifest, with the versioned context namespace as the
+controlling vocabulary; the generic <code>application/ld+json</code>
+remains an acceptable alias (<a
+href="/spec/v0.4/ext-opt/#o13-json-ld-production-rule-reference-encoding">EXT-OPT
+§O1.3</a>). The compact-encoding media type for CBOR-LD is registered
+with the CBOR-LD production rule in <a
 href="/spec/v0.4/ext-opt/">EXT-OPT</a>.</p>
+<p><em>(Working-group note: the <code>+ld+json</code> multiple-suffix
+form depends on IETF media-type suffix policy that is not yet settled —
+the W3C VC WG registered <code>application/vc</code> for this reason. If
+registration of <code>application/um+ld+json</code> is refused, the
+fallback identifier is <code>application/um</code>, with
+<code>application/ld+json</code> retained as the alias; this note flags
+a registrability risk in the suffix form only and does not reopen the
+namespace decision above. The full RFC 6838 registration template — type
+name, subtype, required/optional parameters, encoding, security
+considerations, contact, change controller — is to be added as an
+appendix before CR-equivalent maturity.)</em></p>
 </section>
 <section id="registry-change-control" class="level2">
 <h2><span class="secno">10.2. </span>Registry Change Control</h2>
@@ -3344,7 +3827,10 @@ href="/spec/v0.4/ext-opt/">EXT-OPT</a>).</p>
 class="level1">
 <h1>Appendix B. Versioned Context Document (Normative Reference)</h1>
 <p>The full term definitions for v0.4 are fixed by the versioned context
-document served at <code>https://universalmanifest.net/ns/v0.4</code>.
+document identified by the namespace URI
+<code>https://universalmanifest.net/ns/v0.4</code> (which, upon
+publication, will also be served there; until then the normative copy is
+<code>spec/v0.4/schema.jsonld</code> in the specification repository).
 That document, together with its content hash, is the <strong>normative
 reference for context integrity</strong> (<a
 href="#context-integrity">§6.10</a>): an evaluator pins this
@@ -3355,10 +3841,517 @@ set (<code>um:Manifest</code>, <code>um:Facet</code>,
 <code>um:Receipt</code>, <code>um:Device</code>, the
 <code>um:reason:</code> and <code>um:profile:</code> registries, and the
 structural member terms) over the base IRI
-<code>https://universalmanifest.net/ns/um#</code>. The verbatim context
-body and its multihash are reproduced in the published specification
-artifact; implementations MUST verify the hash before trusting the term
-definitions.</p>
+<code>https://universalmanifest.net/ns/um#</code>.</p>
+<p>The versioned namespace URI identifies an <strong>immutable
+document</strong>, not a mutable network resource (<a
+href="/spec/v0.4/ext-opt/#o17-context-integrity-production-detail">EXT-OPT</a>).
+Its normative body is the JSON-LD context document reproduced verbatim
+below; the same document is carried unchanged as the machine-readable
+artifact <code>schema.jsonld</code> in the v0.4 artifact directory
+(<code>spec/v0.4/schema.jsonld</code> in the specification repository —
+the normative copy until publication; upon publication it will also be
+served at
+<code>https://universalmanifest.net/ns/universal-manifest/v0.4/schema.jsonld</code>).
+The reproduction below, that artifact, and any copy retrieved from the
+namespace URI are the same byte sequence: UTF-8 text with LF (U+000A)
+line endings and a single trailing LF. Trust in the term definitions
+derives from the content hash, never from the retrieval channel.</p>
+<p>The content hash of the v0.4 context document is the SHA-256
+multihash computed over exactly those bytes, per the computation rule in
+<a
+href="/spec/v0.4/ext-opt/#o17-context-integrity-production-detail">EXT-OPT</a>:</p>
+<ul>
+<li>Multibase base58btc:
+<code>zQmY71ixd6ez6UkXpzGJ7fiMpwL26jzQwWp9CV6kwX4Kb4f</code></li>
+<li>Multihash bytes (hex):
+<code>122091167fd510c39f93a023fc15a7474b77bc4414188ddb2d73806dc08e0f69345c</code></li>
+</ul>
+<p>Implementations MUST verify this hash before trusting the term
+definitions; a manifest whose <code>@context</code> cannot be matched to
+a context the evaluator trusts MUST be rejected (<a
+href="#context-integrity">§6.10</a>).</p>
+
+<p>The verbatim body of the versioned context document:</p>
+<pre class="json"><code>{
+  &quot;@context&quot;: {
+    &quot;@version&quot;: 1.1,
+    &quot;um&quot;: &quot;https://universalmanifest.net/ns/um#&quot;,
+    &quot;schema&quot;: &quot;https://schema.org/&quot;,
+    &quot;xsd&quot;: &quot;http://www.w3.org/2001/XMLSchema#&quot;,
+    &quot;id&quot;: &quot;@id&quot;,
+    &quot;type&quot;: &quot;@type&quot;,
+    &quot;Manifest&quot;: &quot;um:Manifest&quot;,
+    &quot;Facet&quot;: &quot;um:Facet&quot;,
+    &quot;Entity&quot;: &quot;um:Entity&quot;,
+    &quot;Consent&quot;: &quot;um:Consent&quot;,
+    &quot;Receipt&quot;: &quot;um:Receipt&quot;,
+    &quot;Device&quot;: &quot;um:Device&quot;,
+    &quot;BilateralSession&quot;: &quot;um:BilateralSession&quot;,
+    &quot;agentDelegation&quot;: &quot;um:agentDelegation&quot;,
+    &quot;manifestVersion&quot;: &quot;um:manifestVersion&quot;,
+    &quot;subject&quot;: {
+      &quot;@id&quot;: &quot;um:subject&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;issuedAt&quot;: {
+      &quot;@id&quot;: &quot;um:issuedAt&quot;,
+      &quot;@type&quot;: &quot;xsd:dateTime&quot;
+    },
+    &quot;expiresAt&quot;: {
+      &quot;@id&quot;: &quot;um:expiresAt&quot;,
+      &quot;@type&quot;: &quot;xsd:dateTime&quot;
+    },
+    &quot;requiredTrustTier&quot;: {
+      &quot;@id&quot;: &quot;um:requiredTrustTier&quot;,
+      &quot;@type&quot;: &quot;xsd:integer&quot;
+    },
+    &quot;requiredLiveness&quot;: {
+      &quot;@id&quot;: &quot;um:requiredLiveness&quot;
+    },
+    &quot;minFreshness&quot;: &quot;um:minFreshness&quot;,
+    &quot;userVerified&quot;: {
+      &quot;@id&quot;: &quot;um:userVerified&quot;,
+      &quot;@type&quot;: &quot;xsd:boolean&quot;
+    },
+    &quot;requiredAssuranceClass&quot;: &quot;um:requiredAssuranceClass&quot;,
+    &quot;facets&quot;: {
+      &quot;@id&quot;: &quot;um:facets&quot;,
+      &quot;@container&quot;: &quot;@set&quot;
+    },
+    &quot;claims&quot;: {
+      &quot;@id&quot;: &quot;um:claims&quot;,
+      &quot;@container&quot;: &quot;@set&quot;
+    },
+    &quot;consents&quot;: {
+      &quot;@id&quot;: &quot;um:consents&quot;,
+      &quot;@container&quot;: &quot;@set&quot;
+    },
+    &quot;devices&quot;: {
+      &quot;@id&quot;: &quot;um:devices&quot;,
+      &quot;@container&quot;: &quot;@set&quot;
+    },
+    &quot;pointers&quot;: {
+      &quot;@id&quot;: &quot;um:pointers&quot;,
+      &quot;@container&quot;: &quot;@set&quot;
+    },
+    &quot;actorState&quot;: {
+      &quot;@id&quot;: &quot;um:actorState&quot;
+    },
+    &quot;name&quot;: &quot;schema:name&quot;,
+    &quot;description&quot;: &quot;schema:description&quot;,
+    &quot;ref&quot;: {
+      &quot;@id&quot;: &quot;um:ref&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;entity&quot;: {
+      &quot;@id&quot;: &quot;um:entity&quot;
+    },
+    &quot;encryptionProfile&quot;: &quot;um:encryptionProfile&quot;,
+    &quot;protected&quot;: &quot;um:jweProtected&quot;,
+    &quot;recipients&quot;: {
+      &quot;@id&quot;: &quot;um:jweRecipients&quot;,
+      &quot;@container&quot;: &quot;@set&quot;
+    },
+    &quot;header&quot;: &quot;um:jweHeader&quot;,
+    &quot;kid&quot;: &quot;um:jweKid&quot;,
+    &quot;encrypted_key&quot;: &quot;um:jweEncryptedKey&quot;,
+    &quot;iv&quot;: &quot;um:jweIv&quot;,
+    &quot;ciphertext&quot;: &quot;um:jweCiphertext&quot;,
+    &quot;tag&quot;: &quot;um:jweTag&quot;,
+    &quot;previousKid&quot;: &quot;um:jwePreviousKid&quot;,
+    &quot;rotationReason&quot;: &quot;um:jweRotationReason&quot;,
+    &quot;revokedRecipientKid&quot;: &quot;um:jweRevokedRecipientKid&quot;,
+    &quot;revocationAction&quot;: &quot;um:jweRevocationAction&quot;,
+    &quot;issuer&quot;: {
+      &quot;@id&quot;: &quot;um:issuer&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;claimProof&quot;: {
+      &quot;@id&quot;: &quot;um:claimProof&quot;
+    },
+    &quot;boundDids&quot;: {
+      &quot;@id&quot;: &quot;um:boundDids&quot;,
+      &quot;@container&quot;: &quot;@set&quot;
+    },
+    &quot;attester&quot;: {
+      &quot;@id&quot;: &quot;um:attester&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;attestationMethod&quot;: &quot;um:attestationMethod&quot;,
+    &quot;attestedAt&quot;: {
+      &quot;@id&quot;: &quot;um:attestedAt&quot;,
+      &quot;@type&quot;: &quot;xsd:dateTime&quot;
+    },
+    &quot;facetRef&quot;: {
+      &quot;@id&quot;: &quot;um:facetRef&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;scope&quot;: {
+      &quot;@id&quot;: &quot;um:scope&quot;,
+      &quot;@container&quot;: &quot;@set&quot;
+    },
+    &quot;purpose&quot;: &quot;um:purpose&quot;,
+    &quot;grantedAt&quot;: {
+      &quot;@id&quot;: &quot;um:grantedAt&quot;,
+      &quot;@type&quot;: &quot;xsd:dateTime&quot;
+    },
+    &quot;grantor&quot;: {
+      &quot;@id&quot;: &quot;um:grantor&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;withdrawnAt&quot;: {
+      &quot;@id&quot;: &quot;um:withdrawnAt&quot;,
+      &quot;@type&quot;: &quot;xsd:dateTime&quot;
+    },
+    &quot;conditions&quot;: {
+      &quot;@id&quot;: &quot;um:conditions&quot;,
+      &quot;@container&quot;: &quot;@set&quot;
+    },
+    &quot;unlockWindowFacets&quot;: {
+      &quot;@id&quot;: &quot;um:unlockWindowFacets&quot;,
+      &quot;@container&quot;: &quot;@set&quot;
+    },
+    &quot;idleLifetime&quot;: {
+      &quot;@id&quot;: &quot;um:idleLifetime&quot;,
+      &quot;@type&quot;: &quot;xsd:duration&quot;
+    },
+    &quot;absoluteLifetime&quot;: {
+      &quot;@id&quot;: &quot;um:absoluteLifetime&quot;,
+      &quot;@type&quot;: &quot;xsd:duration&quot;
+    },
+    &quot;lockOnSleep&quot;: {
+      &quot;@id&quot;: &quot;um:lockOnSleep&quot;,
+      &quot;@type&quot;: &quot;xsd:boolean&quot;
+    },
+    &quot;target&quot;: {
+      &quot;@id&quot;: &quot;um:target&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;label&quot;: &quot;um:label&quot;,
+    &quot;createdAt&quot;: {
+      &quot;@id&quot;: &quot;um:createdAt&quot;,
+      &quot;@type&quot;: &quot;xsd:dateTime&quot;
+    },
+    &quot;delegateType&quot;: &quot;um:delegateType&quot;,
+    &quot;delegatedBy&quot;: {
+      &quot;@id&quot;: &quot;um:delegatedBy&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;delegatedAt&quot;: {
+      &quot;@id&quot;: &quot;um:delegatedAt&quot;,
+      &quot;@type&quot;: &quot;xsd:dateTime&quot;
+    },
+    &quot;delegateId&quot;: {
+      &quot;@id&quot;: &quot;um:delegateId&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;livenessEndpoint&quot;: {
+      &quot;@id&quot;: &quot;um:livenessEndpoint&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;holderBinding&quot;: {
+      &quot;@id&quot;: &quot;um:holderBinding&quot;
+    },
+    &quot;mode&quot;: &quot;um:bindingMode&quot;,
+    &quot;cnfThumbprint&quot;: &quot;um:cnfThumbprint&quot;,
+    &quot;commitment&quot;: &quot;um:commitment&quot;,
+    &quot;pseudonymScope&quot;: &quot;um:pseudonymScope&quot;,
+    &quot;boundDid&quot;: {
+      &quot;@id&quot;: &quot;um:boundDid&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;subjectProof&quot;: &quot;um:subjectProof&quot;,
+    &quot;boundDidProof&quot;: &quot;um:boundDidProof&quot;,
+    &quot;bindingProof&quot;: {
+      &quot;@id&quot;: &quot;um:bindingProof&quot;
+    },
+    &quot;cryptosuite&quot;: &quot;um:cryptosuite&quot;,
+    &quot;proofSystem&quot;: &quot;um:proofSystem&quot;,
+    &quot;circuit&quot;: &quot;um:circuit&quot;,
+    &quot;publicInputs&quot;: {
+      &quot;@id&quot;: &quot;um:publicInputs&quot;
+    },
+    &quot;commitmentA&quot;: &quot;um:commitmentA&quot;,
+    &quot;commitmentB&quot;: &quot;um:commitmentB&quot;,
+    &quot;publicKeyA&quot;: &quot;um:publicKeyA&quot;,
+    &quot;publicKeyB&quot;: &quot;um:publicKeyB&quot;,
+    &quot;derivationPathA&quot;: &quot;um:derivationPathA&quot;,
+    &quot;derivationPathB&quot;: &quot;um:derivationPathB&quot;,
+    &quot;ceremonyProof&quot;: {
+      &quot;@id&quot;: &quot;um:ceremonyProof&quot;
+    },
+    &quot;threshold&quot;: &quot;um:threshold&quot;,
+    &quot;attesters&quot;: {
+      &quot;@id&quot;: &quot;um:attesters&quot;,
+      &quot;@container&quot;: &quot;@set&quot;
+    },
+    &quot;ceremonyId&quot;: {
+      &quot;@id&quot;: &quot;um:ceremonyId&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;aggregateProof&quot;: &quot;um:aggregateProof&quot;,
+    &quot;presentationProof&quot;: {
+      &quot;@id&quot;: &quot;um:presentationProof&quot;
+    },
+    &quot;proofType&quot;: &quot;um:proofType&quot;,
+    &quot;challenge&quot;: &quot;um:challenge&quot;,
+    &quot;audience&quot;: {
+      &quot;@id&quot;: &quot;um:audience&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;proofPurpose&quot;: &quot;um:proofPurpose&quot;,
+    &quot;proofValue&quot;: &quot;um:proofValue&quot;,
+    &quot;verificationMethod&quot;: {
+      &quot;@id&quot;: &quot;um:verificationMethod&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;livenessAttestation&quot;: {
+      &quot;@id&quot;: &quot;um:livenessAttestation&quot;
+    },
+    &quot;validUntil&quot;: {
+      &quot;@id&quot;: &quot;um:validUntil&quot;,
+      &quot;@type&quot;: &quot;xsd:dateTime&quot;
+    },
+    &quot;method&quot;: &quot;um:method&quot;,
+    &quot;signature&quot;: {
+      &quot;@id&quot;: &quot;um:signature&quot;
+    },
+    &quot;algorithm&quot;: &quot;um:algorithm&quot;,
+    &quot;canonicalization&quot;: &quot;um:canonicalization&quot;,
+    &quot;keyRef&quot;: {
+      &quot;@id&quot;: &quot;um:keyRef&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;publicKeySpkiB64&quot;: &quot;um:publicKeySpkiB64&quot;,
+    &quot;created&quot;: {
+      &quot;@id&quot;: &quot;um:created&quot;,
+      &quot;@type&quot;: &quot;xsd:dateTime&quot;
+    },
+    &quot;value&quot;: &quot;um:value&quot;,
+    &quot;statusRef&quot;: {
+      &quot;@id&quot;: &quot;um:statusRef&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;revocationCursor&quot;: &quot;um:revocationCursor&quot;,
+    &quot;manifestId&quot;: {
+      &quot;@id&quot;: &quot;um:manifestId&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;outcome&quot;: &quot;um:outcome&quot;,
+    &quot;signatureCheck&quot;: &quot;um:signatureCheck&quot;,
+    &quot;freshnessCheck&quot;: &quot;um:freshnessCheck&quot;,
+    &quot;revocationStatus&quot;: &quot;um:revocationStatus&quot;,
+    &quot;revocationReason&quot;: &quot;um:revocationReason&quot;,
+    &quot;keyRefResolution&quot;: &quot;um:keyRefResolution&quot;,
+    &quot;facetStatuses&quot;: {
+      &quot;@id&quot;: &quot;um:facetStatuses&quot;,
+      &quot;@container&quot;: &quot;@set&quot;
+    },
+    &quot;facetId&quot;: {
+      &quot;@id&quot;: &quot;um:facetId&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;status&quot;: &quot;um:status&quot;,
+    &quot;reason&quot;: &quot;um:reason&quot;,
+    &quot;consentStatuses&quot;: {
+      &quot;@id&quot;: &quot;um:consentStatuses&quot;,
+      &quot;@container&quot;: &quot;@set&quot;
+    },
+    &quot;consentRef&quot;: {
+      &quot;@id&quot;: &quot;um:consentRef&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;claimStatuses&quot;: {
+      &quot;@id&quot;: &quot;um:claimStatuses&quot;,
+      &quot;@container&quot;: &quot;@set&quot;
+    },
+    &quot;claimRef&quot;: {
+      &quot;@id&quot;: &quot;um:claimRef&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;tier&quot;: {
+      &quot;@id&quot;: &quot;um:tier&quot;,
+      &quot;@type&quot;: &quot;xsd:integer&quot;
+    },
+    &quot;effectiveTrustTier&quot;: {
+      &quot;@id&quot;: &quot;um:effectiveTrustTier&quot;,
+      &quot;@type&quot;: &quot;xsd:integer&quot;
+    },
+    &quot;holderBindingStatus&quot;: &quot;um:holderBindingStatus&quot;,
+    &quot;presentationProofStatus&quot;: &quot;um:presentationProofStatus&quot;,
+    &quot;livenessStatus&quot;: &quot;um:livenessStatus&quot;,
+    &quot;crossDidBindingStatus&quot;: &quot;um:crossDidBindingStatus&quot;,
+    &quot;assuranceStatus&quot;: {
+      &quot;@id&quot;: &quot;um:assuranceStatus&quot;
+    },
+    &quot;assertedClass&quot;: &quot;um:assertedClass&quot;,
+    &quot;met&quot;: {
+      &quot;@id&quot;: &quot;um:met&quot;,
+      &quot;@type&quot;: &quot;xsd:boolean&quot;
+    },
+    &quot;unprocessedEntries&quot;: {
+      &quot;@id&quot;: &quot;um:unprocessedEntries&quot;,
+      &quot;@container&quot;: &quot;@set&quot;
+    },
+    &quot;checkedAt&quot;: {
+      &quot;@id&quot;: &quot;um:checkedAt&quot;,
+      &quot;@type&quot;: &quot;xsd:dateTime&quot;
+    },
+    &quot;processedAt&quot;: {
+      &quot;@id&quot;: &quot;um:processedAt&quot;,
+      &quot;@type&quot;: &quot;xsd:dateTime&quot;
+    },
+    &quot;warnings&quot;: {
+      &quot;@id&quot;: &quot;um:warnings&quot;,
+      &quot;@container&quot;: &quot;@set&quot;
+    },
+    &quot;code&quot;: &quot;um:code&quot;,
+    &quot;message&quot;: &quot;um:message&quot;,
+    &quot;receiptId&quot;: {
+      &quot;@id&quot;: &quot;um:receiptId&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;evaluatorId&quot;: {
+      &quot;@id&quot;: &quot;um:evaluatorId&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;exchangeId&quot;: {
+      &quot;@id&quot;: &quot;um:exchangeId&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;seq&quot;: {
+      &quot;@id&quot;: &quot;um:seq&quot;,
+      &quot;@type&quot;: &quot;xsd:integer&quot;
+    },
+    &quot;prevHash&quot;: &quot;um:prevHash&quot;,
+    &quot;chainId&quot;: {
+      &quot;@id&quot;: &quot;um:chainId&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;events&quot;: {
+      &quot;@id&quot;: &quot;um:events&quot;,
+      &quot;@container&quot;: &quot;@set&quot;
+    },
+    &quot;eventType&quot;: &quot;um:eventType&quot;,
+    &quot;at&quot;: {
+      &quot;@id&quot;: &quot;um:at&quot;,
+      &quot;@type&quot;: &quot;xsd:dateTime&quot;
+    },
+    &quot;subjectRef&quot;: {
+      &quot;@id&quot;: &quot;um:subjectRef&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;facetKeyRef&quot;: {
+      &quot;@id&quot;: &quot;um:facetKeyRef&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;receiptSignature&quot;: {
+      &quot;@id&quot;: &quot;um:receiptSignature&quot;
+    },
+    &quot;sessionId&quot;: {
+      &quot;@id&quot;: &quot;um:sessionId&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;participants&quot;: {
+      &quot;@id&quot;: &quot;um:participants&quot;,
+      &quot;@container&quot;: &quot;@set&quot;
+    },
+    &quot;did&quot;: {
+      &quot;@id&quot;: &quot;um:did&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;role&quot;: &quot;um:role&quot;,
+    &quot;initiatedAt&quot;: {
+      &quot;@id&quot;: &quot;um:initiatedAt&quot;,
+      &quot;@type&quot;: &quot;xsd:dateTime&quot;
+    },
+    &quot;state&quot;: &quot;um:sessionState&quot;,
+    &quot;updatedAt&quot;: {
+      &quot;@id&quot;: &quot;um:updatedAt&quot;,
+      &quot;@type&quot;: &quot;xsd:dateTime&quot;
+    },
+    &quot;cursor&quot;: &quot;um:cursor&quot;,
+    &quot;nextCheck&quot;: {
+      &quot;@id&quot;: &quot;um:nextCheck&quot;,
+      &quot;@type&quot;: &quot;xsd:duration&quot;
+    },
+    &quot;trustWeight&quot;: &quot;um:trustWeight&quot;,
+    &quot;facetSensitivityOrdering&quot;: {
+      &quot;@id&quot;: &quot;um:facetSensitivityOrdering&quot;
+    },
+    &quot;profile&quot;: {
+      &quot;@id&quot;: &quot;um:profile&quot;,
+      &quot;@type&quot;: &quot;@id&quot;
+    },
+    &quot;labels&quot;: {
+      &quot;@id&quot;: &quot;um:labels&quot;,
+      &quot;@container&quot;: &quot;@list&quot;
+    },
+    &quot;order&quot;: {
+      &quot;@id&quot;: &quot;um:order&quot;,
+      &quot;@container&quot;: &quot;@list&quot;
+    }
+  }
+}</code></pre>
+<section id="b1-term-inclusion-rule" class="level2">
+<h2>B.1. Term-Inclusion Rule</h2>
+<p>Which members hold a term in this versioned context is governed by a
+stated rule, not by accumulation:</p>
+<ol type="1">
+<li><p><strong>Production-candidate wire surface.</strong> The context
+defines a term for every member of the production-candidate surface: the
+Base envelope, facet, claim, consent, pointer, and device members; the
+signature members; and every field of the receipt field surface (<a
+href="#structured-receipts">§3.3</a>). Receipts are first-class
+manifests, so receipt fields are wire members — this class includes the
+credential-binding status fields (<code>holderBindingStatus</code>,
+<code>presentationProofStatus</code>, <code>livenessStatus</code>,
+<code>crossDidBindingStatus</code>), <code>revocationReason</code>, the
+warnings entry members <code>code</code> and <code>message</code>, and
+the holder-binding mode members (including the
+<code>bbs-holder-commitment</code> mode's
+<code>commitment</code>).</p></li>
+<li><p><strong>Wire-exercised PREVIEW members.</strong> A member
+belonging to a PREVIEW feature holds a term when v0.4 wire artifacts
+already carry it — a conformance fixture, the behavioral suite, or a
+Cookbook worked example — so that those artifacts expand losslessly
+under this context. A term in this class pins the member's
+<em>expansion</em>, not the feature's <em>maturity</em>: the feature
+stays PREVIEW and revisable. This is why <code>unlockWindowFacets</code>
+(PREVIEW unlock windows, carried by the
+<code>consent-unlock-window</code> and
+<code>manifest-locked-facet-below-floor</code> fixtures), the per-facet
+floor members (<code>requiredLiveness</code>, <code>minFreshness</code>,
+<code>userVerified</code>, <code>requiredAssuranceClass</code>, and the
+<code>assuranceStatus</code> echo members), the key-lifecycle members
+(<code>events</code>, <code>eventType</code>, <code>facetKeyRef</code>),
+the Tier-2 and Tier-3 proof members, the bilateral-session members, and
+the statusRef response members hold terms today.</p></li>
+<li><p><strong>Design-stage members stay out.</strong> Members of
+design-stage candidate profiles (EXT-OPT Sections O2.6, O12, O13, O14)
+and PREVIEW members whose designs are not yet wire-frozen (for example
+<code>transparencyAnchor</code> and its sub-members,
+<code>sessionKeyAuthorization</code>, the <code>actorState</code> and
+device sub-members, <code>postQuantumSignature</code>) enter the context
+only at their wire freeze, together with their fixtures and schema
+coverage (<a href="#standalone-conformance-suite">§4.4</a>).</p></li>
+</ol>
+<p>Two transitional carriages sit outside these classes and are
+documented rather than silently kept. First, the manifest-carried
+sensitivity-ordering member set (<code>facetSensitivityOrdering</code>,
+<code>profile</code>, <code>labels</code>, <code>order</code>) remains
+in the context while its fixture ships, but under working-group decision
+UM-v04-DEC-03 the ordering is profile-supplied: this member set is
+transitional and comes off the wire before the schema locks, in a
+coordinated cleanup of the context, fixture, conformance listing, and
+guard surfaces. Second, <code>trustWeight</code> (EXT-OPT Section O8)
+and the <code>actorState</code> container term (<a
+href="#actorstate-member">§1.4.7</a>) were seeded with their structural
+definitions ahead of wire exercise; at schema lock each either gains
+fixture coverage or comes off the wire under the same procedure. Any
+term addition or removal changes the context bytes and therefore the
+content hash, so changes are batched and the hash rolls once per
+batch.</p>
 <p><em>(Appendix A — Manifest Class Registry Snapshot — is informative
 and PREVIEW; it is relocated to <a
 href="/spec/v0.4/ext-opt/">EXT-OPT</a>. Appendix C — Complete
@@ -3368,6 +4361,7 @@ href="/spec/v0.4/cookbook/">Cookbook</a>.)</em></p>
 <p><em>End of Base. To implement above Tier 0, continue with <a
 href="/spec/v0.4/ext-t1/">EXT-T1</a>. For concrete payloads, see
 the <a href="/spec/v0.4/cookbook/">Cookbook</a>.</em></p>
+</section>
 </section>
     <script src="/spec/spec-reader.js" defer></script>
 

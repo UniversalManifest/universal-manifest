@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://universalmanifest.net/ns/universal-manifest/v0.4/schema.json",
   "title": "Universal Manifest (v0.4)",
-  "description": "Structural schema for v0.4 Universal Manifest documents. Derived from the v0.4 normative specification (docs/W3C-STYLE-SPEC-v04-preview.html). Extends v0.3 with holderBinding, presentationProof, livenessAttestation, ZKP proof profiles, ceremony proofs, statusRef resolution, bilateral sessions, and agent delegation scope registry.",
+  "description": "Structural schema for v0.4 Universal Manifest documents. Derived from the markdown-canonical v0.4 normative specification at internal editorial record and rendered to /spec/v0.4/. Extends v0.3 with holderBinding, presentationProof, livenessAttestation, per-facet liveness and assurance floors, ZKP proof profiles, ceremony proofs, statusRef resolution, bilateral sessions, private-data handling, and agent delegation scope registry.",
   "type": "object",
   "required": [
     "@context",
@@ -16,11 +16,13 @@
   ],
   "properties": {
     "@context": {
-      "description": "JSON-LD context URL/object/array. Must reference the v0.4 namespace (https://universalmanifest.net/ns/v0.4) per Section 1.2.1.",
-      "oneOf": [
-        { "type": "string" },
-        { "type": "object" },
-        { "type": "array" }
+      "description": "JSON-LD context reference. v0.4 manifests MUST use the versioned namespace https://universalmanifest.net/ns/v0.4 per Section 1.2.1 (string form, or an array containing it); evaluators match it against the pinned, content-hashed context document per Section 6.10.",
+      "anyOf": [
+        { "const": "https://universalmanifest.net/ns/v0.4" },
+        {
+          "type": "array",
+          "contains": { "const": "https://universalmanifest.net/ns/v0.4" }
+        }
       ]
     },
     "@id": {
@@ -29,13 +31,14 @@
       "description": "Globally unique opaque identifier per Section 1.2.2. MUST NOT contain PII."
     },
     "@type": {
-      "description": "Must include um:Manifest (string or array). Per Section 1.2.3.",
-      "oneOf": [
-        { "type": "string" },
+      "description": "Must include um:Manifest (string or array). Per Section 1.2.3 and Section 3.1.1.",
+      "anyOf": [
+        { "const": "um:Manifest" },
         {
           "type": "array",
           "items": { "type": "string" },
-          "minItems": 1
+          "minItems": 1,
+          "contains": { "const": "um:Manifest" }
         }
       ]
     },
@@ -101,9 +104,15 @@
       "properties": {
         "@id": { "type": "string", "minLength": 1 },
         "@type": {
-          "oneOf": [
-            { "type": "string" },
-            { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+          "description": "Must include um:Facet (string or array). Per Section 2.1's @type shape convention.",
+          "anyOf": [
+            { "const": "um:Facet" },
+            {
+              "type": "array",
+              "items": { "type": "string" },
+              "minItems": 1,
+              "contains": { "const": "um:Facet" }
+            }
           ]
         },
         "name": { "type": "string" },
@@ -112,11 +121,15 @@
         "requiredTrustTier": { "$ref": "#/$defs/trustTier" },
         "requiredLiveness": {
           "$ref": "#/$defs/requiredLiveness",
-          "description": "OPTIONAL per-facet liveness floor (Section 6.6.3)."
+          "description": "OPTIONAL per-facet liveness floor (EXT-T1 Section T1.3.1)."
+        },
+        "requiredAssuranceClass": {
+          "enum": ["software", "hardware-uv", "hardware-bound"],
+          "description": "OPTIONAL per-facet authenticator assurance floor (EXT-T1 Section T1.3.3)."
         },
         "encryptionProfile": { "const": "jwe-inline-v1" },
         "entity": {
-          "oneOf": [
+          "anyOf": [
             { "$ref": "#/$defs/entity" },
             { "$ref": "#/$defs/jweEntity" },
             { "type": "object" },
@@ -227,23 +240,56 @@
     },
     "holderBinding": {
       "type": "object",
-      "description": "Holder binding per v0.4 Section 6.6.1.",
+      "description": "Holder binding per EXT-T1 Section T1.1. Mode-specific REQUIRED fields: cnfThumbprint for sd-jwt-kb; commitment and proofValue for bbs-holder-commitment (EXT-T1 Section T1.1.1); boundDid, subjectProof, and boundDidProof for reciprocal-control.",
       "required": ["mode"],
       "properties": {
         "mode": {
           "enum": ["sd-jwt-kb", "bbs-holder-commitment", "reciprocal-control"]
         },
-        "cnfThumbprint": { "type": "string" },
+        "cnfThumbprint": { "type": "string", "minLength": 1 },
+        "commitment": {
+          "type": "string",
+          "minLength": 1,
+          "description": "REQUIRED for bbs-holder-commitment mode: the issuer's commitment to the holder secret (EXT-T1 Section T1.1.1)."
+        },
+        "proofValue": {
+          "type": "string",
+          "minLength": 1,
+          "description": "REQUIRED for bbs-holder-commitment mode: the holder's zero-knowledge proof of possession (EXT-T1 Section T1.1.1)."
+        },
         "pseudonymScope": { "type": "string" },
         "boundDid": { "type": "string" },
         "subjectProof": { "type": "string" },
         "boundDidProof": { "type": "string" }
       },
-      "additionalProperties": true
+      "additionalProperties": true,
+      "allOf": [
+        {
+          "if": {
+            "properties": { "mode": { "const": "sd-jwt-kb" } },
+            "required": ["mode"]
+          },
+          "then": { "required": ["cnfThumbprint"] }
+        },
+        {
+          "if": {
+            "properties": { "mode": { "const": "bbs-holder-commitment" } },
+            "required": ["mode"]
+          },
+          "then": { "required": ["commitment", "proofValue"] }
+        },
+        {
+          "if": {
+            "properties": { "mode": { "const": "reciprocal-control" } },
+            "required": ["mode"]
+          },
+          "then": { "required": ["boundDid", "subjectProof", "boundDidProof"] }
+        }
+      ]
     },
     "bindingProof": {
       "type": "object",
-      "description": "ZKP binding proof per v0.4 Section 6.4.7.",
+      "description": "ZKP binding proof per EXT-T2 Section T2.1 (named in Base Section 6.4.7).",
       "required": ["type"],
       "properties": {
         "type": {
@@ -302,7 +348,7 @@
     },
     "ceremonyProof": {
       "type": "object",
-      "description": "Tier 3 multi-party ceremony proof per v0.4 Section 6.4.8.",
+      "description": "Tier 3 multi-party ceremony proof per EXT-T3 Section T3.1 (named in Base Section 6.4.8).",
       "required": ["type", "threshold", "attesters", "ceremonyId", "aggregateProof"],
       "properties": {
         "type": { "const": "ThresholdAttestationProof" },
@@ -321,7 +367,8 @@
       "additionalProperties": true
     },
     "crossDidBindingClaim": {
-      "required": ["@type", "issuer", "boundDids", "attester", "attestationMethod", "attestedAt"],
+      "description": "identity.crossDidBinding claim per Section 6.4.4. The attester triple (attester, attestationMethod, attestedAt) is REQUIRED only for attester-asserted bindings; when the claim carries a cryptographic bindingProof (EXT-T2) or ceremonyProof (EXT-T3), the proof object carries the binding and the triple is OPTIONAL.",
+      "required": ["@type", "issuer", "boundDids"],
       "properties": {
         "@type": { "const": "identity.crossDidBinding" },
         "boundDids": {
@@ -332,14 +379,38 @@
         "attester": { "type": "string", "minLength": 1 },
         "attestationMethod": { "type": "string", "minLength": 1 },
         "attestedAt": { "type": "string", "format": "date-time" }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "not": {
+              "anyOf": [
+                { "required": ["bindingProof"] },
+                { "required": ["ceremonyProof"] }
+              ]
+            }
+          },
+          "then": { "required": ["attester", "attestationMethod", "attestedAt"] }
+        }
+      ]
     },
     "consent": {
       "type": "object",
       "required": ["@id", "@type", "facetRef", "scope", "purpose", "grantedAt", "expiresAt"],
       "properties": {
         "@id": { "type": "string", "minLength": 1 },
-        "@type": { "const": "um:Consent" },
+        "@type": {
+          "description": "Must include um:Consent (string or array). Per Section 2.1's @type shape convention.",
+          "anyOf": [
+            { "const": "um:Consent" },
+            {
+              "type": "array",
+              "items": { "type": "string" },
+              "minItems": 1,
+              "contains": { "const": "um:Consent" }
+            }
+          ]
+        },
         "facetRef": { "type": "string", "minLength": 1 },
         "scope": {
           "type": "array",
@@ -408,7 +479,7 @@
     },
     "presentationProof": {
       "type": "object",
-      "description": "Presentation proof per v0.4 Section 6.6.2.",
+      "description": "Presentation proof per EXT-T1 Section T1.2. Excluded from the manifest signing input alongside signature and postQuantumSignature (Base Section 1.6.3).",
       "required": ["proofType", "challenge", "audience", "created", "proofValue"],
       "properties": {
         "proofType": { "enum": ["sd-jwt-kb", "bbs-derived", "did-auth"] },
@@ -421,7 +492,7 @@
     },
     "livenessAttestation": {
       "type": "object",
-      "description": "Liveness attestation per v0.4 Section 6.6.3. proofType, attestedAt, validUntil, and proofValue are REQUIRED; userVerified and attester are OPTIONAL.",
+      "description": "Liveness attestation per EXT-T1 Section T1.3. proofType, attestedAt, validUntil, and proofValue are REQUIRED; userVerified and attester are OPTIONAL.",
       "required": ["proofType", "attestedAt", "validUntil", "proofValue"],
       "properties": {
         "proofType": { "type": "string", "minLength": 1, "description": "Identifies the liveness method (e.g. 'webauthn-uv'); extensible via the profile registry." },
@@ -429,14 +500,14 @@
         "validUntil": { "type": "string", "format": "date-time" },
         "proofValue": { "type": "string", "minLength": 1, "description": "Base64url proof computed over the UTF-8 bytes of subject || attestedAt." },
         "method": { "type": "string" },
-        "userVerified": { "type": "boolean", "description": "Whether user verification (biometric/PIN) was performed. Absent is treated as false for floor purposes (Section 6.6.3)." },
+        "userVerified": { "type": "boolean", "description": "Whether user verification (biometric/PIN) was performed. Absent is treated as false for floor purposes (EXT-T1 Section T1.3.1)." },
         "attester": { "type": "string", "description": "DID of the attesting authority." }
       },
       "additionalProperties": true
     },
     "requiredLiveness": {
       "type": "object",
-      "description": "Per-facet liveness floor per v0.4 Section 6.6.3. A compound (freshness class plus a boolean), NOT a mirror of the closed-integer requiredTrustTier.",
+      "description": "Per-facet liveness floor per EXT-T1 Section T1.3.1. A compound (freshness class plus a boolean), NOT a mirror of the closed-integer requiredTrustTier. The floor object is a closed compound: it carries exactly minFreshness and the optional userVerified boolean (additionalProperties: false).",
       "required": ["minFreshness"],
       "properties": {
         "minFreshness": {
@@ -479,7 +550,7 @@
     },
     "statusRefResponse": {
       "type": "object",
-      "description": "statusRef resolution response per v0.4 Section 3.4.2.",
+      "description": "statusRef resolution response per EXT-OPT Section O2.2 (protocol named in Base Section 3.4).",
       "required": ["manifestId", "status", "updatedAt"],
       "properties": {
         "manifestId": { "type": "string", "minLength": 1 },

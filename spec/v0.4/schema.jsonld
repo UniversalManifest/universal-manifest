@@ -31,6 +31,15 @@
       "@id": "um:requiredTrustTier",
       "@type": "xsd:integer"
     },
+    "requiredLiveness": {
+      "@id": "um:requiredLiveness"
+    },
+    "minFreshness": "um:minFreshness",
+    "userVerified": {
+      "@id": "um:userVerified",
+      "@type": "xsd:boolean"
+    },
+    "requiredAssuranceClass": "um:requiredAssuranceClass",
     "facets": {
       "@id": "um:facets",
       "@container": "@set"
@@ -124,6 +133,22 @@
       "@id": "um:conditions",
       "@container": "@set"
     },
+    "unlockWindowFacets": {
+      "@id": "um:unlockWindowFacets",
+      "@container": "@set"
+    },
+    "idleLifetime": {
+      "@id": "um:idleLifetime",
+      "@type": "xsd:duration"
+    },
+    "absoluteLifetime": {
+      "@id": "um:absoluteLifetime",
+      "@type": "xsd:duration"
+    },
+    "lockOnSleep": {
+      "@id": "um:lockOnSleep",
+      "@type": "xsd:boolean"
+    },
     "target": {
       "@id": "um:target",
       "@type": "@id"
@@ -155,6 +180,7 @@
     },
     "mode": "um:bindingMode",
     "cnfThumbprint": "um:cnfThumbprint",
+    "commitment": "um:commitment",
     "pseudonymScope": "um:pseudonymScope",
     "boundDid": {
       "@id": "um:boundDid",
@@ -241,6 +267,7 @@
     "signatureCheck": "um:signatureCheck",
     "freshnessCheck": "um:freshnessCheck",
     "revocationStatus": "um:revocationStatus",
+    "revocationReason": "um:revocationReason",
     "keyRefResolution": "um:keyRefResolution",
     "facetStatuses": {
       "@id": "um:facetStatuses",
@@ -279,6 +306,15 @@
     "holderBindingStatus": "um:holderBindingStatus",
     "presentationProofStatus": "um:presentationProofStatus",
     "livenessStatus": "um:livenessStatus",
+    "crossDidBindingStatus": "um:crossDidBindingStatus",
+    "assuranceStatus": {
+      "@id": "um:assuranceStatus"
+    },
+    "assertedClass": "um:assertedClass",
+    "met": {
+      "@id": "um:met",
+      "@type": "xsd:boolean"
+    },
     "unprocessedEntries": {
       "@id": "um:unprocessedEntries",
       "@container": "@set"
@@ -295,6 +331,8 @@
       "@id": "um:warnings",
       "@container": "@set"
     },
+    "code": "um:code",
+    "message": "um:message",
     "receiptId": {
       "@id": "um:receiptId",
       "@type": "@id"
@@ -312,10 +350,30 @@
       "@type": "xsd:integer"
     },
     "prevHash": "um:prevHash",
+    "chainId": {
+      "@id": "um:chainId",
+      "@type": "@id"
+    },
+    "events": {
+      "@id": "um:events",
+      "@container": "@set"
+    },
+    "eventType": "um:eventType",
+    "at": {
+      "@id": "um:at",
+      "@type": "xsd:dateTime"
+    },
+    "subjectRef": {
+      "@id": "um:subjectRef",
+      "@type": "@id"
+    },
+    "facetKeyRef": {
+      "@id": "um:facetKeyRef",
+      "@type": "@id"
+    },
     "receiptSignature": {
       "@id": "um:receiptSignature"
     },
-    "keyResolution": "um:keyResolution",
     "sessionId": {
       "@id": "um:sessionId",
       "@type": "@id"
@@ -341,11 +399,23 @@
     "cursor": "um:cursor",
     "nextCheck": {
       "@id": "um:nextCheck",
-      "@type": "xsd:dateTime"
+      "@type": "xsd:duration"
     },
-    "trustWeight": {
-      "@id": "um:trustWeight",
-      "@type": "xsd:decimal"
+    "trustWeight": "um:trustWeight",
+    "facetSensitivityOrdering": {
+      "@id": "um:facetSensitivityOrdering"
+    },
+    "profile": {
+      "@id": "um:profile",
+      "@type": "@id"
+    },
+    "labels": {
+      "@id": "um:labels",
+      "@container": "@list"
+    },
+    "order": {
+      "@id": "um:order",
+      "@container": "@list"
     }
   }
 }

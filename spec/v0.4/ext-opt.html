@@ -694,7 +694,7 @@
     <div class="head">
         <h1 id="title" class="title p-name">Universal Manifest v0.4 — EXT-OPT</h1>
         <h2 id="subtitle">Optional-Feature Profiles</h2>
-        <h2><time class="dt-published" datetime="2026-06-23">23 June 2026</time></h2>
+        <h2><time class="dt-published" datetime="2026-07-04">4 July 2026</time></h2>
         <dl>
             <dt>This document:</dt>
             <dd><a class="u-url" href="https://universalmanifest.net/spec/v0.4/ext-opt/">/spec/v0.4/ext-opt/</a></dd>
@@ -765,6 +765,9 @@ class="secno">O2.4. </span>Error Handling</a></li>
 <li><a href="#o25-status-endpoint-conformance"
 id="toc-o25-status-endpoint-conformance"><span class="secno">O2.5.
 </span>Status Endpoint Conformance</a></li>
+<li><a href="#o26-current-policy-state-profile"
+id="toc-o26-current-policy-state-profile"><span class="secno">O2.6.
+</span>Current Policy-State Profile</a></li>
 </ul></li>
 <li><a href="#o3-receipt-as-a-first-class-manifest-class"
 id="toc-o3-receipt-as-a-first-class-manifest-class"><span
@@ -832,8 +835,75 @@ id="toc-o10-cryptographic-requirements-summary"><span class="secno">O10.
 </span>Cryptographic Requirements Summary</a></li>
 <li><a href="#o11-optional-feature-matrix-consolidated"
 id="toc-o11-optional-feature-matrix-consolidated"><span
-class="secno">O11. </span>Optional-Feature Matrix
-(consolidated)</a></li>
+class="secno">O11. </span>Optional-Feature Matrix (consolidated)</a>
+<ul>
+<li><a href="#o111-conformance-claim-contents-candidate-template"
+id="toc-o111-conformance-claim-contents-candidate-template"><span
+class="secno">O11.1. </span>Conformance-Claim Contents (candidate
+template)</a></li>
+</ul></li>
+<li><a
+href="#o12-asset-bound-manifests-and-represented-person-consent-profile"
+id="toc-o12-asset-bound-manifests-and-represented-person-consent-profile"><span
+class="secno">O12. </span>Asset-Bound Manifests and Represented-Person
+Consent Profile</a>
+<ul>
+<li><a href="#o121-motivation-and-role-vocabulary"
+id="toc-o121-motivation-and-role-vocabulary"><span class="secno">O12.1.
+</span>Motivation and Role Vocabulary</a></li>
+<li><a href="#o122-asset-bound-manifest-class"
+id="toc-o122-asset-bound-manifest-class"><span class="secno">O12.2.
+</span>Asset-Bound Manifest Class</a></li>
+<li><a href="#o123-represented-person-consent-record"
+id="toc-o123-represented-person-consent-record"><span
+class="secno">O12.3. </span>Represented-Person Consent Record</a></li>
+<li><a href="#o124-carrier-binding" id="toc-o124-carrier-binding"><span
+class="secno">O12.4. </span>Carrier Binding</a></li>
+<li><a href="#o125-current-consent-state-resolution"
+id="toc-o125-current-consent-state-resolution"><span
+class="secno">O12.5. </span>Current Consent-State Resolution</a></li>
+<li><a href="#o126-honest-limits" id="toc-o126-honest-limits"><span
+class="secno">O12.6. </span>Honest Limits</a></li>
+</ul></li>
+<li><a
+href="#o13-signed-referral-route-attribution-and-route-scoped-disclosure-profile"
+id="toc-o13-signed-referral-route-attribution-and-route-scoped-disclosure-profile"><span
+class="secno">O13. </span>Signed Referral-Route Attribution and
+Route-Scoped Disclosure Profile</a>
+<ul>
+<li><a href="#o131-scope-boundary" id="toc-o131-scope-boundary"><span
+class="secno">O13.1. </span>Scope Boundary</a></li>
+<li><a href="#o132-route-actors-and-role-classes"
+id="toc-o132-route-actors-and-role-classes"><span class="secno">O13.2.
+</span>Route Actors and Role Classes</a></li>
+<li><a href="#o133-signed-route-evidence"
+id="toc-o133-signed-route-evidence"><span class="secno">O13.3.
+</span>Signed Route Evidence</a></li>
+<li><a href="#o134-route-scoped-disclosure"
+id="toc-o134-route-scoped-disclosure"><span class="secno">O13.4.
+</span>Route-Scoped Disclosure</a></li>
+<li><a href="#o135-attribution-receipts-and-the-privacy-boundary"
+id="toc-o135-attribution-receipts-and-the-privacy-boundary"><span
+class="secno">O13.5. </span>Attribution Receipts and the Privacy
+Boundary</a></li>
+<li><a href="#o136-honest-limits" id="toc-o136-honest-limits"><span
+class="secno">O13.6. </span>Honest Limits</a></li>
+</ul></li>
+<li><a href="#o14-geopose-primary-pose-value-profile"
+id="toc-o14-geopose-primary-pose-value-profile"><span class="secno">O14.
+</span>GeoPose Primary Pose Value Profile</a>
+<ul>
+<li><a href="#o141-scope-boundary" id="toc-o141-scope-boundary"><span
+class="secno">O14.1. </span>Scope Boundary</a></li>
+<li><a href="#o142-primary-pose-attachment"
+id="toc-o142-primary-pose-attachment"><span class="secno">O14.2.
+</span>Primary Pose Attachment</a></li>
+<li><a href="#o143-provenance-time-and-currency"
+id="toc-o143-provenance-time-and-currency"><span class="secno">O14.3.
+</span>Provenance, Time, and Currency</a></li>
+<li><a href="#o144-honest-limits" id="toc-o144-honest-limits"><span
+class="secno">O14.4. </span>Honest Limits</a></li>
+</ul></li>
 <li><a href="#appendix-oa-manifest-class-registry-snapshot"
 id="toc-appendix-oa-manifest-class-registry-snapshot">Appendix OA.
 Manifest Class Registry Snapshot</a></li>
@@ -870,7 +940,9 @@ feature).</p>
 Data Model &amp; Format Independence</a> (incl. CBOR-LD encoding, ADM
 conformance, context-integrity production)</li>
 <li><a href="#o2-statusref-resolution-schema">O2. statusRef Resolution
-Schema</a></li>
+Schema</a> (incl. the <a
+href="#o26-current-policy-state-profile">current policy-state
+profile</a> <span class="preview-tag">PREVIEW</span>)</li>
 <li><a href="#o3-receipt-as-a-first-class-manifest-class">O3. Receipt as
 a First-Class Manifest Class</a>
 <span class="preview-tag">PREVIEW</span></li>
@@ -891,7 +963,20 @@ two-component devices, actorState)</li>
 <li><a href="#o10-cryptographic-requirements-summary">O10. Cryptographic
 Requirements Summary</a> <span class="preview-tag">PREVIEW</span></li>
 <li><a href="#o11-optional-feature-matrix-consolidated">O11.
-Optional-Feature Matrix (consolidated)</a></li>
+Optional-Feature Matrix (consolidated)</a> (incl. the <a
+href="#o111-conformance-claim-contents-candidate-template">conformance-claim
+template</a> <span class="preview-tag">PREVIEW</span>)</li>
+<li><a
+href="#o12-asset-bound-manifests-and-represented-person-consent-profile">O12.
+Asset-Bound Manifests and Represented-Person Consent Profile</a>
+<span class="preview-tag">PREVIEW</span></li>
+<li><a
+href="#o13-signed-referral-route-attribution-and-route-scoped-disclosure-profile">O13.
+Signed Referral-Route Attribution and Route-Scoped Disclosure
+Profile</a> <span class="preview-tag">PREVIEW</span></li>
+<li><a href="#o14-geopose-primary-pose-value-profile">O14. GeoPose
+Primary Pose Value Profile</a>
+<span class="preview-tag">PREVIEW</span></li>
 <li><a href="#appendix-oa-manifest-class-registry-snapshot">Appendix OA.
 Manifest Class Registry Snapshot</a>
 <span class="preview-tag">PREVIEW</span></li>
@@ -960,7 +1045,12 @@ and do not depend on which production rule serialized a given manifest.
 Extensions and future versions that define new root-level members MUST
 define them as abstract properties with a representation in each
 production rule they are used with; unknown members are preserved as
-unprocessed entries. The integrity proof is computed over the bytes of a
+unprocessed entries. A receipt-class manifest (<a
+href="/spec/v0.4/core/#receipt-as-a-first-class-manifest-class">Base
+§3.3.2</a>) additionally carries the receipt field surface of <a
+href="/spec/v0.4/core/#receipt-fields">Base
+§3.3.1</a> as abstract properties under the same name-per-production
+mapping rule. The integrity proof is computed over the bytes of a
 specific production (<a href="#o15-signing-and-production">O1.5</a>), so
 a signature is bound to one encoding: converting a signed manifest
 between encodings requires re-signing; the <em>meaning</em> is preserved
@@ -1000,8 +1090,11 @@ Media type <code>application/um+ld+json</code> (also valid
 <strong>type</strong>, <strong>id</strong>,
 <strong>contextReference</strong> → <code>@type</code>,
 <code>@id</code>, <code>@context</code>; all other abstract properties →
-JSON members of the same name; abstract datetimes → RFC 3339 strings;
-integers/strings/lists/maps → JSON counterparts. A lone
+JSON members of the same name; abstract datetimes → RFC 3339 [<a
+href="#references">RFC3339</a>] strings;
+integers/decimals/booleans/strings/lists/maps → their JSON counterparts
+(JSON numbers for integers and decimals, JSON
+<code>true</code>/<code>false</code> for booleans). A lone
 <code>@context</code> string is consumed as a one-element
 <code>contextReference</code> list; producers SHOULD emit the array form
 (normalization does not affect the signature, which covers the concrete
@@ -1041,15 +1134,67 @@ offline or constrained channels SHOULD pre-provision the context for the
 relevant version, since it cannot be assumed retrievable at decode time.
 Term tokenization is deterministic only when both parties use the same
 context version, which the versioned namespace makes explicit.</p>
-<p><strong>Preview:</strong> A complete CBOR-LD profile — registered
-context-to-token table, a fixed signature production for the binary
-encoding (<a href="#o15-signing-and-production">O1.5</a>), and
-conformance fixtures — will be finalized after working-group review.
-Input is requested on whether CBOR-LD is the right compact encoding to
-standardize first.</p>
+
+<p><strong>Signing (candidate per-production rule).</strong> The CBOR-LD
+production is signed under its own production rule, per the
+per-production architecture of <a
+href="#o15-signing-and-production">O1.5</a> — a Profile-A analogue
+defined against the CBOR bytes:</p>
+<ul>
+<li><strong>Signing input.</strong> Starting from the CBOR-LD document,
+remove the same signing-input exclusions as <a
+href="/spec/v0.4/core/#signing-input-procedure">Base
+§1.6.3</a> — the <strong>signature</strong> property and, when present,
+<strong>presentationProof</strong> and
+<strong>postQuantumSignature</strong> — then encode the result under the
+Core Deterministic Encoding Requirements of RFC 8949 §4.2.1 [<a
+href="#references">RFC8949</a>]. The signing input is those
+deterministic-encoding bytes. This parallels Profile A exactly — parse
+the consumed production, remove the exclusions, canonicalize, sign or
+verify — with CBOR deterministic encoding playing the role JCS plays for
+JSON.</li>
+<li><strong>Algorithm and profile identity.</strong> Ed25519 over that
+input. The signature object carries the same members as Profile A (<a
+href="/spec/v0.4/core/#signature-shape">Base
+§1.6.2</a>), with the candidate <code>canonicalization</code> value
+<code>"CBOR-RFC8949-CDE"</code>; the <code>algorithm</code> +
+<code>canonicalization</code> pair (<code>"Ed25519"</code> +
+<code>"CBOR-RFC8949-CDE"</code>) identifies the profile per <a
+href="/spec/v0.4/core/#profile-identification">Base
+§1.6.5</a>.</li>
+<li><strong>Verification.</strong> A verifier of a consumed CBOR-LD
+manifest recomputes the signing input from the bytes it consumed —
+parse, remove the exclusions, re-encode deterministically — and verifies
+against them, never against another production's bytes (<a
+href="#o16-conformance-to-the-abstract-data-model">O1.6</a>).</li>
+</ul>
+<p>Because the signing input is the tokenized form, the signature is
+bound to the context version that fixes the token mapping; the
+pinned-context and context-hash disciplines of <a
+href="#o17-context-integrity-production-detail">O1.7</a> therefore apply
+before signing or verifying. <strong>Prohibited implementation
+(explicit).</strong> Verifying a manifest's <em>JSON-LD-production</em>
+signature against bytes reconstructed from a consumed CBOR-LD document
+is prohibited: <a
+href="#o16-conformance-to-the-abstract-data-model">O1.6</a> requires
+verifying the integrity proof against the bytes of the production
+actually consumed, and <a href="#o15-signing-and-production">O1.5</a>
+forbids a signature from traveling across a re-encoding. A manifest
+converted from JSON-LD to CBOR-LD MUST be re-signed under this rule
+before it is presented in CBOR-LD (and symmetrically, a manifest
+re-encoded back to JSON-LD is re-signed under Profile A). With this rule
+stated, a signed — hence conformant — CBOR-LD manifest is constructible
+by design, as O1.4's identical-conformance sentence requires; the rule
+remains a candidate until wire freeze.</p>
+<p><strong>Preview:</strong> A complete CBOR-LD profile — the registered
+context-to-token table, finalization of the candidate signature
+production above, and conformance fixtures — will be finalized after
+working-group review. Input is requested on whether CBOR-LD is the right
+compact encoding to standardize first.</p>
 </section>
 <section id="o15-signing-and-production" class="level3">
 <h3><span class="secno">O1.5. </span>Signing and Production</h3>
+
 <p>The integrity proof is computed over the canonical bytes of a
 specific production. Signature Profile A (<a
 href="/spec/v0.4/core/#signature-profile-a-jcs--ed25519">Base
@@ -1057,17 +1202,27 @@ href="/spec/v0.4/core/#signature-profile-a-jcs--ed25519">Base
 is the JCS-canonicalized JSON-LD document with the signing-input
 exclusions removed (the <strong>signature</strong> property and, when
 present, <strong>presentationProof</strong> and
-<strong>postQuantumSignature</strong>). Each production rule MUST either
-reuse a profile defined against the abstract model or specify how the
-integrity proof is computed over its own canonical bytes, so a verifier
-can recompute the signing input deterministically. Because a signature
-is bound to the bytes of one production, a manifest re-encoded under a
-different production rule MUST be re-signed under that production's
-signing rule. <em>(Working-group note: whether a future profile should
-sign a canonicalization of the abstract model — making one signature
-portable across encodings — is the strategic open question of the
-format-independence design; this draft builds in per-production
-signing.)</em></p>
+<strong>postQuantumSignature</strong>); the production consumed for
+signing is constrained to I-JSON with duplicate member names rejected
+(<a
+href="/spec/v0.4/core/#signing-input-procedure">Base
+§1.6.3</a>), which is what makes the JCS input well-defined. Each
+production rule MUST either reuse a profile defined against the abstract
+model or specify how the integrity proof is computed over its own
+canonical bytes, so a verifier can recompute the signing input
+deterministically. Both production rules defined by this specification
+have a stated integrity-proof computation: Signature Profile A for
+JSON-LD, and the candidate Profile-A analogue over RFC 8949 Core
+Deterministic Encoding bytes for CBOR-LD (<a
+href="#o14-cbor-ld-production-rule-compact-encoding">O1.4</a>). Because
+a signature is bound to the bytes of one production, a manifest
+re-encoded under a different production rule MUST be re-signed under
+that production's signing rule. <em>(Working-group note: whether a
+future profile should sign a canonicalization of the abstract model —
+making one signature portable across encodings — is the strategic open
+question of the format-independence design; this draft builds in
+per-production signing, and the abstract-model option stands as the
+recorded question for the next version.)</em></p>
 </section>
 <section id="o16-conformance-to-the-abstract-data-model" class="level3">
 <h3><span class="secno">O1.6. </span>Conformance to the Abstract Data
@@ -1087,6 +1242,32 @@ both produces and consumes an encoding; and MUST verify the integrity
 proof against the bytes of the production it consumed.
 <strong>Supporting only the JSON-LD reference encoding is sufficient for
 full conformance</strong>; supporting CBOR-LD is OPTIONAL.</p>
+<p><em>Carrying external standards (informative).</em> The same wrapper
+discipline extends beyond UM's own encodings. A manifest can carry — as
+a facet or claim value — or point to (via <code>pointers</code>) an
+artifact governed by another standard: C2PA content-credential material
+[<a href="#references">C2PA</a>], an OGC GeoPose payload [<a
+href="#references">OGC-GEOPOSE</a>] (<a
+href="#o14-geopose-primary-pose-value-profile">O14</a>), a W3C
+Verifiable Credential, or a comparable external artifact. Universal
+Manifest complements such carrier and provenance standards; it does not
+replace them. The carried artifact travels unmodified — UM never
+re-signs, transforms, or reinterprets its bytes — and it remains
+independently verifiable under its own standard's rules: a receiver
+performs two independent checks, the UM envelope evaluation defined by
+this document set and the carried standard's own verification, and
+passing one never substitutes for the other. An evaluator that has
+verified the UM envelope has not thereby verified the carried artifact;
+absent a registered carry profile, a carried standard the evaluator
+cannot evaluate is preserved as sealed/opaque or unprocessed content
+under the existing fail-closed baselines (<a
+href="/spec/v0.4/core/#receipt-fields">Base
+§3.3.1</a>), never reported as verified. A dedicated
+external-standard-carry profile — a registered carried-standard
+verification-result receipt field and an unknown-carried-standard
+disposition value — is a registered-profile candidate (<a
+href="#o6-profile-registration-mechanism">O6</a>) whose wire shape is
+not defined by this draft.</p>
 </section>
 <section id="o17-context-integrity-production-detail" class="level3">
 <h3><span class="secno">O1.7. </span>Context Integrity (production
@@ -1107,6 +1288,27 @@ depends on byte-identical context versions on both sides. <em>(The Base
 states the evaluator-facing requirement in <a
 href="/spec/v0.4/core/#context-integrity">Base
 §6.10</a>; this is the production/encoding detail.)</em></p>
+<p><strong>Hash computation.</strong> The context content hash named by
+<a href="/spec/v0.4/core/#context-integrity">Base
+§6.10</a> and reproduced in <a
+href="/spec/v0.4/core/#appendix-b-versioned-context-document-normative-reference">Base
+Appendix B</a> is a multihash [<a href="#references">MULTIFORMATS</a>];
+the multihash function MUST be SHA-256 (multihash function code
+<code>0x12</code>) for v0.4, the same function required for the
+receipt-chain <code>prevHash</code>. The hash input is the exact
+published byte sequence of the versioned context document — its UTF-8
+text with LF (U+000A) line endings and a single trailing LF — with no
+re-serialization, JSON canonicalization, whitespace normalization, or
+transcoding applied before hashing. Where the hash appears in
+text-bearing positions it is expressed as a multibase base58btc string
+(<code>z</code> prefix); binary positions MAY carry the raw multihash
+bytes. The hash is encoding-independent and pins the context for every
+production rule: a JSON-LD evaluator verifies it before trusting term
+definitions (<a
+href="/spec/v0.4/core/#context-integrity">Base
+§6.10</a>), and a CBOR-LD deployment MUST verify it over those identical
+bytes before deriving or applying a term-token table (<a
+href="#o14-cbor-ld-production-rule-compact-encoding">O1.4</a>).</p>
 <hr />
 </section>
 </section>
@@ -1189,9 +1391,10 @@ Bitstring Status List endpoint [<a href="#references">VC-STATUS</a>] as
 the <code>statusRef</code> target, provided the evaluator can parse the
 response into the status semantics above; this is a SHOULD-level
 alternative that mitigates the status-resolution correlation risk (<a
-href="#o5-federation">O5</a> and the privacy considerations in <a
-href="/spec/v0.4/ext-t2/#t221-privacy-considerations-for-track-b">EXT-T2
-§T2.2.1</a>).</p>
+href="#o5-federation">O5</a> and the status-resolution correlation
+consideration in <a
+href="/spec/v0.4/core/#privacy-considerations">Base
+§7</a>).</p>
 </section>
 <section id="o25-status-endpoint-conformance" class="level3">
 <h3><span class="secno">O2.5. </span>Status Endpoint Conformance</h3>
@@ -1207,6 +1410,126 @@ working-group decision on whether federation moves to a companion
 specification.</p>
 <p><em>(Worked example: statusRef response — see <a
 href="/spec/v0.4/cookbook/">Cookbook</a>.)</em></p>
+</section>
+<section id="o26-current-policy-state-profile" class="level3">
+<h3><span class="secno">O2.6. </span>Current Policy-State Profile
+<span class="preview-tag">PREVIEW</span></h3>
+<p><strong>Candidate registered profile</strong> (candidate identifier
+<code>um:profile:trust:current-policy-state</code>, registration via <a
+href="#o6-profile-registration-mechanism">O6</a>; the identifier —
+including its <code>trust</code> category segment — is provisional,
+since category assignment is a registration-time decision).
+<strong>Design-stage:</strong> the members and value tokens below are
+candidates whose wire shape may change; they are <strong>not
+yet</strong> in the published
+<code>schema.json</code>/<code>schema.jsonld</code> or the conformance
+fixture suite, and per the Base conformance discipline (<a
+href="/spec/v0.4/core/#standalone-conformance-suite">Base
+§4.4</a>) they carry no conformance tests until the design is
+finalized.</p>
+<p>The bounded composition in <a
+href="/spec/v0.4/core/#current-policy-state-resolution-before-governed-action-informative-composition">Base
+§3.4.1</a> answers "is this consent/authorization state still current?"
+from existing machinery. This profile adds the three pieces that
+composition deliberately leaves open, for deployments that need them. It
+applies to any governed asset or action — 3D assets, scans, media,
+digital replicas, embodied-person representations, and agentic actions
+alike.</p>
+<p><strong>Supersession pointer.</strong> A status response (<a
+href="#o22-response-schema">O2.2</a>) MAY additionally carry
+<code>supersededBy</code> — a URI identifying the record (typically a
+newer manifest instance) that replaces the queried one.
+<code>supersededBy</code> is meaningful only alongside
+<code>status: "revoked"</code> or <code>"suspended"</code>; the closed
+<code>status</code> enum is unchanged, so endpoints and evaluators that
+do not implement this profile interoperate unmodified (an unrecognized
+member is ignored). An evaluator implementing this profile SHOULD record
+the pointer in the receipt (reason
+<code>um:reason:policy:superseded</code>) and MAY request the successor
+record from the holder; it MUST NOT treat the superseded record's grants
+as current. <code>supersededBy</code> is discovery metadata, not a trust
+grant: like the rest of the status response it carries no independent
+signature (<a href="#o21-resolution-procedure">O2.1</a>), and a
+successor record confers nothing until it is itself evaluated —
+signature, TTL, status, consent — under the ordinary evaluation sequence
+(<a
+href="/spec/v0.4/core/#evaluation-sequence">Base
+§3.1</a>).</p>
+<p><strong>Policy-window taxonomy.</strong> A deployment, profile, or
+consent condition MAY declare a <code>policyWindow</code> (ISO 8601
+duration) for a governed action: the maximum age of current-state
+evidence (a status response, a consent record's validation, a delegation
+liveness check) the evaluator may act on. Within the window, cached
+evidence MAY be used, subject to the <code>nextCheck</code> and
+<code>revocationCursor</code> rules of <a
+href="#o21-resolution-procedure">O2.1</a>. Beyond the window, or when
+state cannot be resolved at all, the evaluator MUST NOT proceed on stale
+state and MUST apply the declared <strong>unresolved-state
+disposition</strong>: <code>deny</code> (refuse the governed action; the
+default when no disposition is declared — fail closed) or
+<code>escalate</code> (withhold automatic processing and route the
+decision to a designated out-of-band authority; escalation is a
+refusal-to-proceed-automatically, never a grant). The disposition
+vocabulary is a registry, extensible via <a
+href="#o6-profile-registration-mechanism">O6</a>.</p>
+<p><strong>Policy-window carrier (candidate).</strong> A consent-carried
+policy window is expressed as consent <code>conditions</code> tokens (<a
+href="/spec/v0.4/core/#consents-array-schema">Base
+§1.4.4</a>), in the same plain-string condition shape as the
+<code>route-class:&lt;value&gt;</code> convention (<a
+href="#o134-route-scoped-disclosure">O13.4</a>; <a
+href="#o6-profile-registration-mechanism">O6</a> registry-token note):
+<strong><code>policy-window:&lt;duration&gt;</code></strong> (e.g.
+<code>policy-window:PT1H</code>, the ISO 8601 duration) declares the
+window for governed actions under that consent entry, and
+<strong><code>policy-disposition:deny</code></strong> /
+<strong><code>policy-disposition:escalate</code></strong> declares the
+unresolved-state disposition (absent a disposition token,
+<code>deny</code> — the fail-closed default above). At most one
+<code>policy-window:</code> token and one
+<code>policy-disposition:</code> token may appear on one entry; an entry
+carrying more than one of either is unenforceable and fails closed under
+the Base's condition rule. A deployment- or profile-declared window is
+configuration, declared out-of-band (for example in the deployment's
+conformance claim, <a
+href="#o111-conformance-claim-contents-candidate-template">O11.1</a>, or
+the profile's registration entry) and evaluated identically.
+Interoperation degrades safely: to an evaluator that does not implement
+this profile the tokens are unrecognized conditions, so the governed
+facet already fails closed under <a
+href="/spec/v0.4/core/#consents-array-schema">Base
+§1.4.4</a> — a non-implementer can never process <em>more</em> than an
+implementer. <strong>Default when no policy window is declared</strong>
+by any carrier: no additional currency bound applies — the existing
+machinery alone governs (TTL,
+<code>nextCheck</code>/<code>revocationCursor</code>, consent validity
+windows, per <a
+href="/spec/v0.4/core/#current-policy-state-resolution-before-governed-action-informative-composition">Base
+§3.4.1</a>); this profile adds no implicit window.</p>
+<p><strong>Reason codes and receipt evidence.</strong> This profile
+registers the reason-code candidates
+<code>um:reason:policy:superseded</code>,
+<code>um:reason:policy:unresolved</code>,
+<code>um:reason:policy:window-expired</code>, and
+<code>um:reason:policy:escalated</code> (<a
+href="#o33-structured-reason-registry">O3.3</a>), and the receipt
+event-class candidates <code>policy-state-resolved</code>,
+<code>policy-state-stale</code>, and <code>policy-state-escalated</code>
+(<a href="#o32-typed-event-vocabulary">O3.2</a>), so the disposition of
+a governed action — resolved, unresolved, stale, superseded, denied, or
+escalated — is machine-readable in the receipt (<a
+href="/spec/v0.4/core/#structured-receipts">Base
+§3.3</a>).</p>
+<p><strong>Honest limits.</strong> The profile makes currency decisions
+auditable and fail-closed; it does not make a status endpoint truthful
+(transport integrity per <a href="#o21-resolution-procedure">O2.1</a> is
+the only response-integrity protection), does not erase or relabel state
+already acted on under a then-valid record (consistent with <a
+href="/spec/v0.4/core/#private-data-handling-derived-writes-and-honest-limits">Base
+§7.2</a>), and does not by itself provide resolver-operator privacy (see
+the status-resolution correlation considerations in <a
+href="/spec/v0.4/core/#privacy-considerations">Base
+§7</a>).</p>
 <hr />
 </section>
 </section>
@@ -1222,9 +1545,14 @@ and independently verified, carrying the common envelope members with
 <code>@type</code> including both <code>um:Manifest</code> and
 <code>um:Receipt</code>, plus the receipt fields of <a
 href="/spec/v0.4/core/#receipt-fields">Base
-§3.3.1</a>. This promotion is additive; an evaluator that only emits
-inline receipts remains conformant, and the chain-integrity members are
-OPTIONAL unless a receipt is part of a sequence.</p>
+§3.3.1</a>. The envelope's <code>subject</code> on a receipt manifest is
+the <strong>evaluator</strong> that produced it: the receipt is a record
+of the evaluator's own processing act, and the manifest it processed is
+identified by the <code>manifestId</code> receipt field, not by
+<code>subject</code> (this is the practice the fixture suite and
+Cookbook already follow). This promotion is additive; an evaluator that
+only emits inline receipts remains conformant, and the chain-integrity
+members are OPTIONAL unless a receipt is part of a sequence.</p>
 <section id="o31-chain-integrity" class="level3">
 <h3><span class="secno">O3.1. </span>Chain Integrity</h3>
 <p>Receipts in a session or audit sequence form a hash-linked chain. A
@@ -1250,14 +1578,51 @@ document the way <a
 href="/spec/v0.4/ext-t1/#t15-claim-proof-process--end-to-end-verification-path">EXT-T1
 §T1.5</a> authorizes manifest-signing keys, a session-scoped
 receipt-signing key MUST be introduced by a
-<code>sessionKeyAuthorization</code> — a statement naming the session
-key, the <code>chainId</code>, and a validity window, signed by a key
-authorized for the evaluator's DID — carried in or referenced from the
-first receipt, so the chain is attributable to a known evaluator.
-Evaluators verifying a chain MUST confirm each <code>seq</code>
-increments by one without gaps and each <code>prevHash</code> matches
-the prior receipt; a broken link MUST be reported and the chain after
-the break treated as unverified.</p>
+<strong><code>sessionKeyAuthorization</code></strong> — a candidate
+member of the chain's first (<code>seq</code> 0) receipt manifest,
+carrying the authorization object inline or a URI resolving to it. The
+authorization object's candidate shape: <code>sessionKey</code>
+(REQUIRED — the session public key, as a JWK or a multibase-encoded
+public key; it MUST be the key that signs the chained receipts, e.g. the
+<code>deviceCapability.sessionSigningKey</code>); <code>chainId</code>
+(REQUIRED — MUST equal the chain's <code>chainId</code>);
+<code>validFrom</code> and <code>validUntil</code> (REQUIRED — RFC 3339;
+the window within which this key may sign receipts of the chain); and
+<code>signature</code> (REQUIRED — a Signature Profile A signature over
+the authorization object, computed by applying the <a
+href="/spec/v0.4/core/#signing-input-procedure">Base
+§1.6.3</a> procedure to the object with its own <code>signature</code>
+member excluded, produced by a key authorized for the
+<strong>evaluator's</strong> DID — a key appearing under
+<code>authentication</code> or <code>assertionMethod</code> in the DID
+document of the <code>evaluatorId</code> party). A verifier attributing
+a session-signed chain MUST verify the authorization — the evaluator-key
+signature, the <code>chainId</code> match, that the chained receipts'
+signing key equals <code>sessionKey</code>, and that each receipt was
+signed within the validity window — before attributing the chain to the
+evaluator; on failure, chain <em>integrity</em> may still verify link by
+link, but the chain is unattributable and MUST NOT be attributed to the
+evaluator. Evaluators verifying a chain MUST confirm each
+<code>seq</code> increments by one without gaps and each
+<code>prevHash</code> matches the prior receipt; a broken link MUST be
+reported and the chain after the break treated as unverified.</p>
+<p><strong>Verifying an archived chain vs. acting on a receipt.</strong>
+A chained receipt is a durable audit record, and its links age past
+their manifest TTLs. The freshness gate (<a
+href="/spec/v0.4/core/#stage-2-verify">Base
+§3.1.2</a>) and cache eviction (<a
+href="/spec/v0.4/core/#caching-formulation">Base
+§3.2</a>) govern <em>acting on</em> a receipt's content as current
+state; they do not govern verifying an archived chain. Chain
+verification — signature validity, <code>seq</code> continuity,
+<code>prevHash</code> linkage, and the
+<code>sessionKeyAuthorization</code> — proceeds over expired links
+unchanged: an auditor records an expired link as <em>expired</em> (its
+content is stale for action) but MUST NOT treat expiry as a broken link
+under the broken-link rule above. Deployments retaining chains for audit
+SHOULD bound retention per Receipt Minimization (<a
+href="/spec/v0.4/core/#privacy-considerations">Base
+§7</a>).</p>
 </section>
 <section id="o32-typed-event-vocabulary" class="level3">
 <h3><span class="secno">O3.2. </span>Typed Event Vocabulary</h3>
@@ -1342,12 +1707,16 @@ href="#o6-profile-registration-mechanism">O6</a>).</p>
 following the Certificate Transparency 2.0 model [<a
 href="#references">RFC9162</a>]. When anchored, the receipt MAY carry a
 <code>transparencyAnchor</code> object with <code>logId</code>,
-<code>inclusionProof</code> (a Merkle inclusion proof), and
-<code>anchoredAt</code> (RFC 3339). Anchoring is OPTIONAL and does not
-increase per-event cost for deployments that do not use it; it provides
-tamper-evident, independently auditable history. Evaluators that do not
-implement transparency anchoring MUST preserve the
-<code>transparencyAnchor</code> field without acting on it.</p>
+<code>inclusionProof</code> (a Merkle inclusion proof; its structure is
+a wire-freeze decision to be bound to the [<a
+href="#references">RFC9162</a>] inclusion-proof structure — log
+identity, tree size, leaf index, audit path — and until then it is
+carried as an opaque candidate object), and <code>anchoredAt</code> (RFC
+3339). Anchoring is OPTIONAL and does not increase per-event cost for
+deployments that do not use it; it provides tamper-evident,
+independently auditable history. Evaluators that do not implement
+transparency anchoring MUST preserve the <code>transparencyAnchor</code>
+field without acting on it.</p>
 <p><em>(Worked example: chained receipt manifest with typed events — see
 <a href="/spec/v0.4/cookbook/">Cookbook</a>.)</em></p>
 <p><strong>Preview:</strong> Promoting the Receipt to a first-class
@@ -1387,7 +1756,16 @@ new exchange between the same parties is a new session with new
 <code>sessionId</code>/<code>exchangeId</code>. <code>sessionId</code>
 and <code>exchangeId</code> MUST each be generated with at least 128
 bits of entropy and MUST NOT encode party identifiers, since both are
-correlation tokens the parties rely on.</p>
+correlation tokens the parties rely on. <strong>Session
+operations</strong> — the acts governed by the session lifecycle and its
+TTL — are: presenting or accepting a manifest under the session,
+producing or accepting a receipt bearing the session's
+<code>exchangeId</code>, and the completion acknowledgment (<a
+href="#o42-session-lifecycle">O4.2</a>). After <code>expiresAt</code>,
+the session is <code>"expired"</code> and a participant MUST NOT perform
+or accept any of these under that
+<code>sessionId</code>/<code>exchangeId</code>; receipts already
+exchanged remain valid records.</p>
 </section>
 <section id="o42-session-lifecycle" class="level3">
 <h3><span class="secno">O4.2. </span>Session Lifecycle</h3>
@@ -1401,7 +1779,13 @@ each receipt MUST include <code>exchangeId</code>);
 <code>"completed"</code> (both acknowledged the other's receipt);
 <code>"expired"</code> (TTL elapsed without <code>"completed"</code>;
 evaluators MUST treat as terminated). <code>"expired"</code> MAY be
-entered from any active state.</p>
+entered from any active state. The <code>"completed"</code>-state
+acknowledgment mechanic — how a party signals that it received the
+counterparty's receipt — is transport-defined (<a
+href="#o44-transport-independence">O4.4</a>): a transport binding MAY
+use a message type, an HTTP response, or an equivalent; the session
+model requires only that both acknowledgments occur before the session
+is <code>"completed"</code>.</p>
 </section>
 <section id="o43-paired-receipt-correlation" class="level3">
 <h3><span class="secno">O4.3. </span>Paired Receipt Correlation</h3>
@@ -1436,14 +1820,43 @@ of an existing consent carrying <code>unlock.window</code> in its
 <code>scope</code> (dot form, per the agent-delegation scope convention
 of <a href="#o7-agent-delegation-scope-registry">O7</a>), with
 <code>grantedAt</code>, <code>expiresAt</code>, an optional
-<code>withdrawnAt</code>, and the enumerated facet set. It is not a new
+<code>withdrawnAt</code>, and the enumerated facet set
+(<code>unlockWindowFacets</code>, defined below). It is not a new
 manifest object.</p>
+<p><strong>The window's consent members.</strong> The unlock-window
+consent is an ordinary consent entry (<a
+href="/spec/v0.4/core/#consents-array-schema">Base
+§1.4.4</a>) whose <code>scope</code> contains the
+<code>unlock.window</code> token, extended by one member this profile
+defines: <strong><code>unlockWindowFacets</code></strong> — an array of
+facet <code>@id</code> strings explicitly enumerating the facet set the
+window opens. <code>unlockWindowFacets</code> is REQUIRED on a consent
+whose <code>scope</code> contains <code>unlock.window</code>; it MUST be
+explicit and bounded (literal <code>@id</code> values only — no wildcard
+or pattern forms), and, like the OPTIONAL unlock-policy members below,
+it is carried on the consent object inside the signed payload. A consent
+carrying <code>unlock.window</code> without
+<code>unlockWindowFacets</code> is malformed for this profile, and the
+window MUST NOT be opened (fail closed). An entry of
+<code>unlockWindowFacets</code> that matches no facet of the presented
+manifest is inert — a window cannot open what is not projected. The
+consent's <strong><code>facetRef</code></strong> (REQUIRED by the Base
+consent shape) MUST name one facet of the enumerated set: it designates
+an anchor member, and the Base's scope/purpose/validity matching applies
+to the entry as usual — but the set the window opens is governed by
+<code>unlockWindowFacets</code>, never by <code>facetRef</code> alone.
+<em>(Wire status: <code>unlockWindowFacets</code> and the unlock-policy
+members are grade-1 structural PREVIEW — present in the published v0.4
+context and, for the enumeration, exercised by a shape fixture — while
+the enforcement semantics of this part remain revisable, per the
+two-grade PREVIEW policy.)</em></p>
 <p>An unlock window MUST be sound on the following axes:</p>
 <ol type="1">
 <li><strong>Bounded / enumerated facet set.</strong> The window MUST
-explicitly enumerate the facet set it opens (by <code>@id</code>). It
-MUST NOT open an unbounded or implicit set. This prevents the "one
-ceremony unlocks everything" anti-pattern that per-facet isolation (<a
+explicitly enumerate the facet set it opens (by <code>@id</code>, in
+<code>unlockWindowFacets</code> — defined above). It MUST NOT open an
+unbounded or implicit set. This prevents the "one ceremony unlocks
+everything" anti-pattern that per-facet isolation (<a
 href="/spec/v0.4/core/#per-facet-cryptographic-isolation">Base
 §2.3.5</a>) exists to prevent.</li>
 <li><strong>Never lowers a per-facet floor or isolation.</strong> The
@@ -1480,18 +1893,46 @@ href="/spec/v0.4/core/#private-data-handling-derived-writes-and-honest-limits">B
 <li><strong>Receipt-side liveness reference.</strong> The opening
 ceremony is recorded as a <code>session-unlocked</code> event in the
 typed event vocabulary (<a href="#o32-typed-event-vocabulary">O3.2</a>),
-referencing the opening liveness attestation — not a new consent member.
-This keeps the unlock window member-free on the consent object.</li>
+referencing the opening liveness attestation — the <em>liveness
+reference</em> adds no consent member. The window itself is carried by
+the <code>unlock.window</code> scope token plus the
+<code>unlockWindowFacets</code> enumeration and the OPTIONAL
+unlock-policy members (the consent-object members this profile defines);
+the receipt-side record adds nothing further to the consent object.</li>
 </ol>
-<p><strong>Session-policy fields (locked-tier auditability).</strong>
+<p><strong>What opening means — the window never substitutes for consent
+(fail closed).</strong> Opening an unlock window is an <em>unlock
+ceremony plus a time-boxed authorization window</em>; it is not a
+consent grant. Membership in <code>unlockWindowFacets</code> does not
+authorize any operation on a facet: each enumerated facet is processed
+only under a consent entry of its own that governs it — Stage 4 (<a
+href="/spec/v0.4/core/#stage-4-consent">Base
+§3.1.4</a>) applies unchanged, so an enumerated facet with no governing
+consent entry stays <code>"consent-missing"</code> and MUST NOT be
+processed even while the window is open. What the window adds, for the
+enumerated set and only within
+<code>grantedAt</code>–<code>expiresAt</code> (as tightened by the
+unlock-policy bounds below): (1) the <strong>opening ceremony</strong> —
+the fresh <code>presentationProof</code>/liveness binding of axes 3–4 —
+gating access to locked-tier facets (<a
+href="/spec/v0.4/ext-t1/#t133-locked-tier-portable-unlock-profile-umprofiletrustlocked-tier-portable-unlock">EXT-T1
+§T1.3.3</a>); (2) the <strong>time box</strong> — outside an open
+window, a locked-tier facet of the set reverts to locked/withheld even
+where its own consent entry remains valid; and (3) the <strong>auditable
+record</strong> — the <code>session-unlocked</code> event of axis 6. A
+write inside the window additionally requires its own write-consent and
+per-write replay guard (<a
+href="/spec/v0.4/core/#stage-4-consent">Base
+§3.1.4</a>).</p>
+<p><strong>Unlock-policy fields (locked-tier auditability).</strong>
 When an unlock window opens a locked-tier facet (<a
 href="/spec/v0.4/ext-t1/#t133-locked-tier-portable-unlock-profile-umprofiletrustlocked-tier-portable-unlock">EXT-T1
 §T1.3.3</a>), the unlock-window consent MAY additionally carry these
-OPTIONAL session-policy members so the time-boxed grant is auditable and
+OPTIONAL unlock-policy members so the time-boxed grant is auditable and
 tightly bounded:</p>
 <ul>
 <li><code>idleLifetime</code> — an ISO 8601 duration (e.g.
-<code>"PT10M"</code>) after which an idle session SHOULD re-require the
+<code>"PT10M"</code>) after which an idle window SHOULD re-require the
 unlock gesture;</li>
 <li><code>absoluteLifetime</code> — an ISO 8601 duration (e.g.
 <code>"PT12H"</code>) capping the window regardless of activity; it MUST
@@ -1535,11 +1976,21 @@ availability across a distributed network.</p>
 <p><strong>Resolver coordination.</strong> A federated resolver network
 consists of two or more resolver operators that synchronize manifest
 status. Resolvers MUST identify themselves using DIDs and MUST establish
-mutual trust through bilateral attestation (each attests to the other's
-identity via an <code>identity.crossDidBinding</code> claim or
-equivalent). Resolver discovery is out of scope; deployments MAY use a
-well-known URI (<code>/.well-known/um-resolvers</code>), a DID service
-endpoint, or out-of-band configuration.</p>
+mutual trust through bilateral attestation: each operator issues an
+attested claim about the <em>peer's</em> resolver identity — an ordinary
+attester-asserted claim whose <code>subject</code> is the peer's DID (a
+candidate <code>identity.peerAttestation</code> claim type, registrable
+via <a href="#o6-profile-registration-mechanism">O6</a>), or an
+equivalent mutual-attestation pattern.
+<code>identity.crossDidBinding</code> is <strong>not</strong> that
+pattern and MUST NOT be used for peer trust: it asserts that multiple
+DIDs are controlled by the <em>same</em> entity (<a
+href="/spec/v0.4/core/#identitycrossdidbinding-claim">Base
+§6.4.4</a>), which is precisely not the relationship between two
+independent resolver operators. Resolver discovery is out of scope;
+deployments MAY use a well-known URI
+(<code>/.well-known/um-resolvers</code>), a DID service endpoint, or
+out-of-band configuration.</p>
 <p><strong>Status check distribution.</strong> When an evaluator
 resolves a <code>statusRef</code> URI, it MAY query multiple federated
 resolvers. If any resolver reports <code>"revoked"</code>, the evaluator
@@ -1548,8 +1999,12 @@ overrides other responses). If resolvers disagree, the evaluator MUST
 act on the most restrictive status received and SHOULD record a warning
 with reason <code>um:reason:status:federation-inconsistent</code>; the
 recorded <code>revocationStatus</code> reflects the most restrictive
-answer received, not <code>"unchecked"</code>. If all queried resolvers
-are unreachable, follow the error handling in <a
+answer received, not <code>"unchecked"</code>. The restrictiveness order
+is <code>"revoked"</code> &gt; <code>"suspended"</code> &gt;
+<code>"active"</code> (most to least restrictive);
+<code>"unchecked"</code> is not a member of this order — it is reserved
+for the case where no resolver returned an answer. If all queried
+resolvers are unreachable, follow the error handling in <a
 href="#o24-error-handling">O2.4</a>.</p>
 <p><strong>Cache invalidation.</strong> When a manifest's status
 changes, the issuing resolver MUST propagate the change to all federated
@@ -1574,7 +2029,9 @@ metadata MUST NOT be added to the manifest payload, because the
 payload's bytes are covered by the signature; a forwarding agent MAY
 convey a <code>forwardedVia</code> array (resolver DIDs in path order)
 in transport-level metadata or a wrapper object that carries the
-manifest unmodified — such metadata is informational and MUST NOT affect
+manifest unmodified (the wrapper's shape is transport-profile-defined;
+this profile constrains only that the carried manifest bytes are
+unmodified) — such metadata is informational and MUST NOT affect
 evaluation. Forwarded manifests MUST be re-verified by the receiving
 evaluator; the forwarding agent's handling does not substitute for the
 receiver's own evaluation.</p>
@@ -1649,6 +2106,40 @@ independently of the specification version; each entry contains the
 identifier, name, version, status (<code>"active"</code>,
 <code>"deprecated"</code>, <code>"sunset"</code>), specification URI,
 and registration date.</p>
+<p><strong>Registry-token representation in the JSON-LD encoding
+(informative).</strong> The published v0.4 context gives the
+registry-token families used across this document set three distinct
+JSON-LD shapes, and profile authors should account for them at
+registration time. (1) Receipt <code>reason</code> codes
+(<code>um:reason:&lt;category&gt;:&lt;code&gt;</code>, <a
+href="#o33-structured-reason-registry">O3.3</a>) ride a plain, uncoerced
+term — values are inert literal strings, with shipped wire precedent in
+the conformance fixtures (<code>um:reason:crypto:key-rotated</code> /
+<code>um:reason:crypto:key-shredded</code>); design-stage candidate
+families such as the <a
+href="#o26-current-policy-state-profile">O2.6</a>
+<code>um:reason:policy:*</code> and <a
+href="#o135-attribution-receipts-and-the-privacy-boundary">O13.5</a>
+<code>um:reason:route:*</code> codes follow that same pattern unchanged
+if finalized. (2) Consent <code>conditions</code> values — including the
+<a href="#o134-route-scoped-disclosure">O13.4</a>
+<code>route-class:&lt;value&gt;</code> candidate convention — are
+members of an unordered set of plain strings; they undergo no
+compact-IRI expansion and are compared as opaque tokens. (3)
+<code>profile</code> identifiers
+(<code>um:profile:&lt;category&gt;:&lt;name&gt;</code>) are
+<code>@id</code>-coerced, so a value expands as a compact IRI under the
+version-independent <code>um:</code> prefix; a registered profile
+identifier is thereby a globally unique IRI, not a bare label. The
+term-shape asymmetry — reason codes and conditions as opaque strings,
+profile identifiers as IRIs — is deliberate at this stage: reason codes
+and conditions are matched by evaluators as tokens, while profile
+identifiers name registry entries that benefit from global identity.
+Whether a design-stage candidate token family enters the versioned
+context, and in which of these shapes, is a context-terms decision taken
+at wire freeze through this registration process; appearance of a
+candidate token in a design-stage draft confers no context
+registration.</p>
 <p><strong>Note (working-group):</strong> Whether low-risk profiles
 (e.g., new domain entity types) should follow a lighter-weight
 registration with designated expert review instead of full consensus is
@@ -1677,7 +2168,8 @@ on behalf of the subject); <code>spatial.navigation</code> (navigate
 spatial environments); <code>social.messaging</code> (send and receive
 messages); <code>social.presence</code> (represent the subject's
 presence status); <code>commerce.transaction</code> (initiate
-transactions, within any spending limits declared in the manifest);
+transactions, within any spending limits declared by profile-defined
+members — this specification itself defines no spending-limit member);
 <code>identity.attestation</code> (present the subject's identity claims
 to verifiers — does <strong>not</strong> grant authority to create or
 modify claims).</p>
@@ -1740,21 +2232,36 @@ distinguished by their <code>@type</code>; not top-level
 <code>um:Facet</code> objects), each carrying the common claim members
 of <a
 href="/spec/v0.4/core/#claims-array-schema">Base
-§1.4.3</a> plus <code>trustWeight</code>: <code>operatorIdentity</code>
-(the operating entity's identity, signed by an identity service
-provider; RECOMMENDED for any non-trivial service);
-<code>serviceCategoryClaim</code> (the self-declared category; always
+§1.4.3</a> plus <code>trustWeight</code>, plus the value-carrying
+members named here: <code>operatorIdentity</code> (the operating
+entity's identity, signed by an identity service provider — the
+operator's DID or URI is carried in the base claim <code>subject</code>
+member, with the attesting provider as <code>issuer</code>; no
+additional value member is needed; RECOMMENDED for any non-trivial
+service); <code>serviceCategoryClaim</code> (the self-declared category
+— a REQUIRED <strong><code>category</code></strong> member, a string
+naming the category, drawn from a registered category vocabulary where
+one exists (<a href="#o6-profile-registration-mechanism">O6</a>); always
 <code>trustWeight: "hint"</code> unless paired with a
 <code>categoryAttestation</code>); <code>categoryAttestation</code> (a
-Verifiable Credential attesting the category from a recognized
-authority; REQUIRED for high-impact categories — defined at the profile
-level, e.g. emergency, medical, financial, child-directed);
-<code>urgencyClaim</code> (any urgency/priority assertion, carried as a
-separate signed claim so urgency cannot be smuggled in via the category
-field). Normative rules: an evaluator MUST NOT act on a
+Verifiable Credential attesting the category from a recognized authority
+— carrying the same REQUIRED <strong><code>category</code></strong>
+member, whose value MUST equal the paired
+<code>serviceCategoryClaim</code>'s <code>category</code> for the
+pairing to hold; REQUIRED for high-impact categories — defined at the
+profile level, e.g. emergency, medical, financial, child-directed);
+<code>urgencyClaim</code> (any urgency/priority assertion — a REQUIRED
+<strong><code>urgency</code></strong> member, a string token with
+candidate registry values <code>routine</code>, <code>elevated</code>,
+<code>emergency</code> (extensible via <a
+href="#o6-profile-registration-mechanism">O6</a>), carried as a separate
+signed claim so urgency cannot be smuggled in via the category field).
+Normative rules: an evaluator MUST NOT act on a
 <code>serviceCategoryClaim</code> for a high-impact category without a
-verified <code>categoryAttestation</code>; MUST verify
-<code>categoryAttestation</code> credentials for revocation per <a
+verified <code>categoryAttestation</code> (high-impact membership is
+determined from the <code>category</code> value against the
+profile-level list); MUST verify <code>categoryAttestation</code>
+credentials for revocation per <a
 href="#o2-statusref-resolution-schema">O2</a>; and MUST treat
 <code>operatorIdentity</code> and <code>serviceCategoryClaim</code> as
 independent. The high-impact category list is profile-level, not fixed
@@ -1822,14 +2329,37 @@ most specific derived-variant key granted: a grant for
 sensitive) variant MAY be treated by policy as also authorizing strictly
 more-derived variants of the same signal, but a deployment doing so MUST
 document the implication in its conformance claim.</p>
+<p><strong>Carrier (candidate).</strong> The derived-variant sensor key
+is carried <strong>folded into consent <code>scope</code></strong>: each
+key
+(<code>sensor.&lt;class&gt;.&lt;signal&gt;.&lt;derivation&gt;</code>) is
+a consent-<code>scope</code> operation token (<a
+href="/spec/v0.4/core/#consents-array-schema">Base
+§1.4.4</a>), following the same dot-token discipline as the
+agent-delegation scopes (<a
+href="#o7-agent-delegation-scope-registry">O7</a>) and the write verbs
+(<a href="/spec/v0.4/core/#stage-4-consent">Base
+§3.1.4</a>) — no dedicated <code>sensorConsent</code> member is defined.
+A sensor grant is therefore an ordinary consent entry whose
+<code>scope</code> contains the sensor token and whose
+<code>purpose</code> carries the mandatory purpose binding above; its
+<code>facetRef</code> names the facet through which the sensor data is
+exposed or into which it is written (a deployment MAY model a sensor
+stream as its own facet for this purpose). Stage-4 matching applies
+literally, and the token that authorizes a source sensor read —
+including for the derived-write precedence rule of <a
+href="/spec/v0.4/core/#private-data-handling-derived-writes-and-honest-limits">Base
+§7.2</a> — is the most specific granted token per the specificity rule
+above. The tokens are design-stage candidates and enter the
+context/registry only at wire freeze (<a
+href="#o6-profile-registration-mechanism">O6</a>).</p>
 <p><em>(Worked example: derived-variant sensor consent with purpose
 binding — see <a
 href="/spec/v0.4/cookbook/">Cookbook</a>.)</em></p>
 <p><strong>Preview:</strong> Built on the editors' default (add in v0.4;
-small, non-breaking). Input is requested on the full derivation-tier
-enumeration per sensor class and on whether the sensor key is best
-carried as a dedicated <code>sensorConsent</code> field or folded into
-<code>scope</code>.</p>
+small, non-breaking). The carrier question is resolved at design stage
+to scope-folding (above); input is requested on the full derivation-tier
+enumeration per sensor class.</p>
 </section>
 <section id="o92-two-component-devices-schema" class="level3">
 <h3><span class="secno">O9.2. </span>Two-Component <code>devices</code>
@@ -1904,7 +2434,13 @@ fielded and this is the most consequential wire-shape decision in this
 version. Attestation transparency logs for device attestations are out
 of scope for v0.4 (flagged for v0.5). Input is requested on the
 sensor-class and OpenXR-extension vocabularies and on session-key
-generation requirements.</p>
+generation requirements. Two member-precision decisions are reserved to
+the wire freeze so they are not lost: the <code>modelHash</code>
+computation rule (which bytes are hashed — e.g. a manufacturer-published
+model/firmware descriptor — and the matching procedure against a
+manufacturer registry) and the <code>sessionSigningKey</code>
+representation (JWK vs. multibase); until fixed, both are
+deployment-profiled.</p>
 </section>
 <section id="o93-actorstate-member" class="level3">
 <h3><span class="secno">O9.3. </span><code>actorState</code> Member</h3>
@@ -1941,9 +2477,14 @@ meaningful only when <code>type</code> is <code>"human"</code> or
 href="/spec/v0.4/ext-t1/#t13-liveness-attestation">EXT-T1
 §T1.3</a>). When <code>executor</code> is absent, evaluators MUST treat
 the session as principal-operated (<code>type: "human"</code> with no
-delegate). <code>actorState</code> is additive and non-breaking; v0.3
-manifests omit it, and evaluators that do not implement it record it as
-present-but-unprocessed.</p>
+delegate). A <code>"hybrid"</code> executor MUST be treated as
+agent-operated by any gate that distinguishes human-operated from
+agent-operated sessions (for example a human-only-session requirement —
+<a href="/spec/v0.4/core/#platform-guidance">Base
+§6.5.2</a>): partial human participation does not satisfy a human-only
+gate (fail closed). <code>actorState</code> is additive and
+non-breaking; v0.3 manifests omit it, and evaluators that do not
+implement it record it as present-but-unprocessed.</p>
 <p><em>(Worked example: actorState with an agent executor — see <a
 href="/spec/v0.4/cookbook/">Cookbook</a>.)</em></p>
 <p><strong>Preview:</strong> Built on the editors' default (add as
@@ -2080,6 +2621,18 @@ href="/spec/v0.4/ext-t1/">EXT-T1</a>)</td>
 claims at Tier 0.</td>
 </tr>
 <tr>
+<td>Per-facet floors (<code>requiredLiveness</code>,
+<code>requiredAssuranceClass</code> — <a
+href="/spec/v0.4/ext-t1/#t131-per-facet-liveness-floor-requiredliveness">EXT-T1
+§T1.3.1</a> / <a
+href="/spec/v0.4/ext-t1/#t133-locked-tier-portable-unlock-profile-umprofiletrustlocked-tier-portable-unlock">§T1.3.3</a>,
+PREVIEW)</td>
+<td>OPTIONAL (PREVIEW)</td>
+<td>A floor-bearing facet MUST be withheld (recorded
+<code>assuranceInsufficient</code>, or the unmet-liveness status), never
+processed — fail closed.</td>
+</tr>
+<tr>
 <td>CBOR-LD encoding (<a
 href="#o14-cbor-ld-production-rule-compact-encoding">O1.4</a>)</td>
 <td>OPTIONAL</td>
@@ -2121,9 +2674,654 @@ href="/spec/v0.4/core/#bilateral-exchange">Base
 <td>Single-endpoint statusRef resolution (<a
 href="#o2-statusref-resolution-schema">O2</a>) applies.</td>
 </tr>
+<tr>
+<td>Current policy-state profile (<a
+href="#o26-current-policy-state-profile">O2.6</a>, PREVIEW
+design-stage)</td>
+<td>OPTIONAL</td>
+<td>The bounded composition of <a
+href="/spec/v0.4/core/#current-policy-state-resolution-before-governed-action-informative-composition">Base
+§3.4.1</a> applies: TTL, statusRef, consent windows, fail-closed.</td>
+</tr>
+<tr>
+<td>Represented-person consent profile (<a
+href="#o12-asset-bound-manifests-and-represented-person-consent-profile">O12</a>,
+PREVIEW design-stage)</td>
+<td>OPTIONAL</td>
+<td>Existing fail-closed rules apply: an unrecognized claim type is
+unprocessable above Tier 0 (<a
+href="/spec/v0.4/core/#claims-array-schema">Base
+§1.4.3</a>); an unrecognized or unenforceable consent condition fails
+closed (<a
+href="/spec/v0.4/core/#consents-array-schema">Base
+§1.4.4</a>).</td>
+</tr>
+<tr>
+<td>Referral-route attribution profile (<a
+href="#o13-signed-referral-route-attribution-and-route-scoped-disclosure-profile">O13</a>,
+PREVIEW design-stage)</td>
+<td>OPTIONAL</td>
+<td>An unrecognized pointer type is recorded but not acted on (<a
+href="/spec/v0.4/core/#pointers-array-schema">Base
+§1.4.5</a>); a consent conditioned on a route class the evaluator cannot
+verify fails closed (<a
+href="/spec/v0.4/core/#consents-array-schema">Base
+§1.4.4</a>).</td>
+</tr>
+<tr>
+<td>GeoPose primary pose value profile (<a
+href="#o14-geopose-primary-pose-value-profile">O14</a>, PREVIEW
+design-stage)</td>
+<td>OPTIONAL</td>
+<td>A GeoPose-bearing manifest still follows ordinary UM behavior:
+unknown claims/pointers are preserved but not acted on, unverified
+provenance caps trust, and missing or unverifiable pose data MUST NOT be
+invented.</td>
+</tr>
 </tbody>
 </table>
+<section id="o111-conformance-claim-contents-candidate-template"
+class="level3">
+<h3><span class="secno">O11.1. </span>Conformance-Claim Contents
+(candidate template) <span class="preview-tag">PREVIEW</span></h3>
+<p><strong>Design-stage.</strong> Requirements across this document set
+oblige a deployment to <em>document</em> choices in its conformance
+claim, but no claim format has been defined. This subsection names the
+candidate template so those obligations have a single landing place; the
+claim-document format itself is a registration-time deliverable (<a
+href="#o6-profile-registration-mechanism">O6</a>) and adds no manifest
+wire member.</p>
+<p>A v0.4 conformance claim SHOULD be a published, structured document
+stating, at minimum:</p>
+<ol type="1">
+<li><strong>Identity and class</strong> — the implementation and
+version; the conformance class(es) claimed (evaluator, holder, bilateral
+participant, status endpoint — <a
+href="/spec/v0.4/core/#conformance">Base §4</a>);
+the production rules supported (<a
+href="#o12-production-rules">O1.2</a>).</li>
+<li><strong>Modules and PREVIEW features</strong> — which optional
+modules of the matrix above are implemented, and which PREVIEW features
+the claim includes (per the two-grade PREVIEW policy; design-stage
+profiles MUST NOT be claimed — <a
+href="/spec/v0.4/core/#standalone-conformance-suite">Base
+§4.4</a>).</li>
+<li><strong>Documented deviations and policies</strong> — every choice
+the normative text requires a claim to document: a widened clock-skew
+tolerance (<a
+href="/spec/v0.4/core/#stage-2-verify">Base
+§3.1.2</a>); resource-limit deviations (<a
+href="/spec/v0.4/core/#resource-limits">Base
+§6.3</a>); purpose-vocabulary hierarchy use (<a
+href="/spec/v0.4/core/#consents-array-schema">Base
+§1.4.4</a>); the sensor derivation-implication policy, where a
+less-derived grant is read as also authorizing more-derived variants (<a
+href="#o91-derived-variant-sensor-consent-vocabulary">O9.1</a>); and any
+stricter VP size limits (<a
+href="/spec/v0.4/ext-t1/#t151-claimproof-verification-procedure">EXT-T1
+§T1.5.1</a>).</li>
+<li><strong>Isolation claim</strong> — where per-facet isolation is
+claimed (<a
+href="/spec/v0.4/core/#per-facet-cryptographic-isolation">Base
+§2.3.5</a>), the declared isolated facet set (the named set, or the
+deployment rule identifying it); this is the carrier of the
+conformance-claim flag that section defines.</li>
+<li><strong>Suite evidence</strong> — the conformance-suite results and
+the claimed level (<a
+href="/spec/v0.4/core/#standalone-conformance-suite">Base
+§4.4</a>).</li>
+</ol>
 <hr />
+</section>
+</section>
+<section
+id="o12-asset-bound-manifests-and-represented-person-consent-profile"
+class="level2">
+<h2><span class="secno">O12. </span>Asset-Bound Manifests and
+Represented-Person Consent Profile
+<span class="preview-tag">PREVIEW</span></h2>
+<p><strong>Candidate registered profile</strong>
+(<code>um:profile:domain:represented-person-consent</code>, registration
+via <a href="#o6-profile-registration-mechanism">O6</a>).
+<strong>Design-stage:</strong> the class, members, and value tokens
+below are candidates whose wire shape may change; they are <strong>not
+yet</strong> in the published
+<code>schema.json</code>/<code>schema.jsonld</code> or the conformance
+fixture suite, and per the Base conformance discipline (<a
+href="/spec/v0.4/core/#standalone-conformance-suite">Base
+§4.4</a>) they carry no conformance tests until the design is
+finalized.</p>
+<section id="o121-motivation-and-role-vocabulary" class="level3">
+<h3><span class="secno">O12.1. </span>Motivation and Role
+Vocabulary</h3>
+<p>A portable digital asset can contain a real person: a likeness, a
+body or face scan, a performance capture, a voice, a synthetic replica.
+When the asset ports between worlds, the geometry travels; the consent
+of the person inside it may not. Ownership records answer <em>who
+controls the asset</em>; they do not answer <em>whether the person
+represented inside it agreed, and to what</em>. This profile carries
+that answer with the asset, as a Universal Manifest record.</p>
+<p>The profile distinguishes roles that other systems routinely
+collapse. <strong>Represented person</strong> — the person depicted,
+embodied, scanned, performed, voiced, or replicated inside the asset.
+<strong>Asset owner</strong> — the party controlling or possessing the
+asset. <strong>Token owner</strong> — the holder of a token (e.g., an
+NFT) referencing the asset. <strong>Rights holder</strong> — a party
+with an IP interest in the asset. <strong>Operator</strong> — the
+platform or runtime handling the asset.
+<strong>Holder/presenter</strong> — the party presenting the manifest
+(<a href="/spec/v0.4/core/#terminology">Base
+§1.0</a>). These MAY coincide in a given deployment, but an evaluator
+implementing this profile MUST NOT treat asset ownership, token
+ownership, rights holding, or operator authority as evidence of
+represented-person consent: only a consent record whose grantor is (or
+verifiably acts for) the represented person is represented-person
+consent.</p>
+</section>
+<section id="o122-asset-bound-manifest-class" class="level3">
+<h3><span class="secno">O12.2. </span>Asset-Bound Manifest Class</h3>
+<p>An <strong>asset-bound manifest</strong> is a manifest class (<a
+href="/spec/v0.4/core/#manifest-classes-and-the-polymorphic-envelope">Base
+§1.0.1</a>) whose <code>subject</code> is the asset's stable identifier
+URI rather than a person. Its characteristic members are: a
+<strong>representation facet</strong> describing what or whom the asset
+represents, plus the represented-person consent record of <a
+href="#o123-represented-person-consent-record">O12.3</a>. Like every
+manifest class, it reuses the common envelope unchanged — signature,
+TTL, consents, claims, receipts, and the evaluation sequence all apply
+as specified in the Base.</p>
+<p><strong>Signing anchor (non-DID subject).</strong> An asset URI is
+typically not a DID and resolves to no DID document, so the subject-DID
+key-authorization step of the Tier-1 verification chain (<a
+href="/spec/v0.4/ext-t1/#t152-seven-step-verification-chain">EXT-T1
+§T1.5.2</a>, step 2) cannot apply to this class as written. For an
+asset-bound manifest, the candidate rule is: the signing key's
+authorization is checked against the <strong>signer's own</strong> DID
+document — <code>signature.keyRef</code> SHOULD be a DID URL so the
+controller DID is identifiable; the evaluator resolves that controller's
+DID document and confirms the key appears under the
+<code>authentication</code> or <code>assertionMethod</code> verification
+relationship, exactly as step 2 checks the <em>subject's</em> document
+for person-subject manifests. The signature thereby proves <em>who
+produced the record</em>, not that the producer holds any authority over
+the asset (the <a
+href="/spec/v0.4/core/#bag-of-claims-limitation">Base
+§6.4.1</a> limits apply): the signer's relationship to the asset —
+owner, operator, rights holder, or the represented person's delegate —
+is an assertion, and where it must be verifiable it is carried as an
+ordinary claim with <code>claimProof</code>. Represented-person consent
+verifiability is unaffected by the non-DID subject: it rides the
+consent-grant claim (<a
+href="#o123-represented-person-consent-record">O12.3</a>), whose Tier-1
+verification anchors on the represented person as the claim's issuer,
+not on the manifest <code>subject</code>.</p>
+</section>
+<section id="o123-represented-person-consent-record" class="level3">
+<h3><span class="secno">O12.3. </span>Represented-Person Consent
+Record</h3>
+<p>The profile expresses represented-person consent through existing
+member kinds, specialized — not through a new pipeline:</p>
+<ul>
+<li><strong>Representation facet.</strong> A facet (candidate
+<code>@type</code> value: <code>um:RepresentedParty</code> on its
+entity) identifying the representation. Both of its characteristic
+members are REQUIRED: <code>representedParty</code> (DID or URI of the
+represented person, or an opaque pairwise identifier where the person's
+identity must itself stay private), and <code>relationship</code> (a
+value naming how the person is inside the asset; candidate registry
+values: <code>likeness</code>, <code>scan</code>,
+<code>performance-capture</code>, <code>voice</code>,
+<code>synthetic-replica</code>, <code>composite</code>,
+<code>training-derived</code>; extensible via <a
+href="#o6-profile-registration-mechanism">O6</a>). A representation
+facet missing either member does not identify a representation, and a
+consent record referencing it fails closed.</li>
+<li><strong>Consent entry.</strong> A standard <code>consents[]</code>
+entry (<a
+href="/spec/v0.4/core/#consents-array-schema">Base
+§1.4.4</a>) whose <code>grantor</code> is the represented person (or
+their verifiable delegate) and whose <code>facetRef</code> names the
+representation facet. Because an asset-bound manifest's
+<code>subject</code> is the asset, the Base's
+absent-<code>grantor</code> default (grantor = manifest
+<code>subject</code>) would name the asset itself; a represented-person
+consent entry therefore MUST carry an explicit <code>grantor</code>, and
+an entry without one is not represented-person consent. Its
+<code>scope</code> uses the
+<code>&lt;domain&gt;.&lt;capability&gt;</code> convention (<a
+href="/spec/v0.4/core/#stage-4-consent">Base
+§3.1.4</a>) with candidate use verbs: <code>use.display</code>,
+<code>use.port</code>, <code>use.transform</code>,
+<code>use.regenerate</code>, <code>use.train</code>,
+<code>use.commercial</code>, <code>use.agentic-action</code>. All
+existing consent semantics apply unchanged: fail closed on unlisted
+operations and unrecognized conditions, purpose matching, validity
+windows, <code>withdrawnAt</code>.</li>
+<li><strong>Consent-grant claim.</strong> A claim (candidate
+<code>@type</code>: <code>consent.representedPerson</code>) whose
+<code>issuer</code> is the represented person (or their delegate) and
+whose <code>claimProof</code> carries the verifiable grant (e.g., a
+Verifiable Presentation), giving the record Tier-1 verifiability under
+the existing claim-proof path (<a
+href="/spec/v0.4/core/#claimsclaimproof-field">Base
+§6.4.3</a>, <a href="/spec/v0.4/ext-t1/">EXT-T1</a>). Absent a
+verifiable grant, the record is a Tier-0 self-assertion by the manifest
+signer and MUST be treated as such (<a
+href="/spec/v0.4/core/#bag-of-claims-limitation">Base
+§6.4.1</a>).</li>
+</ul>
+<p><strong>Grant↔︎entry correspondence (fail closed).</strong> The
+Stage-4-operative record is the consent <em>entry</em>; the verifiable
+record is the consent-grant <em>claim</em>. When a deployment relies on
+the grant for Tier-1 verifiability of represented-person consent, the
+two MUST correspond: the entry's <code>facetRef</code> MUST name the
+representation facet the verified grant covers, and the entry's
+<code>scope</code> and <code>purpose</code> MUST be within the uses and
+purpose the verified grant states — an evaluator MUST NOT act at Tier 1
+on a consent entry whose scope exceeds the verified grant (a verified
+<code>use.display</code> grant never Tier-1-authorizes a
+<code>use.train</code> entry). The consent entry SHOULD carry a
+candidate <strong><code>grantClaimRef</code></strong> member — the
+<code>@id</code> of its consent-grant claim — making the correspondence
+mechanically checkable (the same reference discipline as
+<code>actorState.delegationRef</code>, <a
+href="#o93-actorstate-member">O9.3</a>; the name is deliberately
+distinct from the receipt-side <code>claimRef</code> status field, <a
+href="/spec/v0.4/core/#receipt-fields">Base
+§3.3.1</a>, which is already a published context term). On any mismatch,
+or where the referenced claim fails verification, the consent entry is
+<strong>not</strong> verified represented-person consent: it is a Tier-0
+self-assertion by the manifest signer and MUST be treated as such; a
+deployment requiring verified represented-person consent then fails
+closed, exactly as for an absent record (<a
+href="#o124-carrier-binding">O12.4</a>).</p>
+</section>
+<section id="o124-carrier-binding" class="level3">
+<h3><span class="secno">O12.4. </span>Carrier Binding</h3>
+<p>How the record travels with the asset is transport, not trust.
+Candidate carriers — an embedded UM record inside the asset container,
+an embedded UM locator, a sidecar file, a C2PA assertion [<a
+href="#references">C2PA</a>], a 3D-container metadata extension, a
+watermark- or fingerprint-derived locator, or a URI-bound reference —
+are all acceptable; the trust model is always the UM record itself: its
+signature, its consent entries, its claim proofs, and its current-state
+resolution. To bind the record to specific asset bytes, the asset-bound
+manifest SHOULD carry an <strong><code>assetBinding</code></strong>
+object (candidate member): <code>digest</code> (a multihash over the
+asset bytes or a defined container scope), <code>bindingScope</code>
+(what the digest covers — candidate value pattern:
+<code>whole-asset</code> for the complete asset artifact, or
+<code>container:&lt;path&gt;</code> naming a container-relative scope;
+further forms register via <a
+href="#o6-profile-registration-mechanism">O6</a>), and optionally the
+carrier kind. The manifest signature then covers the binding, so the
+consent record cannot be silently re-attached to a different asset. A
+carrier can be stripped; a stripped asset simply arrives with no
+manifest, and a deployment requiring represented-person consent MUST
+treat <em>absent record</em> as <em>absent consent</em> (fail closed),
+exactly as Stage 4 treats an ungoverned facet. The same fail-closed rule
+covers derivatives: an authorized transformation (e.g.
+<code>use.transform</code>, <code>use.regenerate</code>) produces new
+asset bytes outside the original <code>assetBinding</code> digest, so
+the original record neither travels to nor authorizes the onward use of
+the derivative — a deployment requiring represented-person consent needs
+a record bound to the derivative's own bytes. Automatic consent
+carry-forward across derivations is out of scope for this profile.</p>
+</section>
+<section id="o125-current-consent-state-resolution" class="level3">
+<h3><span class="secno">O12.5. </span>Current Consent-State
+Resolution</h3>
+<p>Represented-person consent changes over time — renewal, withdrawal,
+expiry, supersession. The record resolves currency through the existing
+machinery composed in <a
+href="/spec/v0.4/core/#current-policy-state-resolution-before-governed-action-informative-composition">Base
+§3.4.1</a> and, where implemented, the current policy-state profile (<a
+href="#o26-current-policy-state-profile">O2.6</a>): manifest TTL bounds
+staleness; <code>signature.statusRef</code> (and a
+<code>claimProof</code> entry's own <code>statusRef</code>) resolves
+revocation/supersession; a <code>policyWindow</code> with
+<code>deny</code>/<code>escalate</code> dispositions governs unresolved
+or stale state before a governed use — display, porting, transformation,
+regeneration, training, or an agentic action — proceeds; and the receipt
+records the outcome with the <a
+href="#o26-current-policy-state-profile">O2.6</a> reason codes.
+Withdrawal is forward-only: it governs future processing and does not
+un-render, un-copy, or un-train what a then-valid consent already
+authorized (<a
+href="/spec/v0.4/core/#private-data-handling-derived-writes-and-honest-limits">Base
+§7.2</a>).</p>
+</section>
+<section id="o126-honest-limits" class="level3">
+<h3><span class="secno">O12.6. </span>Honest Limits</h3>
+<p>This profile makes represented-person consent <em>portable,
+verifiable, and currency-checkable</em>. It does not prove the asset
+actually depicts the named person (that is an attestation/provenance
+question for issuers and attesters, e.g. C2PA-style capture provenance
+carried as <code>claimProof</code> material); it does not make carriers
+strip-proof (carrier robustness — watermark survival, container
+integrity — is deployment- and carrier-specific and outside UM); it does
+not adjudicate likeness rights (this is standards/runtime machinery, not
+legal advice); and enforcement against a runtime that ignores the record
+is a platform/governance matter — UM makes honoring and violating the
+record <em>auditable</em>, via receipts.</p>
+</section>
+</section>
+<section
+id="o13-signed-referral-route-attribution-and-route-scoped-disclosure-profile"
+class="level2">
+<h2><span class="secno">O13. </span>Signed Referral-Route Attribution
+and Route-Scoped Disclosure Profile
+<span class="preview-tag">PREVIEW</span></h2>
+<p><strong>Candidate registered profile</strong>
+(<code>um:profile:domain:referral-route-attribution</code>, registration
+via <a href="#o6-profile-registration-mechanism">O6</a>).
+<strong>Design-stage:</strong> the members and value tokens below are
+candidates whose wire shape may change; they are <strong>not
+yet</strong> in the published
+<code>schema.json</code>/<code>schema.jsonld</code> or the conformance
+fixture suite, and per the Base conformance discipline (<a
+href="/spec/v0.4/core/#standalone-conformance-suite">Base
+§4.4</a>) they carry no conformance tests until the design is
+finalized.</p>
+<section id="o131-scope-boundary" class="level3">
+<h3><span class="secno">O13.1. </span>Scope Boundary</h3>
+<p>The route by which two parties reach each other — a directory
+listing, a bulletin, a matching agent, a referral — is today either an
+unverifiable browser artifact (<code>Referer</code>) or a captive record
+inside one platform. This profile makes route provenance a signed,
+portable, minimal evidence layer. The boundary is strict: Universal
+Manifest is <strong>not</strong> an advertising network, a marketplace,
+a payment rail, a pricing engine, a platform-fee enforcement system, or
+a tax/royalty-distribution authority, and this profile MUST NOT be
+implemented as one. UM's role ends at <em>evidence, disclosure policy,
+and receipts</em>: proving a route occurred, letting consent key off the
+route, and issuing a minimal attribution record that external payment,
+royalty, or commerce systems MAY honor — without UM moving funds or
+ranking anything. The browser <code>Referer</code> header MUST NOT be
+treated as an authoritative route signal.</p>
+</section>
+<section id="o132-route-actors-and-role-classes" class="level3">
+<h3><span class="secno">O13.2. </span>Route Actors and Role Classes</h3>
+<p>A <strong>route actor</strong> is the party that listed, matched,
+introduced, or forwarded the encounter. Candidate role-class registry
+values: <code>directory</code>, <code>bulletin</code>,
+<code>utility</code>, <code>matching-agent</code>,
+<code>delegated-agent</code>, <code>affiliate</code>,
+<code>platform</code> (extensible via <a
+href="#o6-profile-registration-mechanism">O6</a>). A route actor's
+<em>authority to act in a role</em> is itself an ordinary UM question:
+it can carry a claim with <code>claimProof</code>, be scoped by an agent
+delegation (<a
+href="/spec/v0.4/core/#agent-delegation">Base
+§6.5</a>, <a href="#o7-agent-delegation-scope-registry">O7</a>), and
+resolve currency via <code>statusRef</code> (<a
+href="#o2-statusref-resolution-schema">O2</a>) — so route authority is
+revocable and currency-checkable like any other governed state.</p>
+</section>
+<section id="o133-signed-route-evidence" class="level3">
+<h3><span class="secno">O13.3. </span>Signed Route Evidence</h3>
+<p>Route evidence rides the existing <code>pointers[]</code> member as a
+candidate pointer type <strong><code>um:routeAttribution</code></strong>
+(which, like <code>um:agentDelegation</code>, replaces the base
+<code>target</code> requirement with its own fields — <a
+href="/spec/v0.4/core/#pointers-array-schema">Base
+§1.4.5</a>). Candidate members:</p>
+<ul>
+<li><code>routeActor</code> (REQUIRED) — DID (or service identifier) of
+the party that listed, matched, introduced, or forwarded the
+encounter.</li>
+<li><code>roleClass</code> (REQUIRED) — one registry value of <a
+href="#o132-route-actors-and-role-classes">O13.2</a>.</li>
+<li><code>routedAt</code> (REQUIRED) — RFC 3339 timestamp of the route
+step.</li>
+<li><code>audience</code> (REQUIRED) — the destination party of the
+route step (DID or origin), the same audience-binding discipline as
+<code>presentationProof</code> (<a
+href="/spec/v0.4/ext-t1/#t12-presentation-proof">EXT-T1
+§T1.2</a>).</li>
+<li><code>challenge</code> (OPTIONAL; REQUIRED for interactive
+presentations) — the verifier-issued nonce of the presentation the route
+evidence accompanies (the same anti-replay model as
+<code>presentationProof</code>).</li>
+<li><code>prevRouteRef</code> (OPTIONAL) — the <code>@id</code> of the
+immediately preceding route-attribution entry in a multi-hop route.</li>
+<li><code>routeProof</code> (REQUIRED) — the route actor's proof object:
+<code>proofType</code> (candidate baseline <code>"did-auth"</code> — an
+Ed25519 signature by a route-actor key), OPTIONAL
+<code>verificationMethod</code> (a DID URL naming the signing key; when
+absent, resolution starts from <code>routeActor</code>), and
+<code>proofValue</code> (base64url, unpadded).</li>
+</ul>
+<p><strong>Signing input (candidate layout).</strong>
+<code>routeProof.proofValue</code> is computed over the UTF-8 bytes of
+the JCS canonicalization (the JSON Canonicalization Scheme already
+mandatory for Signature Profile A — <a
+href="/spec/v0.4/core/#canonicalization-and-algorithm">Base
+§1.6.1</a>) of the five-element array
+<code>[subject, roleClass, routedAt, audience, challenge]</code> — the
+routed manifest's <code>subject</code> string, then the entry's
+<code>roleClass</code>, <code>routedAt</code>, <code>audience</code>,
+and <code>challenge</code> values in that order, with
+<code>challenge</code> the empty string when absent. The <strong>routed
+subject</strong> is the manifest <code>subject</code>, not the manifest
+<code>@id</code> and not a signing-input hash: the route step binds the
+routed <em>party</em>, is typically minted before the presentation
+manifest exists, and cannot include that manifest's signing-input hash
+without circularity — <code>pointers[]</code> lies <em>inside</em> the
+signing input (<a
+href="/spec/v0.4/core/#signing-input-procedure">Base
+§1.6.3</a>), unlike the excluded <code>presentationProof</code>. Signing
+the role and timestamp alongside subject and audience prevents a proof
+issued in one role from being replayed as evidence of another role,
+destination, or time.</p>
+<p><strong>Key resolution.</strong> The proof verifies against a
+verification method of the <strong>route actor</strong>: resolve the
+<code>routeActor</code> DID document and confirm the signing key appears
+under the <code>assertionMethod</code> verification relationship — the
+same key-purpose discipline as the <a
+href="/spec/v0.4/ext-t1/#t153-key-purpose-requirements">EXT-T1
+§T1.5.3</a> table (route attestation is an assertion about the
+encounter, not an authentication of the actor to the evaluator). Where
+<code>routeActor</code> is not a DID, verification requires a
+deployment-pinned key for that service identifier; absent one, the step
+is unverifiable and is recorded as unverified.</p>
+<p><strong>Multi-hop routes.</strong> A multi-hop route is a chain of
+route-attribution entries, each step independently signed; the chain is
+evidentiary, not hash-linked — order is established by
+<code>routedAt</code>, with <code>prevRouteRef</code> as the explicit
+link where timestamps do not suffice (equal or unordered timestamps). An
+evaluator verifies the steps it needs and records unverifiable steps as
+unverified rather than inventing route trust; <strong>any one verified
+route entry whose <code>roleClass</code> matches a
+<code>route-class:&lt;value&gt;</code> condition satisfies that
+condition</strong> (<a href="#o134-route-scoped-disclosure">O13.4</a>) —
+additional unverified entries never defeat a verified match. An
+unrecognized <code>um:routeAttribution</code> pointer degrades safely
+under the existing rule: recorded as present, not acted on (<a
+href="/spec/v0.4/core/#pointers-array-schema">Base
+§1.4.5</a>).</p>
+</section>
+<section id="o134-route-scoped-disclosure" class="level3">
+<h3><span class="secno">O13.4. </span>Route-Scoped Disclosure</h3>
+<p>The route someone arrives by can change what they are allowed to see
+— a public-directory arrival may justify less disclosure than a verified
+matching-agent introduction. This profile expresses that as
+<strong>consent conditions keyed by route class</strong> (candidate
+condition convention: <code>route-class:&lt;value&gt;</code>, e.g.
+<code>route-class:verified-directory</code>) on ordinary consent entries
+(<a
+href="/spec/v0.4/core/#consents-array-schema">Base
+§1.4.4</a>). The evaluator matches <em>verified</em> route evidence (<a
+href="#o133-signed-route-evidence">O13.3</a>) against the condition; a
+consent conditioned on a route the evaluator cannot verify fails closed
+under the existing unrecognized/unenforceable-condition rule.
+Route-scoped disclosure is an instance of the bounded
+selective-minimum-disclosure profile (<a
+href="/spec/v0.4/core/#stage-3-project">Base
+§3.1.3</a>, <a
+href="/spec/v0.4/core/#selective-minimum-disclosure-bounded-base-profile">§7.1</a>):
+the route is part of what the target <em>is allowed</em> to see, never a
+reason to disclose more than the interaction needs.</p>
+</section>
+<section id="o135-attribution-receipts-and-the-privacy-boundary"
+class="level3">
+<h3><span class="secno">O13.5. </span>Attribution Receipts and the
+Privacy Boundary</h3>
+<p>When a verified route contributes to a governed action, the evaluator
+MAY record it with the candidate receipt event class
+<code>route-attributed</code> and reason codes
+<code>um:reason:route:credit-recorded</code>,
+<code>um:reason:route:unverified</code>,
+<code>um:reason:route:ineligible</code>,
+<code>um:reason:route:overbroad</code>, and
+<code>um:reason:route:disclosure-denied</code> (<a
+href="#o32-typed-event-vocabulary">O3.2</a>, <a
+href="#o33-structured-reason-registry">O3.3</a>). The
+<strong>proof-to-referrer receipt</strong> is the minimal attribution
+record a route actor receives: its own identity and role class, the
+session-scoped correlator (<code>exchangeId</code> — inside a bilateral
+session, the session's own; outside one, a fresh single-use correlator
+generated for the encounter under the same rules, at least 128 bits of
+entropy and no party identifiers (<a
+href="#o41-session-object">O4.1</a>), so attribution receipts pair
+without requiring a session), the attribution outcome, and a timestamp.
+It MUST NOT carry the counterparty's identity, sealed fields,
+transaction contents, prices, or any private buyer data unless that data
+is independently consented under its own consent entry. A downstream
+payment, royalty, or commerce system MAY treat the receipt as evidence
+that a route contributed to an encounter — settlement, splitting, and
+pricing happen entirely outside UM. Receipt minimization and
+session-scoped receipt-signing guidance (<a
+href="/spec/v0.4/core/#privacy-considerations">Base
+§7</a>, <a href="#o31-chain-integrity">O3.1</a>) apply so attribution
+records do not become long-lived cross-encounter correlators of the
+referred party.</p>
+</section>
+<section id="o136-honest-limits" class="level3">
+<h3><span class="secno">O13.6. </span>Honest Limits</h3>
+<p>The profile proves <em>that a signed route step occurred and was
+accepted</em>; it does not prove the route actor's marketing caused the
+encounter, does not prevent route actors from colluding off-manifest,
+does not rank or price routes, and does not give the referred party
+unlinkability across encounters (the bounded
+selective-minimum-disclosure non-claims of <a
+href="/spec/v0.4/core/#selective-minimum-disclosure-bounded-base-profile">Base
+§7.1</a> apply; the higher-privacy tracks are <a
+href="/spec/v0.4/ext-t2/">EXT-T2</a>).</p>
+</section>
+</section>
+<section id="o14-geopose-primary-pose-value-profile" class="level2">
+<h2><span class="secno">O14. </span>GeoPose Primary Pose Value Profile
+<span class="preview-tag">PREVIEW</span></h2>
+<p><strong>Candidate registered profile</strong>
+(<code>um:profile:domain:geopose-primary-pose</code>, registration via
+<a href="#o6-profile-registration-mechanism">O6</a>).
+<strong>Design-stage:</strong> the class, members, and value tokens
+below are candidates whose wire shape may change; they are <strong>not
+yet</strong> in the published
+<code>schema.json</code>/<code>schema.jsonld</code> or the conformance
+fixture suite, and per the Base conformance discipline (<a
+href="/spec/v0.4/core/#standalone-conformance-suite">Base
+§4.4</a>) they carry no conformance tests until the design is
+finalized.</p>
+<section id="o141-scope-boundary" class="level3">
+<h3><span class="secno">O14.1. </span>Scope Boundary</h3>
+<p>When a Universal Manifest subject is a real-world object, a digital
+twin, a 3D asset, a scan, a dataset record, a scene element, a vehicle,
+a sensor observation, or another object whose primary spatial fact is
+<em>position plus orientation</em>, the primary pose value SHOULD be
+expressed as an OGC GeoPose 1.0 payload [<a
+href="#references">OGC-GEOPOSE</a>] or a pointer to one. The GeoPose
+value answers "where is this object, and how is it oriented, in a
+geographically anchored frame?" Universal Manifest answers "who asserted
+it, what evidence and policy govern it, what may be disclosed, and what
+did the evaluator do with it?"</p>
+<p>This profile therefore does not redefine GeoPose. OGC GeoPose remains
+authoritative for the pose data object, its Basic-YPR, Basic-Quaternion,
+Advanced, Chain, Graph, Regular Time Series, Irregular Time Series, and
+Stream targets, and their JSON-schema conformance. Universal Manifest
+carries or references that value inside the UM envelope so signatures,
+claim proofs, consent, current-state resolution, selective minimum
+disclosure, asset binding, and receipts can govern use of the pose.</p>
+</section>
+<section id="o142-primary-pose-attachment" class="level3">
+<h3><span class="secno">O14.2. </span>Primary Pose Attachment</h3>
+<p>A manifest implementing this profile identifies the GeoPose value
+through one of two candidate attachment forms:</p>
+<ul>
+<li><strong>Inline primary-pose claim.</strong> A standard
+<code>claims[]</code> entry with candidate <code>@type</code>
+<code>geopose.primary</code>, whose <code>subject</code> is the manifest
+subject or a dataset-record URI, whose candidate
+<strong><code>poseValue</code></strong> member (REQUIRED for this claim
+type) carries exactly one OGC GeoPose JSON data object, and whose
+<code>claimProof</code> verifies the issuer or measuring system when the
+pose is relied upon above Tier 0. Because the claim rides the signed
+payload, the inline form is restricted to <strong>static</strong>
+GeoPose targets — Basic-YPR, Basic-Quaternion, Advanced, Chain, Graph,
+and <em>recorded</em> (complete, bounded) time-series targets: a Stream
+target has no fixed byte representation to sign, is incoherent inside a
+signed claim, and MUST NOT be carried inline; streams use the pointer
+form.</li>
+<li><strong>Primary-pose pointer.</strong> A standard
+<code>pointers[]</code> entry with candidate pointer type
+<code>um:geoPosePrimary</code> whose <code>target</code> URI resolves to
+an OGC GeoPose JSON data object or a signed container that includes one
+(any target form, including Stream). The pointer SHOULD carry a
+candidate <strong><code>digest</code></strong> member — a multihash over
+the exact GeoPose bytes the target resolves to (the multihash function
+MUST be SHA-256 for v0.4, the same discipline as <a
+href="#o17-context-integrity-production-detail">O1.7</a> and
+<code>assetBinding.digest</code>, <a
+href="#o124-carrier-binding">O12.4</a>) — so the UM signature binds the
+manifest to the exact pose value, not just to a mutable location. A
+Stream target, having no fixed bytes, cannot be digest-bound; it remains
+a live reference whose currency is governed by <a
+href="#o143-provenance-time-and-currency">O14.3</a>.</li>
+</ul>
+<p>For dataset use, each record that has its own pose SHOULD have its
+own record URI and its own primary-pose claim or pointer. A
+dataset-level manifest MAY also carry a collection-level GeoPose value
+only when it describes the dataset as a whole; it MUST NOT be treated as
+the pose of every member record unless the dataset profile states that
+rule explicitly.</p>
+</section>
+<section id="o143-provenance-time-and-currency" class="level3">
+<h3><span class="secno">O14.3. </span>Provenance, Time, and
+Currency</h3>
+<p>A GeoPose value can be observed, computed, imported, or asserted. The
+manifest SHOULD state the issuer or measuring system in the ordinary
+claim issuer/proof path, SHOULD bind the value to capture/measurement
+provenance when available, and SHOULD record the timestamp or validity
+interval supplied by the GeoPose payload or the surrounding claim. When
+current pose is required for a governed action, the evaluator MUST
+compose the manifest TTL, <code>statusRef</code>, consent windows, the
+current policy-state profile (<a
+href="#o26-current-policy-state-profile">O2.6</a>) where implemented,
+and any domain-specific freshness policy before relying on the pose.</p>
+<p>If the GeoPose value governs a represented-person asset (<a
+href="#o12-asset-bound-manifests-and-represented-person-consent-profile">O12</a>),
+an agentic action, a route-scoped disclosure (<a
+href="#o13-signed-referral-route-attribution-and-route-scoped-disclosure-profile">O13</a>),
+or another consent-gated use, the pose is just another governed datum:
+it is projected only when the viewer/verifier/system/use case is allowed
+or needs to see it, and the receipt records whether the pose was
+accepted, withheld, stale, unverifiable, or unprocessed.</p>
+</section>
+<section id="o144-honest-limits" class="level3">
+<h3><span class="secno">O14.4. </span>Honest Limits</h3>
+<p>This profile makes GeoPose a first-class primary pose value inside
+the Universal Manifest lifecycle. It does not certify that an OGC
+GeoPose payload is itself valid unless an OGC GeoPose validator or
+attester has done so; it does not convert between reference frames; it
+does not resolve ambiguity in external frame definitions; it does not
+make a stale pose current; it does not prove the pose corresponds to the
+depicted asset without separate binding/provenance evidence; and it does
+not authorize location disclosure without an applicable consent or
+policy basis. Missing, unverifiable, stale, or withheld GeoPose data
+MUST be recorded honestly and MUST NOT be inferred.</p>
+<hr />
+</section>
 </section>
 <section id="appendix-oa-manifest-class-registry-snapshot"
 class="level2">
@@ -2203,6 +3401,22 @@ members are the members whose presence identifies the class.</p>
 <code>exchangeId</code></td>
 <td>Correlates a two-party manifest exchange.</td>
 </tr>
+<tr>
+<td>Asset-bound consent capsule (candidate, <a
+href="#o12-asset-bound-manifests-and-represented-person-consent-profile">O12</a>)</td>
+<td><code>subject</code> = asset URI; representation facet +
+represented-person consent entry</td>
+<td>Carries the consent state of the person represented inside a
+portable asset.</td>
+</tr>
+<tr>
+<td>GeoPose-bearing asset or dataset record (candidate, <a
+href="#o14-geopose-primary-pose-value-profile">O14</a>)</td>
+<td><code>claims[]</code> with <code>geopose.primary</code> or
+<code>pointers[]</code> with <code>um:geoPosePrimary</code></td>
+<td>Carries or references an OGC GeoPose primary pose value for the
+subject or record.</td>
+</tr>
 </tbody>
 </table>
 <p>The snapshot is illustrative and non-exhaustive; integration profiles
@@ -2226,7 +3440,9 @@ profile is a working-group deliverable.</p>
 <strong>[RFC8949]</strong> (CBOR), <strong>[RFC3339]</strong>,
 <strong>[RFC9162]</strong> (Certificate Transparency 2.0),
 <strong>[MULTIFORMATS]</strong>, <strong>[VC-STATUS]</strong> (Bitstring
-Status List), <strong>[UM-RFC]</strong>, <strong>[eIDAS2]</strong>,
+Status List), <strong>[C2PA]</strong> (Content Provenance and
+Authenticity), <strong>[UM-RFC]</strong>,
+<strong>[OGC-GEOPOSE]</strong>, <strong>[eIDAS2]</strong>,
 <strong>[OPENXR]</strong>, <strong>[WEBAUTHN]</strong>,
 <strong>[TPM2]</strong>, <strong>[RFC9591]</strong> (FROST).</p>
 <hr />

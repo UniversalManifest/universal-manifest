@@ -694,7 +694,7 @@
     <div class="head">
         <h1 id="title" class="title p-name">Universal Manifest v0.4 — EXT-T1</h1>
         <h2 id="subtitle">Tier-1 Binding Profile</h2>
-        <h2><time class="dt-published" datetime="2026-06-23">23 June 2026</time></h2>
+        <h2><time class="dt-published" datetime="2026-07-04">4 July 2026</time></h2>
         <dl>
             <dt>This document:</dt>
             <dd><a class="u-url" href="https://universalmanifest.net/spec/v0.4/ext-t1/">/spec/v0.4/ext-t1/</a></dd>
@@ -809,7 +809,15 @@ href="/spec/v0.4/core/">Base specification</a>
 (Tier-0 / Tier-1 Core). <strong>Registry categories:</strong>
 <code>binding</code>, <code>trust</code>. <strong>Status:</strong>
 Production-candidate normative content (carried forward and extended
-from v0.3); not PREVIEW.</p>
+from v0.3). The Tier-1 binding core is not PREVIEW; the per-facet floor
+subsections <strong>T1.3.1–T1.3.3 are PREVIEW</strong> (their
+enforcement profiles may change before the schema locks).</p>
+<p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+"SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+"OPTIONAL" in this document are to be interpreted as described in BCP 14
+[<a href="https://www.rfc-editor.org/rfc/rfc2119">RFC 2119</a>] [<a
+href="https://www.rfc-editor.org/rfc/rfc8174">RFC 8174</a>] when, and
+only when, they appear in ALL CAPITALS, as shown here.</p>
 <section id="t10-scope-and-relationship-to-the-base" class="level2">
 <h2><span class="secno">T1.0. </span>Scope and Relationship to the
 Base</h2>
@@ -858,7 +866,18 @@ layer those tiers build upon.</p>
 <p>Manifests without <code>holderBinding</code> on their claims MUST NOT
 be treated as providing identity assurance above Tier 0, regardless of
 the trust tier declared by the holder. Every claim intended to be relied
-upon at Tier 1 or above MUST carry <code>holderBinding</code>.</p>
+upon at Tier 1 or above MUST carry <code>holderBinding</code>.
+<strong>Exception — <code>identity.crossDidBinding</code>
+claims.</strong> For a binding claim whose <code>boundDids</code>
+includes the manifest <code>subject</code> (<a
+href="/spec/v0.4/core/#identitycrossdidbinding-claim">Base
+§6.4.4</a>), presenter binding is established by the subject-signature
+key-authorization check (<a
+href="#t152-seven-step-verification-chain">T1.5.2</a> step 2) together
+with attester or proof verification (<a
+href="#t14-stage-2-verification-sub-steps">T1.4</a> sub-step 2d); a
+separate <code>holderBinding</code> member is OPTIONAL on such
+claims.</p>
 <p>The <code>holderBinding</code> object supports three modes:</p>
 <ul>
 <li><code>"sd-jwt-kb"</code> — SD-JWT Key Binding per [<a
@@ -899,7 +918,11 @@ href="#references">RFC7638</a>]) equals the declared
 <li>Confirm the KB-JWT <code>aud</code> equals the presentation
 <code>audience</code> and its <code>nonce</code> equals the presentation
 <code>challenge</code> (<a href="#t12-presentation-proof">T1.2</a>), and
-that its <code>sd_hash</code> covers the disclosed credential.</li>
+that its <code>sd_hash</code> covers the disclosed credential. When the
+same KB-JWT also serves as the manifest's
+<code>presentationProof</code>, its payload additionally carries the
+manifest-hash binding (<code>um_manifest_hash</code> — <a
+href="#t12-presentation-proof">T1.2</a>).</li>
 <li>On any failure, record <code>holderBindingStatus: "failed"</code>
 and cap the claim at Tier 0.</li>
 </ol>
@@ -964,17 +987,38 @@ derived proof, or DID Auth signature).</li>
 <p><code>presentationProof</code> is excluded from the manifest signing
 input (removed alongside <code>signature</code> in step 2 of <a
 href="/spec/v0.4/core/#signing-input-procedure">Base
-§1.6.3</a>). Its <code>proofValue</code> MUST be computed over the
-concatenation of: the manifest's signing-input hash (SHA-256 of the <a
+§1.6.3</a>). Its <code>proofValue</code> MUST bind four values — the
+manifest's <strong>signing-input hash</strong> (SHA-256 of the <a
 href="/spec/v0.4/core/#signing-input-procedure">Base
-§1.6.3</a> canonical bytes, as its 32 raw bytes), then the UTF-8 bytes
-of <code>challenge</code>, <code>audience</code>, and
-<code>created</code>, in that order, per the mechanics of the declared
-<code>proofType</code> (KB-JWT per [<a href="#references">RFC9901</a>];
-BBS+ derived proof per [<a href="#references">VC-DI-BBS</a>]; DID Auth
-signature per [<a href="#references">DID-CORE</a>]). Binding the proof
-to the signing-input hash ties the presentation to the exact signed
-manifest without requiring the holder to re-sign per presentation.</p>
+§1.6.3</a> canonical bytes, as its 32 raw bytes),
+<code>challenge</code>, <code>audience</code>, and <code>created</code>
+— per the mechanics of the declared <code>proofType</code>:</p>
+
+<ul>
+<li><strong><code>did-auth</code></strong> — <code>proofValue</code> is
+a DID Auth signature ([<a href="#references">DID-CORE</a>]) and MUST be
+computed over the concatenation of: the manifest's signing-input hash
+(its 32 raw bytes), then the UTF-8 bytes of <code>challenge</code>,
+<code>audience</code>, and <code>created</code>, in that order.</li>
+<li><strong><code>sd-jwt-kb</code></strong> — <code>proofValue</code>
+carries the Key Binding JWT ([<a href="#references">RFC9901</a>]). A
+KB-JWT signs its own <code>BASE64URL(header).BASE64URL(payload)</code>
+input, so the binding lives in the KB-JWT payload rather than in a byte
+concatenation: the payload's <code>nonce</code> MUST equal
+<code>challenge</code>, its <code>aud</code> MUST equal
+<code>audience</code>, its <code>iat</code> MUST correspond to
+<code>created</code>, and the payload MUST additionally carry the
+manifest's signing-input hash in a <code>um_manifest_hash</code> claim
+(base64url of the 32 hash bytes). This is a KB-JWT-payload rule only; it
+defines no new Universal Manifest wire member.</li>
+<li><strong><code>bbs-derived</code></strong> — <code>proofValue</code>
+is a BBS+ derived proof ([<a href="#references">VC-DI-BBS</a>]); the
+four values, in the order stated above, form the BBS presentation header
+the derived proof is bound to.</li>
+</ul>
+<p>Binding the proof to the signing-input hash ties the presentation to
+the exact signed manifest without requiring the holder to re-sign per
+presentation.</p>
 <p>A manifest presented without a <code>presentationProof</code> is
 valid only for offline or cached identity display, not for interactive
 verification. When the evaluator itself issued a challenge for this
@@ -985,6 +1029,19 @@ interactive verification, and records
 field <code>presentationProofStatus</code> is one of
 <code>"verified"</code>, <code>"failed"</code>,
 <code>"missing-required"</code>, or <code>"absent"</code>.</p>
+<p><strong>Implementation status of the <code>proofType</code> values
+(at-risk).</strong> Of the three <code>proofType</code> values, only
+<code>did-auth</code> is exercised by the v0.4 fixture suite and the
+reference implementation. <code>sd-jwt-kb</code> (whose manifest binding
+depends on the still-unratified decision UM-v04-DEC-07) and
+<code>bbs-derived</code> are <strong>specification-only</strong>: no
+fixture and no implementation exercises them yet, so interoperability
+for the two is not demonstrable at this stage, and an implementation
+MUST fail them closed (as the reference implementation does) rather than
+report an unverified proof as verified. Both are therefore
+<strong>PREVIEW / at-risk</strong> pending working-group ratification
+and fixtures; a conformance claim relying on interactive presentation
+SHOULD state which <code>proofType</code> it implements.</p>
 </section>
 <section id="t13-liveness-attestation" class="level2">
 <h2><span class="secno">T1.3. </span>Liveness Attestation</h2>
@@ -1025,7 +1082,13 @@ MUST be computed over the UTF-8 bytes of the manifest
 platform key). It MAY contain <code>method</code> (the authentication
 method, copied into the receipt), <code>userVerified</code> (boolean,
 copied into the receipt), and <code>attester</code> (the DID of the
-attesting authority).</p>
+attesting authority). <strong>Signature coverage:</strong> the
+<code>validUntil</code>, <code>method</code>, and
+<code>userVerified</code> members are covered by the holder's manifest
+signature, not by the attester's <code>proofValue</code> (<a
+href="/spec/v0.4/core/#credential-binding-security-considerations">Base
+§6.6</a>); an evaluator MUST treat them as holder-asserted except where
+the declared <code>proofType</code>'s mechanics attest them.</p>
 <p>WebAuthn user-verification (a WebAuthn assertion with the
 user-verified flag set, <code>proofType: "webauthn-uv"</code>) is the
 RECOMMENDED liveness method. The normative anchor for this method is
@@ -1035,11 +1098,22 @@ required-UV ceremonies, the synced-versus-device-bound distinction, and
 the backup-eligibility/backup-state (BE/BS) flags); WebAuthn Level 3 is
 referenced as an in-progress W3C Candidate Recommendation (2025-11-21)
 for its later refinements and MUST NOT be treated as a settled
-Recommendation. Evaluators verifying a <code>livenessAttestation</code>
-MUST validate <code>proofValue</code> against the named
-<code>proofType</code>'s mechanics before treating the attestation's
-freshness class as evidence of human presence. The receipt field
-<code>livenessStatus</code> is an object containing
+Recommendation. For <code>proofType: "webauthn-uv"</code>,
+<code>proofValue</code> carries the WebAuthn assertion — a WebAuthn
+assertion signs
+<code>authenticatorData || SHA-256(clientDataJSON)</code>, not a raw
+byte concatenation — and the challenge of the assertion's client data
+MUST be (a digest of) the <code>subject || attestedAt</code>
+concatenation above; the evaluator MUST derive <code>userVerified</code>
+from the validated assertion's UV flag — the manifest-level
+<code>userVerified</code> field is a display echo and MUST NOT be the
+floor input (<a
+href="#t131-per-facet-liveness-floor-requiredliveness">T1.3.1</a>) when
+the assertion is validatable. Evaluators verifying a
+<code>livenessAttestation</code> MUST validate <code>proofValue</code>
+against the named <code>proofType</code>'s mechanics before treating the
+attestation's freshness class as evidence of human presence. The receipt
+field <code>livenessStatus</code> is an object containing
 <code>freshnessClass</code> (one of <code>"live"</code>,
 <code>"recent"</code>, <code>"stale"</code>, <code>"unknown"</code>)
 and, when present, the <code>method</code> and <code>userVerified</code>
@@ -1188,17 +1262,53 @@ hardware authenticator (the highest rung; the device-bound provenance of
 raises the bar). <code>requiredAssuranceClass</code> is modeled
 <strong>in spirit on <code>requiredTrustTier</code></strong> (<a
 href="/spec/v0.4/core/#requiredtrusttier-declaration">Base
-§6.4.5</a>): like the manifest→facet trust-tier floor, it <strong>can
-only raise</strong> the bar (a facet-level floor MUST NOT lower a
-manifest-level one), and it is <strong>fail-closed</strong> — if the
-asserted or achieved assurance class is below the facet's floor, the
-evaluator <strong>MUST NOT</strong> downgrade and <strong>MUST</strong>
-withhold the facet (content never released), recording the facet status
+§6.4.5</a>): as with <code>requiredTrustTier</code>, the floor
+<strong>can only raise</strong> the bar (it never lowers the effective
+assurance requirement; <code>requiredAssuranceClass</code> is a
+facet-level member — this draft defines no manifest-level assurance
+floor), and it is <strong>fail-closed</strong> — if the asserted or
+achieved assurance class is below the facet's floor, the evaluator
+<strong>MUST NOT</strong> downgrade and <strong>MUST</strong> withhold
+the facet (content never released), recording the facet status
 <code>assuranceInsufficient</code> (<a
 href="/spec/v0.4/core/#receipt-fields">Base
 §3.3.1</a>), exactly parallel to how an unsupported
 <code>requiredTrustTier</code> records
 <code>trustTierUnsupported</code>.</p>
+<p><strong>Evidence→class determination.</strong> The class the unlock
+gesture <em>achieved</em> is determined by the
+<strong>evaluator</strong>, from evidence it has itself verified — never
+from an unverified assertion — under the following rule, evaluated
+top-down with the first match applying:</p>
+<ul>
+<li><code>hardware-bound</code> — a <strong>verified</strong>
+<code>deviceAttestation</code> (<a
+href="/spec/v0.4/ext-opt/#o92-two-component-devices-schema">EXT-OPT
+§O9.2</a>) on the presented manifest whose attestation evidence shows
+device-bound, non-exportable provenance for the authenticator that
+performed the gesture (the <a
+href="#t132-authenticator-provenance">§T1.3.2</a> route; WebAuthn
+backup-eligibility/backup-state flags, where available, corroborate
+non-exportability);</li>
+<li><code>hardware-uv</code> — a <strong>validated</strong>
+<code>livenessAttestation</code> with <code>userVerified: true</code>
+whose <code>proofType</code> mechanics attest hardware-backed user
+verification (e.g. <code>webauthn-uv</code> performed by a platform
+authenticator), without verified device-bound provenance;</li>
+<li><code>software</code> — every other case, including absent,
+unverifiable, or software-only evidence. Unverifiable evidence never
+raises the class (fail closed; the default rung is also the floor's
+default value).</li>
+</ul>
+<p>The <code>assuranceStatus.assertedClass</code> receipt echo (<a
+href="/spec/v0.4/core/#credential-binding-status-fields">Base
+§3.3.1.1</a>) records the class <strong>the evaluator
+determined</strong> under this rule — it is evaluator-asserted, not a
+holder self-declaration; a holder-supplied class assertion, where a
+profile defines one, is a hint and MUST NOT raise the determined class.
+A deployment MAY substitute a stricter determination rule by local
+policy but MUST NOT weaken this one (for example, by treating
+software-only evidence as <code>hardware-uv</code>).</p>
 <p><code>requiredAssuranceClass</code> is <strong>orthogonal</strong>
 both to <code>requiredTrustTier</code> (trust tiers grade
 claim-verification / Sybil-resistance; the assurance class grades
@@ -1212,7 +1322,10 @@ ledger, a future single-use consent on a locked facet can require both a
 single-use spend constraint <strong>and</strong> this assurance floor
 without either field touching the other.</p>
 <p>The following table maps each enum value to comparable assurance
-levels in external frameworks. <strong>This mapping is INFORMATIVE
+levels in external frameworks — NIST SP 800-63B-4 [<a
+href="#references">NIST-800-63B</a>], FIDO authenticator certification
+[<a href="#references">FIDO-CERT</a>], and eIDAS 2.0 [<a
+href="#references">eIDAS2</a>]. <strong>This mapping is INFORMATIVE
 only</strong>; the enum is the normative artifact, and UM asserts no
 conformance claim against NIST, FIDO, or eIDAS levels.</p>
 <table>
@@ -1246,15 +1359,13 @@ resistance)</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Schema note (out of scope for this profile,
-ledgered):</strong> making invalid-enum or wrong-type
-<code>requiredAssuranceClass</code> fixtures <em>schema-detectable</em>
-requires adding the member to the v0.4 facet shape validator — the same
-precedent as <code>requiredLiveness</code> (<a
-href="#t131-per-facet-liveness-floor-requiredliveness">§T1.3.1</a>).
-That validator wiring is a separate follow-up; until it lands, a
-malformed <code>requiredAssuranceClass</code> is
-preserved-but-unvalidated on the open facet schema.</p>
+<p><strong>Schema note:</strong> invalid-enum or wrong-type
+<code>requiredAssuranceClass</code> fixtures are schema-detectable by
+the v0.4 facet shape validator, matching the precedent set by
+<code>requiredLiveness</code> (<a
+href="#t131-per-facet-liveness-floor-requiredliveness">§T1.3.1</a>). The
+evaluator still owns cross-field and runtime assurance-floor checks,
+including below-floor unlock attempts.</p>
 </section>
 </section>
 <section id="t14-stage-2-verification-sub-steps" class="level2">
@@ -1268,7 +1379,12 @@ receipt fields (<a
 href="/spec/v0.4/core/#credential-binding-status-fields">Base
 §3.3.1.1</a>). Evaluators that do not implement credential binding skip
 these sub-steps and record the corresponding statuses as
-<code>"absent"</code>.</p>
+<code>"absent"</code> for <code>holderBindingStatus</code>,
+<code>presentationProofStatus</code>, and
+<code>crossDidBindingStatus</code>; because <code>livenessStatus</code>
+is an object, its no-implementation form is
+<code>livenessStatus.freshnessClass: "unknown"</code> (or the field is
+omitted).</p>
 <ol type="1">
 <li><strong>(2a) Holder-binding verification.</strong> For each claim
 carrying <code>holderBinding</code> (<a
@@ -1281,8 +1397,10 @@ manifest carries a <code>presentationProof</code> (<a
 href="#t12-presentation-proof">T1.2</a>), verify that
 <code>challenge</code> matches the verifier-issued nonce,
 <code>audience</code> matches this verifier, and <code>proofValue</code>
-validates over the signing-input hash, <code>challenge</code>,
-<code>audience</code>, and <code>created</code>. Record
+validates the binding of the signing-input hash, <code>challenge</code>,
+<code>audience</code>, and <code>created</code> under the declared
+<code>proofType</code>'s rule (<a
+href="#t12-presentation-proof">T1.2</a>). Record
 <code>presentationProofStatus</code>. A failed presentation proof MUST
 cause the manifest to be treated as replay-suspect and rejected for
 interactive verification. When the evaluator issued a challenge and no
@@ -1293,10 +1411,19 @@ manifest for interactive verification.</li>
 <li><strong>(2c) Liveness-attestation verification.</strong> If a
 <code>livenessAttestation</code> (<a
 href="#t13-liveness-attestation">T1.3</a>) is present, verify its proof
-and compute its <code>freshnessClass</code> from
-<code>attestedAt</code>. Record <code>livenessStatus</code>. Evaluators
+and compute its <code>freshnessClass</code> from <code>attestedAt</code>
+and <code>validUntil</code> per <a
+href="#t13-liveness-attestation">T1.3</a> (an attestation past its
+<code>validUntil</code> is <code>"unknown"</code> regardless of
+<code>attestedAt</code>). Record <code>livenessStatus</code>. Evaluators
 MUST NOT treat a <code>stale</code> or <code>unknown</code> freshness
-class as current human presence.</li>
+class as current human presence. An evaluator that cannot validate the
+attestation's <code>proofType</code> records the temporal
+<code>freshnessClass</code> with the attestation treated as
+<strong>unvalidated</strong>: it MUST NOT satisfy any
+<code>requiredLiveness</code> floor (<a
+href="#t131-per-facet-liveness-floor-requiredliveness">T1.3.1</a>) and
+MUST NOT be treated as evidence of human presence.</li>
 <li><strong>(2d) Cross-DID binding-proof verification.</strong> For each
 <code>identity.crossDidBinding</code> claim (<a
 href="/spec/v0.4/core/#identitycrossdidbinding-claim">Base
@@ -1307,7 +1434,14 @@ href="/spec/v0.4/ext-t2/">EXT-T2</a>) or Tier 3
 href="/spec/v0.4/ext-t3/">EXT-T3</a>) per the claim-proof
 process (<a
 href="#t15-claim-proof-process--end-to-end-verification-path">T1.5</a>).
-Record each result in <code>crossDidBindingStatus</code>.</li>
+Record each result in <code>crossDidBindingStatus</code>, one of
+<code>"verified"</code>, <code>"failed"</code>, <code>"absent"</code>,
+or <code>"trustTierUnsupported"</code> (the last when the claim declares
+a <code>requiredTrustTier</code> the evaluator has no implemented
+verification profile for — <a
+href="/spec/v0.4/core/#requiredtrusttier-declaration">Base
+§6.4.5</a>); <code>"absent"</code> indicates the claim carried no
+binding proof to verify.</li>
 </ol>
 <p>These sub-steps are the normative record of how the binding mechanics
 weave into the evaluation sequence; the binding modes and proof
@@ -1391,7 +1525,7 @@ the issuer's DID document. Confirm the key appears under the
 key-authorization step: it proves the signing key was authorized by the
 stated issuer DID to issue credentials. (See [<a
 href="#references">DID-CORE</a>] §5.3 and [<a
-href="#references">VC-DATA-MODEL</a>] §6.)</li>
+href="#references">VC-DATA-MODEL</a>] §4.12, Securing Mechanisms.)</li>
 <li>If <code>statusRef</code> is present on the proof entry, check
 revocation status per the statusRef resolution schema (<a
 href="/spec/v0.4/ext-opt/">EXT-OPT</a>).</li>
@@ -1517,6 +1651,7 @@ receipt.</li>
 <li>Cap the effective trust tier at Tier 0 regardless of
 <code>requiredTrustTier</code> declarations.</li>
 </ol>
+
 <p>A v0.3 manifest that declares no manifest-level
 <code>requiredTrustTier</code> (or declares Tier 0) is accepted but
 flagged as "unbound" at Tier 0; evaluators decide their own policy for
@@ -1524,11 +1659,16 @@ unbound manifests. Where a v0.3 manifest declares a manifest-level
 <code>requiredTrustTier</code> that cannot be satisfied because binding
 material is absent, <a
 href="/spec/v0.4/core/#requiredtrusttier-declaration">Base
-§6.4.5</a> governs the outcome: the manifest is processed with outcome
-<code>rejected</code> for trust-gated use, or
-<code>accepted-with-warnings</code> for display-only use, per local
-policy. Capping the effective trust tier at Tier 0 (step 5) does not by
-itself reject the manifest; the declared floor does.</p>
+§6.4.5</a> governs the outcome: <code>accepted-partial</code> if other
+items can still be processed, or <code>rejected</code> when the
+unsupported tier applies at the manifest level (or no processable items
+remain — <a
+href="/spec/v0.4/core/#stage-5-compose">Base
+§3.1.5</a>). There is no display-only outcome branch; whether an
+application still renders anything after a <code>rejected</code>
+evaluation is an application-layer choice that does not change the
+receipt outcome. Capping the effective trust tier at Tier 0 (step 5)
+does not by itself reject the manifest; the declared floor does.</p>
 <p>v0.4 evaluators SHOULD emit an
 <code>um:reason:trust:unbound-claims</code> warning in the receipt when
 processing manifests without holder binding. <em>(Worked example:

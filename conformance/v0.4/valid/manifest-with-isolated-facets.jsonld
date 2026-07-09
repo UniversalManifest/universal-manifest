@@ -1,0 +1,59 @@
+{
+  "@context": "https://universalmanifest.net/ns/v0.4",
+  "@id": "urn:uuid:40000010-0000-4000-8000-000000000010",
+  "@type": "um:Manifest",
+  "manifestVersion": "0.4",
+  "subject": "did:example:alice-v04",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "facets": [
+    {
+      "@id": "urn:um:facet:medical-records-v04",
+      "@type": "um:Facet",
+      "name": "privateHealth",
+      "encryptionProfile": "jwe-inline-v1",
+      "entity": {
+        "protected": "eyJhbGciOiJFQ0RILUVTK0EyNTZLVyIsImVuYyI6IkEyNTZHQ00ifQ",
+        "recipients": [
+          {
+            "header": {
+              "kid": "did:example:clinic-v04#key-agree-health"
+            },
+            "encrypted_key": "base64url-encrypted-key-for-health"
+          }
+        ],
+        "iv": "base64url-iv-health",
+        "ciphertext": "base64url-ciphertext-health",
+        "tag": "base64url-tag-health"
+      }
+    },
+    {
+      "@id": "urn:um:facet:financial-records-v04",
+      "@type": "um:Facet",
+      "name": "privateFinance",
+      "encryptionProfile": "jwe-inline-v1",
+      "entity": {
+        "protected": "eyJhbGciOiJFQ0RILUVTK0EyNTZLVyIsImVuYyI6IkEyNTZHQ00ifQ",
+        "recipients": [
+          {
+            "header": {
+              "kid": "did:example:bank-v04#key-agree-finance"
+            },
+            "encrypted_key": "base64url-encrypted-key-for-finance"
+          }
+        ],
+        "iv": "base64url-iv-finance",
+        "ciphertext": "base64url-ciphertext-finance",
+        "tag": "base64url-tag-finance"
+      }
+    }
+  ],
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:alice-v04#keys-1",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEAvWsBD/ov/5zQwtkxvssqOFz/Ejca8C0NfnAJ9z0iBZY=",
+    "value": "Kph2_Ie2_VH3pv9cH9wRjOMfjBE7jE8ZuEBW67lSZ7zl-jNQ8k803Sb43SwPrVxXFNmiFKRF0gzs7CEW94GdAw"
+  }
+}

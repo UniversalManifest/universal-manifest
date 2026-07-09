@@ -1,0 +1,38 @@
+{
+  "@context": "https://universalmanifest.net/ns/v0.4",
+  "@id": "urn:uuid:40000013-0000-4000-8000-000000000013",
+  "@type": "um:Manifest",
+  "manifestVersion": "0.4",
+  "subject": "did:example:alice-v04",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "facets": [
+    {
+      "@id": "urn:um:facet:agent-memory-v04",
+      "@type": "um:Facet",
+      "name": "agentMemory"
+    }
+  ],
+  "consents": [
+    {
+      "@id": "urn:um:consent:agent-memory-write-v04",
+      "@type": "um:Consent",
+      "facetRef": "urn:um:facet:agent-memory-v04",
+      "scope": [
+        "read",
+        "write.update"
+      ],
+      "purpose": "Persist assistant-derived memory for the holder",
+      "grantedAt": "2026-06-01T00:00:00.000Z",
+      "expiresAt": "2030-06-01T00:00:00.000Z"
+    }
+  ],
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:alice-v04#keys-1",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEAvWsBD/ov/5zQwtkxvssqOFz/Ejca8C0NfnAJ9z0iBZY=",
+    "value": "lrWSkE_-53y7ekXOs3eKtFe-cVjwVfYXfuqSvfPaXBT1_Tg5KQwqvRE4fLPre6K-08SNvqm8-BPyhtUcT-HKDw"
+  }
+}

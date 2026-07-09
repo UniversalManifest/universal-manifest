@@ -1,0 +1,1018 @@
+{
+  "suiteVersion": "1.0.0-draft",
+  "specVersion": "0.4",
+  "fixtures": [
+    {
+      "filename": "valid/minimal-signed-manifest.jsonld",
+      "expectedResult": "accept",
+      "reason": "Baseline v0.4 signed envelope (no facets, no claims) verifies under Signature Profile A.",
+      "category": "signature",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/manifest-with-holder-binding.jsonld",
+      "expectedResult": "accept",
+      "reason": "Claim with holderBinding (sd-jwt-kb mode) validates under EXT-T1 Section T1.1.",
+      "category": "holder-binding",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/manifest-with-bilateral-session-receipt.jsonld",
+      "expectedResult": "accept",
+      "reason": "Manifest with facets and consents suitable for bilateral session evaluation.",
+      "category": "bilateral-session",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/manifest-with-zkp-binding-proof.jsonld",
+      "expectedResult": "accept",
+      "reason": "Claim with ZkLinkedSecretProof bindingProof validates structural shape per v0.4 Section 6.4.7.",
+      "category": "tier2-zkp",
+      "specVersion": "0.4",
+      "conformanceLevel": "extended"
+    },
+    {
+      "filename": "valid/manifest-with-ceremony-proof.jsonld",
+      "expectedResult": "accept",
+      "reason": "Claim with ThresholdAttestationProof ceremonyProof validates per v0.4 Section 6.4.8 (transitional: predates the protocol member, which is REQUIRED only at wire freeze - EXT-T3 Section T3.1).",
+      "category": "tier3-ceremony",
+      "specVersion": "0.4",
+      "conformanceLevel": "extended"
+    },
+    {
+      "filename": "valid/manifest-with-agent-delegation-scopes.jsonld",
+      "expectedResult": "accept",
+      "reason": "Agent delegation pointer with core scope values from EXT-OPT Section O7.",
+      "category": "agent-delegation-scopes",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/manifest-with-encrypted-facet.jsonld",
+      "expectedResult": "accept",
+      "reason": "Encrypted facet with JWE inline profile (carried forward from v0.3).",
+      "category": "encrypted-facets",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/holder-binding-invalid-mode.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "reason": "Reject fixture: holderBinding.mode must be one of sd-jwt-kb|bbs-holder-commitment|reciprocal-control.",
+      "category": "holder-binding",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/holder-binding-missing-cnf.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "reason": "Reject fixture: holderBinding.cnfThumbprint is required for sd-jwt-kb mode.",
+      "category": "holder-binding",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/ceremony-proof-insufficient-attesters.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "accept",
+        "classification": "evaluator-only"
+      },
+      "reason": "Reject fixture: ceremonyProof.attesters must have at least M entries per threshold.",
+      "category": "tier3-ceremony",
+      "specVersion": "0.4",
+      "conformanceLevel": "extended"
+    },
+    {
+      "filename": "invalid/binding-proof-invalid-type.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "reason": "Reject fixture: bindingProof.type must be ZkLinkedSecretProof or ZkHdDerivationProof.",
+      "category": "tier2-zkp",
+      "specVersion": "0.4",
+      "conformanceLevel": "extended"
+    },
+    {
+      "filename": "invalid/missing-signature.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "reason": "Reject fixture: Missing signature.",
+      "category": "signature",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/claim-tier-below-manifest-floor.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "accept",
+        "classification": "evaluator-only"
+      },
+      "reason": "Reject fixture: claim.requiredTrustTier cannot be lower than manifest.requiredTrustTier (Section 6.4.5).",
+      "category": "trust-tier",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/manifest-with-isolated-facets.jsonld",
+      "expectedResult": "accept",
+      "reason": "Q1 per-facet isolation accept: two encrypted facets with distinct recipients[].header.kid and distinct iv (Section 2.3.5). Tests JSON-Schema shape, not the cryptographic isolation property.",
+      "category": "private-data-isolation",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/facet-required-liveness.jsonld",
+      "expectedResult": "accept",
+      "reason": "Q2a accept: a facet carrying a well-formed requiredLiveness floor object (EXT-T1 Section T1.3.1).",
+      "category": "private-data-liveness-floor",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/required-liveness-bad-minfreshness.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "reason": "Reject fixture: requiredLiveness.minFreshness must be one of live|recent|stale ('unknown' is not a valid floor value, EXT-T1 Section T1.3.1).",
+      "category": "private-data-liveness-floor",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/required-liveness-not-object.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "reason": "Reject fixture: requiredLiveness must be an object (EXT-T1 Section T1.3.1).",
+      "category": "private-data-liveness-floor",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/profile-facet-sensitivity-ordering.jsonld",
+      "expectedResult": "accept",
+      "reason": "Q3 shape-only smoke: a profile-defined facet sensitivity ordering. Accepts trivially on the open schema; tests no new Base rule (Section 7.2). The derived-write monotonicity behavior is conformance-deferred (see CONFORMANCE Section 9).",
+      "category": "private-data-derived-write",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/consent-with-write-scope.jsonld",
+      "expectedResult": "accept",
+      "reason": "Q5 shape-only smoke: a consent whose scope includes write.update governing a named target facet. Accepts because scope is an open string array; tests presence-of-write.update, not write authorization (Section 3.1.4). Enforcement is conformance-deferred (see CONFORMANCE Section 9).",
+      "category": "private-data-write-authorization",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/receipt-facet-key-shredded.jsonld",
+      "expectedResult": "accept",
+      "reason": "Q6 shape-only smoke: a receipt manifest carrying facet-key-rotated/facet-key-shredded events with facetKeyRef and crypto key-lifecycle reason codes (EXT-OPT Section O3.2/O3.3). The v0.4 path does not validate embedded events; accepts regardless of event well-formedness. Embedded-event validation is conformance-deferred (see CONFORMANCE Section 9).",
+      "category": "private-data-key-lifecycle",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/consent-unlock-window.jsonld",
+      "expectedResult": "accept",
+      "reason": "Q7 shape-only smoke: a consent with unlock.window in scope and an enumerated facet set (EXT-OPT Section O4.5). Accepts on the open schema; tests presence-of-unlock.window plus the enumerated-set shape, not unlock-window semantics. Enforcement is conformance-deferred (see CONFORMANCE Section 9).",
+      "category": "private-data-unlock-window",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/facet-required-assurance-class.jsonld",
+      "expectedResult": "accept",
+      "reason": "Accept: a locked facet carrying a well-formed requiredAssuranceClass 'hardware-bound' floor plus the locked requiredLiveness {live, userVerified} floor (locked-tier portable-unlock profile, EXT-T1 Section T1.3.3). Tests the closed assurance-class enum shape.",
+      "category": "assurance-floor",
+      "specVersion": "0.4",
+      "conformanceLevel": "extended"
+    },
+    {
+      "filename": "valid/facet-assurance-hardware-uv.jsonld",
+      "expectedResult": "accept",
+      "reason": "Degradation rung: requiredAssuranceClass 'hardware-uv' accepts on the facet shape (EXT-T1 Section T1.3.3).",
+      "category": "assurance-floor",
+      "specVersion": "0.4",
+      "conformanceLevel": "extended"
+    },
+    {
+      "filename": "valid/facet-assurance-software.jsonld",
+      "expectedResult": "accept",
+      "reason": "Degradation rung: requiredAssuranceClass 'software' (the default/lowest rung) accepts on the facet shape (EXT-T1 Section T1.3.3).",
+      "category": "assurance-floor",
+      "specVersion": "0.4",
+      "conformanceLevel": "extended"
+    },
+    {
+      "filename": "valid/manifest-locked-facet-below-floor.jsonld",
+      "expectedResult": "reject",
+      "validationMode": "evaluation",
+      "schemaValidation": {
+        "expectedResult": "accept",
+        "classification": "evaluator-only"
+      },
+      "evaluationContext": {
+        "now": "2026-06-01T00:03:00.000Z",
+        "maxSupportedTrustTier": 0,
+        "presentedAssuranceClass": "software",
+        "omitProcessedAt": true
+      },
+      "expectedReceiptOutcome": "rejected",
+      "expectedFacetStatus": {
+        "facetId": "urn:um:facet:medical-records-v04",
+        "status": "assuranceInsufficient",
+        "assuranceStatus": {
+          "assertedClass": "software",
+          "met": false
+        }
+      },
+      "reason": "Reject: a locked facet with requiredAssuranceClass 'hardware-bound' is evaluated with a software-class presented unlock gesture. The evaluator must withhold the facet, fail closed, and record facetStatuses[].status 'assuranceInsufficient'.",
+      "category": "assurance-floor",
+      "specVersion": "0.4",
+      "conformanceLevel": "extended"
+    },
+    {
+      "filename": "invalid/facet-assurance-class-bad-enum-shape.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "reason": "Reject fixture: requiredAssuranceClass must be one of software|hardware-uv|hardware-bound; bad enum 'titanium' is schema-detectable by the v0.4 facet schema.",
+      "category": "assurance-floor",
+      "specVersion": "0.4",
+      "conformanceLevel": "extended"
+    },
+    {
+      "filename": "invalid/facet-assurance-class-not-string-shape.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "reason": "Reject fixture: requiredAssuranceClass must be one of software|hardware-uv|hardware-bound; wrong type integer 3 is schema-detectable by the v0.4 facet schema.",
+      "category": "assurance-floor",
+      "specVersion": "0.4",
+      "conformanceLevel": "extended"
+    },
+    {
+      "filename": "invalid/bad-signature-value.jsonld",
+      "expectedResult": "reject",
+      "validationMode": "evaluation",
+      "schemaValidation": {
+        "expectedResult": "accept",
+        "classification": "evaluator-only"
+      },
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 0,
+        "omitProcessedAt": true
+      },
+      "expectedReceiptOutcome": "rejected",
+      "expectedSignatureCheck": "invalid",
+      "expectedFreshnessCheck": "not-evaluated",
+      "reason": "Reject: cryptographically wrong signature.value (bit-flipped after signing). Ed25519 verification over the Section 1.6.3 signing input MUST fail; freshness is not reached (not-evaluated, Section 3.3.1). A signature-presence-only implementation accepts this fixture and fails the suite.",
+      "category": "signature",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/tampered-after-signing.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "accept",
+        "classification": "evaluator-only"
+      },
+      "reason": "Reject: subject mutated after signing. The signature no longer covers the canonical bytes (Section 1.6.3/1.6.4); verification MUST fail.",
+      "category": "signature",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/key-substitution-mismatch.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "accept",
+        "classification": "evaluator-only"
+      },
+      "reason": "Reject: embedded publicKeySpkiB64 substituted with a foreign key after signing (the Section 1.6.4 key-substitution attack). Verification against the embedded key MUST fail.",
+      "category": "signature",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/expired-manifest.jsonld",
+      "expectedResult": "reject",
+      "validationMode": "evaluation",
+      "schemaValidation": {
+        "expectedResult": "accept",
+        "classification": "evaluator-only"
+      },
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 0,
+        "omitProcessedAt": true
+      },
+      "expectedReceiptOutcome": "rejected",
+      "expectedSignatureCheck": "valid",
+      "expectedFreshnessCheck": "expired",
+      "reason": "Reject: now > expiresAt (Section 3.1.2 freshness enforcement). The signature is genuine; only TTL math rejects this fixture.",
+      "category": "temporal",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/issued-after-expires.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "accept",
+        "classification": "evaluator-only"
+      },
+      "reason": "Reject: issuedAt > expiresAt (Section 3.1.2). Cross-field temporal misuse over a genuine signature.",
+      "category": "temporal",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/future-issued-at.jsonld",
+      "expectedResult": "reject",
+      "validationMode": "evaluation",
+      "schemaValidation": {
+        "expectedResult": "accept",
+        "classification": "evaluator-only"
+      },
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 0,
+        "omitProcessedAt": true
+      },
+      "expectedReceiptOutcome": "rejected",
+      "expectedFreshnessCheck": "stale",
+      "reason": "Reject: issuedAt more than 60 seconds in the future relative to the evaluation clock is rejected with freshnessCheck \"stale\" (Section 3.1.2).",
+      "category": "temporal",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/manifest-version-mismatch.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "reason": "Reject: manifestVersion \"0.5\" is not supported by any v0.4 processing path (Section 1.3.1: evaluators MUST check version support before processing). v0.3 envelopes instead take the EXT-T1 Section T1.6.4 backcompat path (see the v03-backcompat fixtures).",
+      "category": "envelope",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/unsupported-signature-profile.jsonld",
+      "expectedResult": "reject",
+      "validationMode": "evaluation",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 0,
+        "omitProcessedAt": true
+      },
+      "expectedReceiptOutcome": "rejected",
+      "expectedSignatureCheck": "unsupported-profile",
+      "reason": "Reject: signature.algorithm \"ES256\" is not a supported profile pair; evaluators MUST reject and record signatureCheck \"unsupported-profile\" (Section 1.5.1/1.6.5).",
+      "category": "signature",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/type-missing-um-manifest.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "reason": "Reject: @type does not include um:Manifest (Section 1.2.3, Section 3.1.1).",
+      "category": "envelope",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/context-wrong-namespace.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "reason": "Reject: @context carries a substituted namespace that cannot match the pinned v0.4 context document; the manifest MUST be rejected (Section 1.2.1, Section 6.10; CONFORMANCE Section 6.7 context substitution).",
+      "category": "context-integrity",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/manifest-with-unknown-members.jsonld",
+      "expectedResult": "accept",
+      "reason": "Accept: unknown root members, an unknown entity field, and a devices array, all covered by a genuine signature (Sections 2.2/3.1.1; CONFORMANCE Section 2.17). An implementation that strips unknown members before verification fails this fixture.",
+      "category": "extensibility",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/manifest-with-bbs-holder-binding.jsonld",
+      "expectedResult": "accept",
+      "reason": "Accept: bbs-holder-commitment holder binding carrying its REQUIRED commitment and proofValue plus an optional pseudonymScope (EXT-T1 Section T1.1.1).",
+      "category": "holder-binding",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/manifest-with-reciprocal-holder-binding.jsonld",
+      "expectedResult": "accept",
+      "reason": "Accept: reciprocal-control holder binding carrying its REQUIRED boundDid, subjectProof, and boundDidProof (EXT-T1 Section T1.1).",
+      "category": "holder-binding",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/holder-binding-reciprocal-missing-fields.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "reason": "Reject: reciprocal-control mode without subjectProof/boundDidProof MUST be rejected as a binding failure (EXT-T1 Section T1.1; CONFORMANCE Section 6.2).",
+      "category": "holder-binding",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/holder-binding-bbs-missing-commitment.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "reason": "Reject: bbs-holder-commitment mode without the REQUIRED commitment field (EXT-T1 Section T1.1.1; CONFORMANCE Section 6.2).",
+      "category": "holder-binding",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/manifest-with-presentation-proof.jsonld",
+      "expectedResult": "accept",
+      "validationMode": "evaluation",
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 0,
+        "omitProcessedAt": true,
+        "verifierChallenge": "um-conformance-challenge-0001",
+        "verifierAudience": "did:example:verifier-v04"
+      },
+      "expectedReceiptOutcome": "accepted",
+      "expectedPresentationProofStatus": "verified",
+      "expectedKeyRefResolution": "unresolved",
+      "reason": "Accept: interactive presentation with a genuine did-auth presentationProof (Ed25519 over signing-input hash || challenge || audience || created, EXT-T1 Section T1.2). The manifest signature is computed with presentationProof EXCLUDED (Section 1.6.3); an implementation that fails to exclude it fails verification. keyRefResolution \"unresolved\" caps keyRef-derived identity at Tier 0 (Section 1.6.4).",
+      "category": "presentation-proof",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/presentation-proof-challenge-mismatch.jsonld",
+      "expectedResult": "reject",
+      "validationMode": "evaluation",
+      "schemaValidation": {
+        "expectedResult": "accept",
+        "classification": "evaluator-only"
+      },
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 0,
+        "omitProcessedAt": true,
+        "verifierChallenge": "um-conformance-challenge-0001",
+        "verifierAudience": "did:example:verifier-v04"
+      },
+      "expectedReceiptOutcome": "rejected",
+      "expectedPresentationProofStatus": "failed",
+      "reason": "Reject: presentationProof.challenge does not match the verifier-issued nonce — replay-suspect, rejected for interactive verification (EXT-T1 Sections T1.2/T1.4; CONFORMANCE Section 6.5).",
+      "category": "presentation-proof",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/presentation-proof-audience-mismatch.jsonld",
+      "expectedResult": "reject",
+      "validationMode": "evaluation",
+      "schemaValidation": {
+        "expectedResult": "accept",
+        "classification": "evaluator-only"
+      },
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 0,
+        "omitProcessedAt": true,
+        "verifierChallenge": "um-conformance-challenge-0001",
+        "verifierAudience": "did:example:verifier-v04"
+      },
+      "expectedReceiptOutcome": "rejected",
+      "expectedPresentationProofStatus": "failed",
+      "reason": "Reject: presentationProof.audience does not match this verifier (EXT-T1 Sections T1.2/T1.4; CONFORMANCE Section 6.5).",
+      "category": "presentation-proof",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/presentation-proof-missing-when-challenged.jsonld",
+      "expectedResult": "reject",
+      "validationMode": "evaluation",
+      "schemaValidation": {
+        "expectedResult": "accept",
+        "classification": "evaluator-only"
+      },
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 0,
+        "omitProcessedAt": true,
+        "verifierChallenge": "um-conformance-challenge-0001",
+        "verifierAudience": "did:example:verifier-v04"
+      },
+      "expectedReceiptOutcome": "rejected",
+      "expectedPresentationProofStatus": "missing-required",
+      "reason": "Reject: the evaluator issued a challenge and the manifest carries no presentationProof — replay-suspect; record presentationProofStatus \"missing-required\" and reject for interactive verification (EXT-T1 Section T1.2).",
+      "category": "presentation-proof",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/manifest-with-liveness-attestation.jsonld",
+      "expectedResult": "accept",
+      "validationMode": "evaluation",
+      "evaluationContext": {
+        "now": "2026-06-01T00:00:30.000Z",
+        "maxSupportedTrustTier": 0,
+        "omitProcessedAt": true
+      },
+      "expectedReceiptOutcome": "accepted",
+      "expectedLivenessFreshnessClass": "live",
+      "reason": "Accept: well-formed livenessAttestation (proofType/attestedAt/validUntil/proofValue) evaluated 30 seconds after attestation inside its validity — livenessStatus.freshnessClass \"live\" (EXT-T1 Section T1.3).",
+      "category": "liveness",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/liveness-attestation-past-valid-until.jsonld",
+      "expectedResult": "accept",
+      "validationMode": "evaluation",
+      "evaluationContext": {
+        "now": "2026-06-01T02:00:00.000Z",
+        "maxSupportedTrustTier": 0,
+        "omitProcessedAt": true
+      },
+      "expectedReceiptOutcome": "accepted",
+      "expectedLivenessFreshnessClass": "unknown",
+      "reason": "Stale-liveness replay check: an attestation past its validUntil is \"unknown\" regardless of attestedAt (it would otherwise classify \"recent\") and MUST NOT be treated as current human presence (EXT-T1 Section T1.3; CONFORMANCE Sections 2.11/6.5).",
+      "category": "liveness",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/liveness-missing-valid-until.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "reason": "Reject: livenessAttestation without its REQUIRED validUntil (EXT-T1 Section T1.3).",
+      "category": "liveness",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/agent-delegation-delegatedby-mismatch.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "accept",
+        "classification": "evaluator-only"
+      },
+      "reason": "Reject: um:agentDelegation.delegatedBy does not match the manifest subject (Section 6.5.1; CONFORMANCE Section 6.8).",
+      "category": "agent-delegation",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/agent-delegation-expired.jsonld",
+      "expectedResult": "reject",
+      "validationMode": "evaluation",
+      "schemaValidation": {
+        "expectedResult": "accept",
+        "classification": "evaluator-only"
+      },
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 0,
+        "omitProcessedAt": true
+      },
+      "expectedReceiptOutcome": "rejected",
+      "expectedWarningsContain": [
+        "um:reason:delegation:expired"
+      ],
+      "reason": "Reject: um:agentDelegation past its expiresAt — expired delegations MUST be rejected (Section 6.5.1; CONFORMANCE Section 6.8).",
+      "category": "agent-delegation",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/agent-delegation-fail-closed-defaults.jsonld",
+      "expectedResult": "accept",
+      "validationMode": "evaluation",
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 0,
+        "omitProcessedAt": true
+      },
+      "expectedReceiptOutcome": "accepted-with-warnings",
+      "expectedWarningsContain": [
+        "um:reason:delegation:empty-scope",
+        "um:reason:delegation:unattributed"
+      ],
+      "reason": "Fail-closed defaults: a delegation with an empty scope grants no capabilities and a delegation without delegateId is not attributed to any agent; both are receipt-observable warnings (Section 6.5.1).",
+      "category": "agent-delegation",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/facet-without-consent.jsonld",
+      "expectedResult": "accept",
+      "validationMode": "evaluation",
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 0,
+        "omitProcessedAt": true
+      },
+      "expectedReceiptOutcome": "accepted-partial",
+      "expectedFacetStatus": {
+        "facetId": "urn:um:facet:health-summary-v04",
+        "status": "consent-missing"
+      },
+      "reason": "Consent baseline: a facet with no governing consent entry records \"consent-missing\" and MUST NOT be processed (Sections 1.4.4/3.1.4; CONFORMANCE Section 2.8).",
+      "category": "consent-lifecycle",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/consent-expired.jsonld",
+      "expectedResult": "accept",
+      "validationMode": "evaluation",
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 0,
+        "omitProcessedAt": true
+      },
+      "expectedReceiptOutcome": "accepted-partial",
+      "expectedFacetStatus": {
+        "facetId": "urn:um:facet:health-summary-v04",
+        "status": "consent-denied"
+      },
+      "expectedConsentStatus": {
+        "consentRef": "urn:um:consent:health-expired-v04",
+        "status": "expired"
+      },
+      "reason": "Consent lifecycle: an expired consent is treated as absent — facet \"consent-denied\" with consent status \"expired\" (Sections 1.4.4/3.1.4).",
+      "category": "consent-lifecycle",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/consent-withdrawn.jsonld",
+      "expectedResult": "accept",
+      "validationMode": "evaluation",
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 0,
+        "omitProcessedAt": true
+      },
+      "expectedReceiptOutcome": "accepted-partial",
+      "expectedFacetStatus": {
+        "facetId": "urn:um:facet:health-summary-v04",
+        "status": "consent-denied"
+      },
+      "expectedConsentStatus": {
+        "consentRef": "urn:um:consent:health-withdrawn-v04",
+        "status": "withdrawn"
+      },
+      "reason": "Consent lifecycle: a consent with withdrawnAt set is treated as absent — facet \"consent-denied\" with consent status \"withdrawn\" (Sections 1.4.4/3.1.4).",
+      "category": "consent-lifecycle",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/consent-scope-mismatch-read.jsonld",
+      "expectedResult": "accept",
+      "validationMode": "evaluation",
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 0,
+        "omitProcessedAt": true,
+        "intendedScope": [
+          "read"
+        ]
+      },
+      "expectedReceiptOutcome": "accepted-partial",
+      "expectedFacetStatus": {
+        "facetId": "urn:um:facet:health-summary-v04",
+        "status": "consent-denied"
+      },
+      "expectedConsentStatus": {
+        "consentRef": "urn:um:consent:health-display-only-v04",
+        "status": "scope-mismatch"
+      },
+      "reason": "Read-path fail-closed scope check: the intended \"read\" operation is not literally present in the consent scope — facet \"consent-denied\" with consent status \"scope-mismatch\" (Sections 1.4.4/3.1.4).",
+      "category": "consent-lifecycle",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/consent-unknown-condition.jsonld",
+      "expectedResult": "accept",
+      "validationMode": "evaluation",
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 0,
+        "omitProcessedAt": true
+      },
+      "expectedReceiptOutcome": "accepted-partial",
+      "expectedFacetStatus": {
+        "facetId": "urn:um:facet:health-summary-v04",
+        "status": "consent-denied"
+      },
+      "expectedConsentStatus": {
+        "consentRef": "urn:um:consent:health-conditional-v04",
+        "status": "condition-violated"
+      },
+      "reason": "Fail-closed condition check: a facet governed by a consent condition the evaluator cannot recognize or enforce MUST NOT be processed — consent status \"condition-violated\" (Sections 1.4.4/3.1.4).",
+      "category": "consent-lifecycle",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/encrypted-facet-sealed-entry.jsonld",
+      "expectedResult": "accept",
+      "validationMode": "evaluation",
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 0,
+        "omitProcessedAt": true
+      },
+      "expectedReceiptOutcome": "accepted-partial",
+      "expectedFacetStatus": {
+        "facetId": "urn:um:facet:medical-records-v04",
+        "status": "opaque"
+      },
+      "reason": "Sealed-entry receipt check: an encrypted facet the evaluator cannot decrypt is acknowledged as a sealed entry — status \"opaque\", outcome \"accepted-partial\"; the manifest MUST NOT be rejected solely for undecryptable facets (Sections 2.4.2/3.1.4; CONFORMANCE Section 2.7).",
+      "category": "encrypted-facets",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/encrypted-facet-malformed-jwe.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "reason": "Reject: encrypted facet whose JWE lacks iv and tag — structural conformance MUST require all five JWE JSON Serialization fields (Section 2.3.2; CONFORMANCE Section 6.6).",
+      "category": "encrypted-facets",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/claim-unrecognized-type.jsonld",
+      "expectedResult": "accept",
+      "validationMode": "evaluation",
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 0,
+        "omitProcessedAt": true
+      },
+      "expectedReceiptOutcome": "accepted",
+      "expectedClaimStatus": {
+        "claimRef": "urn:um:claim:custom-credential-v04",
+        "status": "unprocessable"
+      },
+      "reason": "Fail-closed claim baseline: an unrecognized claim @type is treated as unprocessable — present but unverifiable above Tier 0 — and recorded in claimStatuses (Section 1.4.3).",
+      "category": "claims",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/pointer-unrecognized-type.jsonld",
+      "expectedResult": "accept",
+      "validationMode": "evaluation",
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 0,
+        "omitProcessedAt": true
+      },
+      "expectedReceiptOutcome": "accepted",
+      "expectedUnprocessedEntry": {
+        "kind": "pointer",
+        "type": "com.example.customPointer"
+      },
+      "reason": "Fail-closed pointer baseline: an unrecognized pointer @type is recorded present (receipt unprocessedEntries) and MUST NOT be acted on (Section 1.4.5).",
+      "category": "pointers",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/claim-tier-cap-no-holder-binding.jsonld",
+      "expectedResult": "accept",
+      "validationMode": "evaluation",
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 1,
+        "omitProcessedAt": true
+      },
+      "expectedReceiptOutcome": "accepted-partial",
+      "expectedClaimStatus": {
+        "claimRef": "urn:um:claim:unbound-tier1-v04",
+        "status": "trustTierUnsupported",
+        "tier": 0
+      },
+      "expectedHolderBindingStatus": "absent",
+      "expectedEffectiveTrustTier": 0,
+      "reason": "Holder-binding bypass check: a claim relied upon at Tier 1 with no holderBinding is capped at Tier 0 — holderBindingStatus \"absent\", effectiveTrustTier 0, claim recorded trustTierUnsupported (EXT-T1 Sections T1.0/T1.1; CONFORMANCE Section 6.1; authored to the T1.1 value set).",
+      "category": "trust-tier",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/claim-tier-unsupported-by-evaluator.jsonld",
+      "expectedResult": "accept",
+      "validationMode": "evaluation",
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 1,
+        "omitProcessedAt": true
+      },
+      "expectedReceiptOutcome": "accepted-partial",
+      "expectedClaimStatus": {
+        "claimRef": "urn:um:claim:tier2-binding-v04",
+        "status": "trustTierUnsupported",
+        "tier": 1
+      },
+      "reason": "Tier-capability check: a Tier-2 claim evaluated by a Tier-1 evaluator is treated as unverifiable and recorded \"trustTierUnsupported\" in claimStatuses without downgrading; outcome \"accepted-partial\" (Section 6.4.5; CONFORMANCE Section 2.15).",
+      "category": "trust-tier",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/facet-tier-below-manifest-floor.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "accept",
+        "classification": "evaluator-only"
+      },
+      "reason": "Reject: facet.requiredTrustTier cannot be lower than manifest.requiredTrustTier — the floor raises only (Section 6.4.5; CONFORMANCE Section 6.3).",
+      "category": "trust-tier",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "valid/cross-did-binding-proof-only.jsonld",
+      "expectedResult": "accept",
+      "reason": "Accept: identity.crossDidBinding carrying a cryptographic bindingProof and no attester triple — the attester/attestationMethod/attestedAt members are REQUIRED only for attester-asserted bindings (Section 6.4.4).",
+      "category": "tier2-zkp",
+      "specVersion": "0.4",
+      "conformanceLevel": "extended"
+    },
+    {
+      "filename": "valid/v03-backcompat-manifest.jsonld",
+      "expectedResult": "accept",
+      "validationMode": "evaluation",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 1,
+        "omitProcessedAt": true
+      },
+      "expectedReceiptOutcome": "accepted-with-warnings",
+      "expectedHolderBindingStatus": "absent",
+      "expectedPresentationProofStatus": "absent",
+      "expectedLivenessFreshnessClass": "unknown",
+      "expectedEffectiveTrustTier": 0,
+      "expectedWarningsContain": [
+        "um:reason:trust:unbound-claims"
+      ],
+      "reason": "Backcompat: a v0.3 manifest is parsed and processed through the six-stage sequence with holderBindingStatus/presentationProofStatus \"absent\", livenessStatus.freshnessClass \"unknown\", the effective trust tier capped at 0, and the unbound-claims warning (EXT-T1 Section T1.6.4). The v0.4 structural schema rejects the v0.3 envelope; the evaluator backcompat path accepts it.",
+      "category": "backcompat",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/v03-backcompat-tier-floor-unsatisfiable.jsonld",
+      "expectedResult": "reject",
+      "validationMode": "evaluation",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "evaluationContext": {
+        "now": "2026-06-01T00:01:00.000Z",
+        "maxSupportedTrustTier": 1,
+        "omitProcessedAt": true
+      },
+      "expectedReceiptOutcome": "rejected",
+      "expectedHolderBindingStatus": "absent",
+      "expectedEffectiveTrustTier": 0,
+      "reason": "Backcompat reject: a v0.3 manifest declaring requiredTrustTier 1 cannot be satisfied at the backcompat Tier-0 cap; Section 6.4.5 governs the outcome (\"rejected\" for trust-gated use, EXT-T1 Section T1.6.4).",
+      "category": "backcompat",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/claim-proof-oversize-vp.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "accept",
+        "classification": "evaluator-only"
+      },
+      "reason": "Reject: an embedded claimProof VP over the 50 KB per-VP limit MUST be rejected (Section 6.4.3; EXT-T1 Section T1.5.1).",
+      "category": "claims",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/missing-subject.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "reason": "Reject: missing required subject (Section 1.3.2).",
+      "category": "envelope",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/missing-expires-at.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "reason": "Reject: missing required expiresAt (Section 1.3.3).",
+      "category": "envelope",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/consent-missing-facet-ref.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "reject",
+        "classification": "schema-detectable"
+      },
+      "reason": "Reject: consent entry missing its required facetRef (Section 1.4.4).",
+      "category": "consent-lifecycle",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    },
+    {
+      "filename": "invalid/signature-keyref-without-embedded-key.jsonld",
+      "expectedResult": "reject",
+      "schemaValidation": {
+        "expectedResult": "accept",
+        "classification": "evaluator-only"
+      },
+      "reason": "Reject: keyRef resolution is unavailable (did:example is unresolvable by construction) and no publicKeySpkiB64 is embedded — the evaluator MUST reject (Section 1.6.4 key-resolution ladder).",
+      "category": "signature",
+      "specVersion": "0.4",
+      "conformanceLevel": "baseline"
+    }
+  ]
+}

@@ -123,7 +123,7 @@
         },
         "entity": {
           "description": "Plain um:Entity object, or (when encryptionProfile is present) a JWE JSON Serialization object per Section 2.3.2.",
-          "oneOf": [
+          "anyOf": [
             { "$ref": "#/$defs/entity" },
             { "$ref": "#/$defs/jweEntity" },
             { "type": "object" },

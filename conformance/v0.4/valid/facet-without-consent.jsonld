@@ -1,0 +1,24 @@
+{
+  "@context": "https://universalmanifest.net/ns/v0.4",
+  "@type": "um:Manifest",
+  "manifestVersion": "0.4",
+  "subject": "did:example:alice-v04",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "@id": "urn:uuid:47000026-0000-4000-8000-000000000026",
+  "facets": [
+    {
+      "@id": "urn:um:facet:health-summary-v04",
+      "@type": "um:Facet",
+      "name": "healthSummary"
+    }
+  ],
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:alice-v04#keys-1",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEAvWsBD/ov/5zQwtkxvssqOFz/Ejca8C0NfnAJ9z0iBZY=",
+    "value": "4GafMqK_tZhswRBBgSh2od1SUt-Ym76gGkSDRWmROVhjJvVqx5bAveXNMD5BOUqiJx0JkKFc9zTP89Z6BdcICg"
+  }
+}
