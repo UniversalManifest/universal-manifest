@@ -1,1 +1,46 @@
-../../../examples/v0.4/manifest-with-bilateral-session-receipt.jsonld
+{
+  "@context": "https://universalmanifest.net/ns/v0.4",
+  "@id": "urn:uuid:40000003-0000-4000-8000-000000000003",
+  "@type": "um:Manifest",
+  "manifestVersion": "0.4",
+  "subject": "did:example:alice-v04",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "facets": [
+    {
+      "@id": "urn:um:facet:public-profile-v04",
+      "@type": "um:Facet",
+      "name": "publicProfile",
+      "entity": {
+        "@id": "did:example:alice-v04",
+        "@type": [
+          "um:Entity",
+          "schema:Person"
+        ],
+        "name": "Alice Example"
+      }
+    }
+  ],
+  "consents": [
+    {
+      "@id": "urn:um:consent:public-profile-v04-001",
+      "@type": "um:Consent",
+      "facetRef": "urn:um:facet:public-profile-v04",
+      "scope": [
+        "read",
+        "display"
+      ],
+      "purpose": "session-personalization",
+      "grantedAt": "2026-06-01T00:00:00.000Z",
+      "expiresAt": "2030-06-01T00:00:00.000Z"
+    }
+  ],
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:alice-v04#keys-1",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEAvWsBD/ov/5zQwtkxvssqOFz/Ejca8C0NfnAJ9z0iBZY=",
+    "value": "LmgTFJ5SN23M6rE7jKeW4RUkcfJoyBsrMITKnDEmKdzXRE24uTsvdwZ2D_odI7bFIf95NRrOR1hX-89rHdiBCQ"
+  }
+}
