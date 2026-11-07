@@ -1,0 +1,49 @@
+name: Specification issue
+description: Report a problem or suggest a change to the Universal Manifest specification.
+labels: ["specification"]
+body:
+  - type: dropdown
+    id: version
+    attributes:
+      label: Specification version
+      description: Which version of the specification does this apply to?
+      options:
+        - v0.5.0-rc.1 (release candidate)
+        - v0.4 (current)
+        - v0.3
+        - v0.2
+        - v0.1
+        - All versions
+    validations:
+      required: true
+  - type: dropdown
+    id: document
+    attributes:
+      label: Document
+      description: Which document does this apply to?
+      options:
+        - Core specification
+        - Primer
+        - "Extension: Binding Profile (ext-t1)"
+        - "Extension: Crypto Binding Profile (ext-t2)"
+        - "Extension: Ceremony Profile (ext-t3)"
+        - "Extension: Optional Features (ext-opt)"
+        - Cookbook
+        - Conformance suite
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the issue clearly. Quote the relevant section if possible.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: If you have a specific change in mind, describe it here.
+    validations:
+      required: false
