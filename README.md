@@ -37,10 +37,9 @@ Created by Grig Bilham, [Sumset Tech LLC](https://sumset.tech).
 
 ## Licensing
 
-This repository uses dual licensing:
-
-- **[LICENSE](LICENSE)** (Apache 2.0): applies to any code or tooling added to this repository.
-- **[LICENSE-DOCS](LICENSE-DOCS)** (W3C Software and Document License): applies to everything in the `spec/` directory.
+- **`spec/v0.5/` and later revisions:** the [Apache License, Version 2.0](LICENSE). Copyright (c) 2026 SumSet Tech LLC and the Universal Manifest contributors.
+- **Earlier published revisions, `spec/v0.1/` to `spec/v0.4/`:** each keeps the notices and terms it carried when published. This section does not change them. [LICENSE-DOCS](LICENSE-DOCS) (W3C Software and Document License) stays in this repository for those revisions.
+- **Code or tooling added to this repository:** [LICENSE](LICENSE) (Apache 2.0).
 
 ## Contributing
 
