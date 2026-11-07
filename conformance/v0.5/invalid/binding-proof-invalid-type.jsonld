@@ -1,0 +1,36 @@
+{
+  "__validate": "structural",
+  "__expectedError": "bindingProof.type must be ZkLinkedSecretProof or ZkHdDerivationProof",
+  "@context": "https://universalmanifest.net/ns/v0.5",
+  "@id": "urn:uuid:40000093-0000-4000-8000-000000000093",
+  "@type": "um:Manifest",
+  "manifestVersion": "0.5",
+  "subject": "did:example:alice-v05",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "claims": [
+    {
+      "@type": "identity.crossDidBinding",
+      "issuer": "self",
+      "boundDids": [
+        "did:example:alice-v05",
+        "did:pkh:eip155:1:0xabc"
+      ],
+      "attester": "did:web:verify.example",
+      "attestationMethod": "Unknown ZKP",
+      "attestedAt": "2026-06-01T00:00:00.000Z",
+      "bindingProof": {
+        "type": "UnknownProofType",
+        "proofValue": "zFoo"
+      }
+    }
+  ],
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:alice-v05#keys-1",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEAvWsBD/ov/5zQwtkxvssqOFz/Ejca8C0NfnAJ9z0iBZY=",
+    "value": "bXIE2c2oMAKw7Fgd7kueVY509zKjULDpQNtsDa5uTagmqvXl_BNta1qc9S1MRdf46ecXtW7VqGlHxPgrLS6CCg"
+  }
+}

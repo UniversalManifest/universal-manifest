@@ -1,0 +1,37 @@
+{
+  "@context": "https://universalmanifest.net/ns/v0.5",
+  "@id": "urn:uuid:41000003-0000-4000-8000-000000000003",
+  "@type": "um:Manifest",
+  "manifestVersion": "0.5",
+  "subject": "did:example:alice-v05",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "facets": [
+    {
+      "@id": "urn:um:facet:agent-memory-es256-v05",
+      "@type": "um:Facet",
+      "name": "agentMemory"
+    }
+  ],
+  "consents": [
+    {
+      "@id": "urn:um:consent:agent-memory-es256-v05",
+      "@type": "um:Consent",
+      "facetRef": "urn:um:facet:agent-memory-es256-v05",
+      "scope": [
+        "read"
+      ],
+      "purpose": "Profile B coverage over a manifest carrying facets and consents",
+      "grantedAt": "2026-06-01T00:00:00.000Z",
+      "expiresAt": "2030-06-01T00:00:00.000Z"
+    }
+  ],
+  "signature": {
+    "algorithm": "ES256",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:alice-v05#keys-es256",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqjXfpsmg3sRKT1bZZatcKHdYovfN37fks5Cj9YEmefJePvU9TO5eE9olWSGicu3YnSB3pD+LorCZvAYXZy8geg==",
+    "value": "ue4riFXDb3bXf_Y5DtUr9bT7RjmTymZUgV294YwKB699cBvCp-WM27STGhjdJEHR8NfvCXGX33mNMwD43DRyWw"
+  }
+}

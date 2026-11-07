@@ -1,0 +1,39 @@
+{
+  "@context": "https://universalmanifest.net/ns/v0.5",
+  "@type": "um:Manifest",
+  "manifestVersion": "0.5",
+  "subject": "did:example:alice-v05",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "@id": "urn:uuid:47000031-0000-4000-8000-000000000031",
+  "facets": [
+    {
+      "@id": "urn:um:facet:medical-records-v05",
+      "@type": "um:Facet",
+      "name": "privateHealth",
+      "encryptionProfile": "jwe-inline-v1",
+      "entity": {
+        "protected": "eyJhbGciOiJFQ0RILUVTK0EyNTZLVyIsImVuYyI6IkEyNTZHQ00ifQ",
+        "recipients": [
+          {
+            "header": {
+              "kid": "did:example:clinic-v05#key-agree-health"
+            },
+            "encrypted_key": "base64url-encrypted-key-sealed-health"
+          }
+        ],
+        "iv": "iv-sealed-health",
+        "ciphertext": "base64url-ciphertext-sealed-health",
+        "tag": "base64url-tag-sealed-health"
+      }
+    }
+  ],
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:alice-v05#keys-1",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEAvWsBD/ov/5zQwtkxvssqOFz/Ejca8C0NfnAJ9z0iBZY=",
+    "value": "1EeNnpinVfROKrkLZQWEr5Xk-oiKfWws5GtD7QofZvAVWs3DqQaNZyV4A-f_i1-OPbuKI8RDP31UxqekYK4qBg"
+  }
+}

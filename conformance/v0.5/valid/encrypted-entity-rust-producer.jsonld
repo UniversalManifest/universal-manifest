@@ -1,0 +1,97 @@
+{
+  "@context": "https://universalmanifest.net/ns/v0.5",
+  "@id": "urn:uuid:55050011-0000-4000-8000-000000000011",
+  "@type": "um:Manifest",
+  "manifestVersion": "0.5",
+  "subject": "did:example:alice-v05",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "facets": [
+    {
+      "@id": "urn:um:test:facet:rust:0",
+      "@type": [
+        "um:Facet"
+      ],
+      "encryptionProfile": "jwe-inline-v1",
+      "entity": {
+        "ciphertext": "jMnLTYxO_PKgrIjGRf7MjALCgpOolvDGZRgJhMyFyeAgN8oJH9KntrCa5OBtUoZ3ud-huL0hv5IiUDfjqV7btilv9U6VhqaxglLv2H3EswyTbLWdQaGwkmlMvM4j7N0vKpSdKNOa0CtkIQ",
+        "iv": "dOvKYzAu4IDGa3ow",
+        "protected": "eyJhbGciOiJFQ0RILUVTK0EyNTZLVyIsImVuYyI6IkEyNTZHQ00ifQ",
+        "recipients": [
+          {
+            "encrypted_key": "H82x1zWZz91vLF4q-c_esnTAgFWe1utkt8jAq4aI90N_zMNPAEjSEg",
+            "header": {
+              "epk": {
+                "crv": "P-256",
+                "kty": "EC",
+                "x": "50Bo15GL8xAie_bFV17Ybm0IclCP7kFSKo5rC-bZL8Q",
+                "y": "RumLNf2Wjzo8DN4c1CUFJk9hhx-LAl8h1LGmabhFcSg"
+              },
+              "kid": "public-test-rust-facet-0-recipient-0"
+            }
+          },
+          {
+            "encrypted_key": "5ge6rG81LjUVp631i9U48MXkfk9xh_NoG-CEZMMo32-dDFvdTMEeqg",
+            "header": {
+              "epk": {
+                "crv": "P-256",
+                "kty": "EC",
+                "x": "gT4mmgRLOkmPS70PwSRGwHFiilkWjtmTDNpQUyYa6B4",
+                "y": "Q4Z3otC7MtRvkfLMMiN-OXY4Qrlpdpc3NunIHuh_Fxg"
+              },
+              "kid": "public-test-rust-facet-0-recipient-1"
+            }
+          }
+        ],
+        "tag": "N9hMWura5vzhgt7qGAbY0w"
+      }
+    },
+    {
+      "@id": "urn:um:test:facet:rust:1",
+      "@type": [
+        "um:Facet"
+      ],
+      "encryptionProfile": "jwe-inline-v1",
+      "entity": {
+        "ciphertext": "FUNAf76GwMDKF9x3K3o3pK14TjcTVPHlPuu2oSJw_BOi95Il1sFXkGaAjZz7376ETzXKvBpM7l28_ouMLTqTeUp27buF-AWFDT7S3AwB87g5BtHog9PS_yMvL0WOyL00fCIQW1deit-vdw",
+        "iv": "ktBXsoV6TFbZ14fb",
+        "protected": "eyJhbGciOiJFQ0RILUVTK0EyNTZLVyIsImVuYyI6IkEyNTZHQ00ifQ",
+        "recipients": [
+          {
+            "encrypted_key": "6Odv78ZFqNB6MxwhsJrRkyl2WAGa9NdstLQg3EgVpFqM1mHMoDQjXA",
+            "header": {
+              "epk": {
+                "crv": "P-256",
+                "kty": "EC",
+                "x": "ynoxYX3zb0p655WPsEfUVRWJig1K4TKawNzmmu0aHH0",
+                "y": "KMs4zUbkbyNSmhKD672uohtOSS2aXXj3t8Wu5BIfJTw"
+              },
+              "kid": "public-test-rust-facet-1-recipient-0"
+            }
+          },
+          {
+            "encrypted_key": "Jx6WyWAkvvGtmeSBHJ1dWKrOaD1_ME3mLOO8liXXBk1rlBwZQnckTw",
+            "header": {
+              "epk": {
+                "crv": "P-256",
+                "kty": "EC",
+                "x": "XFzhCMgdCZcawk3kF_6VZW59Yp5CYFJd4FCEYsQ1qG4",
+                "y": "O94PQQeV5eVNej9lWrzFbWjBQx-lWV_4NkdMpIXKpuU"
+              },
+              "kid": "public-test-rust-facet-1-recipient-1"
+            }
+          }
+        ],
+        "tag": "dE-E9HXQR_bHEL5GUgugew"
+      }
+    }
+  ],
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:alice-v05#keys-1",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEAvWsBD/ov/5zQwtkxvssqOFz/Ejca8C0NfnAJ9z0iBZY=",
+    "value": "9oBRo4BItORmFL8RTPuullDK1uIcUTGZNMiu1x2r3uCJv2ji5nKZ0fP7zA3WD00I5OXRfjoThsCzLVVa3bzpDQ"
+  }
+}

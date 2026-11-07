@@ -1,0 +1,48 @@
+{
+  "@context": "https://universalmanifest.net/ns/v0.5",
+  "@id": "urn:uuid:63000000-0000-4000-8000-000000000008",
+  "@type": "um:Manifest",
+  "manifestVersion": "0.5",
+  "subject": "did:example:alice-v05",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "facets": [
+    {
+      "@id": "urn:um:facet:two-consents-8",
+      "@type": "um:Facet",
+      "name": "twoConsents"
+    }
+  ],
+  "consents": [
+    {
+      "@id": "urn:um:consent:two-consents-8-0",
+      "@type": "um:Consent",
+      "facetRef": "urn:um:facet:two-consents-8",
+      "scope": [
+        "read"
+      ],
+      "purpose": "Consent evaluation coverage",
+      "grantedAt": "2026-06-01T00:00:00.000Z",
+      "expiresAt": "2030-06-01T00:00:00.000Z"
+    },
+    {
+      "@id": "urn:um:consent:two-consents-8-1",
+      "@type": "um:Consent",
+      "facetRef": "urn:um:facet:two-consents-8",
+      "scope": [
+        "read"
+      ],
+      "purpose": "Another purpose",
+      "grantedAt": "2026-06-01T00:00:00.000Z",
+      "expiresAt": "2030-06-01T00:00:00.000Z"
+    }
+  ],
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:alice-v05#keys-1",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEArM0/Tf6Rih7qhjqfTq6wvcjyBOR317rgR8lW+vHXPwg=",
+    "value": "h6CBCwWC_WWAu3xOJpWqmuU6Oo7lOGJB_ERYa0XmbhBw546fFgU02ECM_AlqcqoMPjxZz0_CmMDvr3W0uHRlAw"
+  }
+}

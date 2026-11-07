@@ -1,0 +1,37 @@
+{
+  "@context": "https://universalmanifest.net/ns/v0.5",
+  "@type": "um:Manifest",
+  "manifestVersion": "0.5",
+  "subject": "did:example:alice-v05",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "@id": "urn:uuid:55050001-0000-4000-8000-000000000001",
+  "facets": [
+    {
+      "@id": "urn:um:facet:health-summary-v05",
+      "@type": "um:Facet",
+      "name": "healthSummary"
+    }
+  ],
+  "consents": [
+    {
+      "@id": "urn:um:consent:health-display-only-v05",
+      "@type": "um:Consent",
+      "facetRef": "urn:um:facet:health-summary-v05",
+      "scope": [
+        "display"
+      ],
+      "purpose": "Display the facet to the evaluating party",
+      "grantedAt": "2026-06-01T00:00:00.000Z",
+      "expiresAt": "2030-06-01T00:00:00.000Z"
+    }
+  ],
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:alice-v05#keys-1",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEAvWsBD/ov/5zQwtkxvssqOFz/Ejca8C0NfnAJ9z0iBZY=",
+    "value": "GRz7uJCP_0pxcro6kEc8NFP_tJDL4g8X20-KKC1j1QWtjQKYp6tCy-Rt36coEf7zc2mbEjBTmkDtiBuJpeaYBA"
+  }
+}

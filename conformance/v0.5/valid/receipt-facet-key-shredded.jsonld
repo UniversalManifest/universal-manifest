@@ -1,0 +1,46 @@
+{
+  "@context": "https://universalmanifest.net/ns/v0.5",
+  "@id": "urn:uuid:40000015-0000-4000-8000-000000000015",
+  "@type": [
+    "um:Manifest",
+    "um:Receipt"
+  ],
+  "manifestVersion": "0.5",
+  "subject": "did:example:evaluator-v05",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "manifestId": "urn:uuid:40000007-0000-4000-8000-000000000007",
+  "outcome": "accepted-with-warnings",
+  "signatureCheck": "valid",
+  "freshnessCheck": "fresh",
+  "facetStatuses": [
+    {
+      "facetId": "urn:um:facet:medical-records-v05",
+      "name": "privateHealth",
+      "status": "opaque"
+    }
+  ],
+  "events": [
+    {
+      "eventType": "facet-key-rotated",
+      "at": "2026-06-01T00:00:00.000Z",
+      "facetKeyRef": "did:example:clinic-v05#key-agree-health",
+      "reason": "um:reason:crypto:key-rotated"
+    },
+    {
+      "eventType": "facet-key-shredded",
+      "at": "2026-06-01T00:01:00.000Z",
+      "facetKeyRef": "did:example:clinic-v05#key-agree-health-old",
+      "reason": "um:reason:crypto:key-shredded"
+    }
+  ],
+  "processedAt": "2026-06-01T00:01:00.000Z",
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:evaluator-v05#keys-1",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEAvWsBD/ov/5zQwtkxvssqOFz/Ejca8C0NfnAJ9z0iBZY=",
+    "value": "fOKwjgGbSY5ZjONJg93CUVyXa_pppfI1JwBY-77gztqJtk4APgA0aMwN0J7beD4KkCiP64hFEhgpMB988o_DDg"
+  }
+}

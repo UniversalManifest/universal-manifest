@@ -1,0 +1,18 @@
+{
+  "@context": "https://universalmanifest.net/ns/v0.5",
+  "@type": "um:Manifest",
+  "manifestVersion": "0.5",
+  "subject": "did:example:mallory-v05-post-sign-mutation",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "@id": "urn:uuid:47000002-0000-4000-8000-000000000002",
+  "__expectedError": "Signature verification failed",
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:alice-v05#keys-1",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEAvWsBD/ov/5zQwtkxvssqOFz/Ejca8C0NfnAJ9z0iBZY=",
+    "value": "zu7TUmPNZ8JdQ-X3PJOj17GNdFy6h3L6DISVKNsfTtxMgYEuSocFECoLg3IndKhlIDK95tdP5U1dJjoRht3LCA"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "@context": "https://universalmanifest.net/ns/v0.3",
+  "@type": "um:Manifest",
+  "manifestVersion": "0.3",
+  "subject": "did:example:alice-v03",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "@id": "urn:uuid:47000040-0000-4000-8000-000000000040",
+  "requiredTrustTier": 1,
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:alice-v03#keys-1",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEAvWsBD/ov/5zQwtkxvssqOFz/Ejca8C0NfnAJ9z0iBZY=",
+    "value": "d415FqROwVHJ0Wz58ERZcfbpGdrxYhMGtYdEBFgUH_cvaxiQN9EZ9hFV7pF_oPnW35D_vQ41SNs_tSb9omSnAQ"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "__validate": "structural",
+  "__expectedError": "claim.requiredTrustTier cannot be lower than manifest.requiredTrustTier",
+  "@context": "https://universalmanifest.net/ns/v0.5",
+  "@id": "urn:uuid:40000095-0000-4000-8000-000000000095",
+  "@type": "um:Manifest",
+  "manifestVersion": "0.5",
+  "subject": "did:example:alice-v05",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "requiredTrustTier": 2,
+  "claims": [
+    {
+      "@type": "membership.organization",
+      "issuer": "did:web:example-org.com",
+      "requiredTrustTier": 1
+    }
+  ],
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:alice-v05#keys-1",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEAvWsBD/ov/5zQwtkxvssqOFz/Ejca8C0NfnAJ9z0iBZY=",
+    "value": "v8it71bVuAc9bswCGfBWwPW4gqDjCHcs3gHrioVgyhUVZ31fy1dwX8dYKmgLIOuOQPvtDHuviP9hPyAC3_15Cw"
+  }
+}

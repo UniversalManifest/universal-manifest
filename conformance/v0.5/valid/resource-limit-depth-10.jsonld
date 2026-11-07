@@ -1,0 +1,52 @@
+{
+  "@context": "https://universalmanifest.net/ns/v0.5",
+  "@id": "urn:uuid:63000000-0000-4000-8000-000000000001",
+  "@type": "um:Manifest",
+  "manifestVersion": "0.5",
+  "subject": "did:example:alice-v05",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "facets": [
+    {
+      "@id": "urn:um:facet:limits-1",
+      "@type": "um:Facet",
+      "name": "limits",
+      "entity": {
+        "d": {
+          "n": {
+            "n": {
+              "n": {
+                "n": {
+                  "n": {
+                    "n": "end"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "consents": [
+    {
+      "@id": "urn:um:consent:limits-1",
+      "@type": "um:Consent",
+      "facetRef": "urn:um:facet:limits-1",
+      "scope": [
+        "read"
+      ],
+      "purpose": "Base Section 6.3 resource limit coverage",
+      "grantedAt": "2026-06-01T00:00:00.000Z",
+      "expiresAt": "2030-06-01T00:00:00.000Z"
+    }
+  ],
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:alice-v05#keys-1",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEAaxvkbrplLpI6J4/94AAJsvhMT45BqUA7cc6HgCBOKFU=",
+    "value": "AAO19y4CMy-1jRwvRwQGvcB_zEAk5vsYk36hx-5s8jUZboaGkxuQUcMSdEpTH1CmpocvY4mbUcQ7KN0Y06WMCg"
+  }
+}

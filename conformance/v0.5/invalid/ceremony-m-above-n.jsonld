@@ -1,0 +1,42 @@
+{
+  "@context": "https://universalmanifest.net/ns/v0.5",
+  "@id": "urn:uuid:40000005-0000-4000-8000-000000000005",
+  "@type": "um:Manifest",
+  "manifestVersion": "0.5",
+  "subject": "did:example:alice-v05",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "claims": [
+    {
+      "@type": "identity.crossDidBinding",
+      "issuer": "did:web:notary-a.example",
+      "boundDids": [
+        "did:example:a",
+        "did:example:b"
+      ],
+      "attester": "did:web:notary-a.example",
+      "attestationMethod": "Multi-party ceremony",
+      "attestedAt": "2026-06-01T00:00:00.000Z",
+      "requiredTrustTier": 3,
+      "ceremonyProof": {
+        "type": "ThresholdAttestationProof",
+        "threshold": "3-of-2",
+        "attesters": [
+          "did:example:a",
+          "did:example:b",
+          "did:example:c"
+        ],
+        "ceremonyId": "urn:um:ceremony:2026-06-01-abc",
+        "aggregateProof": "zAggregateProofBytes"
+      }
+    }
+  ],
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:alice-v05#keys-1",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEAvWsBD/ov/5zQwtkxvssqOFz/Ejca8C0NfnAJ9z0iBZY=",
+    "value": "jMB3UYZhxXPPNfz_cErNobK7Jp1mP7a-gHWoOVA1xSuD_Le8fZadwK4J7Ed_q6TTb7ohiiJtwgogD1xfk5AFCA"
+  }
+}

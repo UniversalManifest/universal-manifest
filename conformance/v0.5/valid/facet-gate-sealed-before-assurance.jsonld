@@ -1,0 +1,59 @@
+{
+  "@context": "https://universalmanifest.net/ns/v0.5",
+  "@id": "urn:uuid:55210001-0000-4000-8000-000000000006",
+  "@type": "um:Manifest",
+  "manifestVersion": "0.5",
+  "subject": "did:example:alice-v05",
+  "issuedAt": "2026-06-01T00:00:00.000Z",
+  "expiresAt": "2030-06-01T00:00:00.000Z",
+  "facets": [
+    {
+      "@id": "urn:um:test:facet:rust:0",
+      "@type": [
+        "um:Facet"
+      ],
+      "encryptionProfile": "jwe-inline-v1",
+      "entity": {
+        "ciphertext": "jMnLTYxO_PKgrIjGRf7MjALCgpOolvDGZRgJhMyFyeAgN8oJH9KntrCa5OBtUoZ3ud-huL0hv5IiUDfjqV7btilv9U6VhqaxglLv2H3EswyTbLWdQaGwkmlMvM4j7N0vKpSdKNOa0CtkIQ",
+        "iv": "dOvKYzAu4IDGa3ow",
+        "protected": "eyJhbGciOiJFQ0RILUVTK0EyNTZLVyIsImVuYyI6IkEyNTZHQ00ifQ",
+        "recipients": [
+          {
+            "encrypted_key": "H82x1zWZz91vLF4q-c_esnTAgFWe1utkt8jAq4aI90N_zMNPAEjSEg",
+            "header": {
+              "epk": {
+                "crv": "P-256",
+                "kty": "EC",
+                "x": "50Bo15GL8xAie_bFV17Ybm0IclCP7kFSKo5rC-bZL8Q",
+                "y": "RumLNf2Wjzo8DN4c1CUFJk9hhx-LAl8h1LGmabhFcSg"
+              },
+              "kid": "public-test-rust-facet-0-recipient-0"
+            }
+          },
+          {
+            "encrypted_key": "5ge6rG81LjUVp631i9U48MXkfk9xh_NoG-CEZMMo32-dDFvdTMEeqg",
+            "header": {
+              "epk": {
+                "crv": "P-256",
+                "kty": "EC",
+                "x": "gT4mmgRLOkmPS70PwSRGwHFiilkWjtmTDNpQUyYa6B4",
+                "y": "Q4Z3otC7MtRvkfLMMiN-OXY4Qrlpdpc3NunIHuh_Fxg"
+              },
+              "kid": "public-test-rust-facet-0-recipient-1"
+            }
+          }
+        ],
+        "tag": "N9hMWura5vzhgt7qGAbY0w"
+      },
+      "requiredAssuranceClass": "hardware-bound"
+    }
+  ],
+  "signature": {
+    "algorithm": "Ed25519",
+    "canonicalization": "JCS-RFC8785",
+    "keyRef": "did:example:alice-v04#keys-1",
+    "created": "2026-06-01T00:00:00.000Z",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEAvWsBD/ov/5zQwtkxvssqOFz/Ejca8C0NfnAJ9z0iBZY=",
+    "value": "bsJPYCp7imbjNO6IvZN18mTjdhvOzK1w1Dm80wyY7K81Yg_lVYHd5jzqRACo_yBxsljcEu4GvYI080XCKY__Cg"
+  }
+}
