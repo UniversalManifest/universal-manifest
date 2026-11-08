@@ -4,29 +4,38 @@ This directory packages Universal Manifest conformance fixtures and machine-read
 
 The fixtures a v0.4 implementation runs against live under `conformance/v0.4/` (`valid/`, `invalid/`, and `expected.json`) — this is the authoritative v0.4 suite location and the set the pass criteria in `spec/v0.4/CONFORMANCE.md` are written against. Some of those files are regular files and some are relative symlinks into `examples/` (see Packaging mode below); either way, `conformance/v0.4/` is the complete, self-contained set to execute. The parallel `examples/v0.4/` tree is a **partial mirror** used during authoring, not the full suite — do not treat it as the source of record for v0.4 (it does not carry every fixture, and its layout differs from the conformance layout).
 
-For the earlier versions, the `examples/` trees remain the canonical fixture sources exposed through this stable conformance layout:
-- `examples/v0.1/`
-- `examples/v0.2/`
-- `examples/v0.3/`
+## v0.5 suite
+
+The v0.5 suite lives under `conformance/v0.5/`: 198 cases indexed by `conformance/v0.5/expected.json`, SHA-256 `f3c812984f47f284a3254dc8d51b1cba8140a06ba41238f6bce3b7f8e4cdb97c`. Its pass criteria are in `spec/v0.5/CONFORMANCE.md` section 5, and the same index is served at <https://universalmanifest.net/conformance/v0.5/expected.json>.
+
+- **Cases.** 115 under `valid/` and 83 under `invalid/`. Directory placement does not define the expected outcome; match each `expected.json` entry.
+- **Surfaces.** Structural, evaluation (with a pinned `evaluationContext`), schema sweep against `spec/v0.5/schema.json`, and I-JSON ingress (`ijson-ingress` cases, refused before schema validation).
+- **Files.** Every v0.5 fixture is a regular file, not a link.
+- **The suite is frozen with the v0.5 wire files.** New cases for later versions go to a new index address, never into `conformance/v0.5/expected.json`.
+- **Reference results.** The TypeScript and Rust reference evaluators each match 198 of 198. Both are in-project, and the conformance level they establish is `none`.
+- **Running it.** The reference runner is in `conformance/runner/`, the TypeScript adapter in `conformance/adapters/typescript/`, and the TypeScript package source it builds on in `packages/universal-manifest/`, all Apache-2.0. From the repository root, with Node.js 22:
+
+  ```bash
+  cd packages/universal-manifest && npm ci && npx tsc -p tsconfig.json
+  cd ../../conformance/runner && node cli.mjs --mode command --adapter-command "node ../adapters/typescript/adapter.mjs" --versions 0.5 --report /absolute/path/to/report.json
+  ```
+
+  Any implementation can be run the same way through its own adapter command; see `conformance/runner/README.md`.
+
+This repository publishes the v0.4 and v0.5 suites. Versions v0.1 to v0.3 have no packaged suite here.
 
 ## Fixture Packaging
 
 Layout:
-- `conformance/v0.1/valid/` -> valid v0.1 fixtures (root fixtures + `stubs/`)
-- `conformance/v0.1/invalid/` -> invalid v0.1 fixtures
-- `conformance/v0.2/valid/` -> valid v0.2 fixtures
-- `conformance/v0.2/invalid/` -> invalid v0.2 fixtures
-- `conformance/v0.3/valid/` -> valid v0.3 fixtures
-- `conformance/v0.3/invalid/` -> invalid v0.3 fixtures
 - `conformance/v0.4/valid/` -> valid v0.4 fixtures
 - `conformance/v0.4/invalid/` -> invalid v0.4 fixtures
-- `conformance/v0.1/expected.json` -> expected outcomes for all v0.1 fixtures
-- `conformance/v0.2/expected.json` -> expected outcomes for all v0.2 fixtures
-- `conformance/v0.3/expected.json` -> expected outcomes for all v0.3 fixtures
+- `conformance/v0.5/valid/` -> valid v0.5 fixtures
+- `conformance/v0.5/invalid/` -> invalid v0.5 fixtures
 - `conformance/v0.4/expected.json` -> expected outcomes for all v0.4 fixtures
+- `conformance/v0.5/expected.json` -> expected outcomes for all v0.5 fixtures
 
 Packaging mode:
-- Fixture content under `valid/` and `invalid/` is a mix of regular files and relative symlinks into `examples/` (the canonical fixture source), so the conformance package stays synchronized with canonical fixtures. Both forms resolve transparently in a full repository checkout; when extracting the suite out of the repository, dereference symlinks (for example `cp -RL`).
+- Every fixture under `valid/` and `invalid/` is a regular file.
 - Directory placement does not define the expected outcome. Match each fixture's `expected.json` entry, not the directory name (one v0.4 fixture under `valid/` is an evaluation-mode reject, and one is schema-rejected while evaluator-accepted; see the v0.4 sections below).
 
 ## Version Packages And Verification Surfaces
@@ -177,11 +186,12 @@ These define the standard JSON formats for implementation test reports and hoste
 
 ## Reference Harness (Non-Normative)
 
-The repo-local TypeScript reference harness is one of many possible implementations; third-party adopters do not need Node/TypeScript. For cross-checking, from `packages/universal-manifest/`:
+The TypeScript reference harness is one of many possible implementations; third-party adopters do not need Node/TypeScript. Its source is in `packages/universal-manifest/`, and the runner is in `conformance/runner/` (see the v0.5 suite section above). In the project's development repository, these package scripts run the same suites from `packages/universal-manifest/`:
 - `npm run test:v04:conformance` - the v0.4 structural + evaluation matrix against `expected.json`
 - `npm run test:v04:schema` - the direct Draft 2020-12 schema sweep over all v0.4 conformance fixtures and examples
 - `npm run test:v04:evaluator` / `npm run test:v04:behavioral` - evaluator and behavioral paths
-- `npm test` - all suites, v0.1 through v0.4
+- `npm run test:v05:conformance` / `npm run test:v05:schema` - the v0.5 matrix and schema sweep
+- `npm test` - all suites, v0.1 through v0.5
 
 ## Badges
 

@@ -2,7 +2,7 @@
 
 ## Reporting Vulnerabilities
 
-**Do NOT open public GitHub issues for security vulnerabilities.**
+**Do not open public GitHub issues for security vulnerabilities.**
 
 Please report security issues by email to: **security@universalmanifest.net**
 
@@ -16,20 +16,18 @@ Include:
 
 | Version | Status |
 |---------|--------|
-| v0.3    | Current published specification |
-| v0.2    | Previous version, maintained |
-| v0.1    | Legacy, no active updates |
+| v0.5    | Released (`v0.5.0`); reports are accepted |
+| v0.4    | Published; reports are accepted |
+| v0.3    | Previous version |
+| v0.2    | Previous version |
+| v0.1    | Legacy, no updates |
 
-## Response Timeline
+A published version's context and schema never change. A correction to a published version is made as text errata or in a new version.
 
-- **Acknowledgment**: Within 48 hours of receipt
-- **Critical issues**: Fix and patch within 30 days
-- **Severity assessment**: Conducted during initial review
+## Response
 
-## Cryptographic Profile
+Reports are read and assessed by the maintainers. No fixed response time is promised.
 
-The v0.2 signature profile uses Ed25519 signatures with JCS (RFC 8785) canonicalization. The v0.3 specification extends this with a normative receiver pipeline, encrypted inline facets (JWE), and structured receipts.
+## Cryptographic Profiles
 
-## Contact
-
-Security inquiries: security@universalmanifest.net
+v0.5 Signature Profile A is Ed25519 over the JCS (RFC 8785) canonical form, with canonical prime-order points, a canonical S and the full-challenge equation. Signature Profile B is JCS + ES256. The v0.5 conformance suite in `conformance/v0.5/` exercises both.
