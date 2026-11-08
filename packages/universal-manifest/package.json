@@ -1,0 +1,87 @@
+{
+  "name": "universal-manifest",
+  "version": "0.1.0",
+  "description": "TypeScript types and runtime validators for the Universal Manifest specification",
+  "type": "module",
+  "engines": {
+    "node": ">=22 <23"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./conformance-behavioral": {
+      "types": "./dist/conformance-behavioral.d.ts",
+      "default": "./dist/conformance-behavioral.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test:jcs": "node scripts/test-jcs-canonicalization.mjs",
+    "test:ijson": "node scripts/test-ijson-duplicate-members.mjs",
+    "test:liveness": "node scripts/test-required-liveness.mjs",
+    "test:liveness:v1": "node scripts/test-liveness-v1.mjs",
+    "validate:examples": "node scripts/validate-examples.mjs",
+    "validate:gpc": "node scripts/validate-gpc.mjs",
+    "test:v03:evaluator": "node scripts/test-v03-evaluator.mjs",
+    "test:v03:conformance": "node scripts/test-v03-conformance.mjs",
+    "test:v04:evaluator": "node scripts/test-v04-evaluator.mjs",
+    "test:v05:created": "node scripts/test-v05-created.mjs",
+    "test:v04:conformance": "node scripts/test-v04-conformance.mjs",
+    "test:v04:schema": "node scripts/test-v04-schema.mjs",
+    "test:v05:schema": "node scripts/test-v04-schema.mjs 0.5",
+    "test:v05:contract": "node scripts/test-v05-contract.mjs",
+    "build:v05:fixtures": "node scripts/build-v05-fixtures.mjs",
+    "check:v04:contract": "node ../../tools/spec/check-v04-contract-surface.mjs",
+    "check:v04:context": "node ../../tools/spec/check-v04-context-hash.mjs",
+    "check:v04:smd": "node scripts/check-v04-smd-boundary.mjs",
+    "build:behavioral-fixtures": "node scripts/build-behavioral-fixtures.mjs",
+    "build:v04:gap-fixtures": "node scripts/build-v04-gap-fixtures.mjs",
+    "test:v04:behavioral": "node scripts/test-v04-behavioral.mjs",
+    "test": "npm run build && npm run test:jcs && npm run test:ijson && npm run test:liveness && npm run test:liveness:v1 && npm run validate:examples && npm run validate:gpc && npm run test:v03:evaluator && npm run test:v03:conformance && npm run test:v04:evaluator && npm run test:v05:created && npm run test:v04:conformance && npm run test:v04:schema && npm run check:v04:contract && npm run check:v04:context && npm run check:v04:smd && npm run test:v04:behavioral && npm run test:v05:conformance && npm run test:v05:schema && npm run test:v05:contract && npm run test:v05:types",
+    "journeys": "npm run build && node scripts/run-journeys.mjs",
+    "check:terminology": "node scripts/check-terminology.mjs",
+    "smoke:endpoints:dev": "node scripts/smoke-endpoints.mjs --mode dev",
+    "smoke:endpoints:dev:contract": "node scripts/smoke-endpoints.mjs --mode dev --contract",
+    "smoke:endpoints:staging": "node scripts/smoke-endpoints.mjs --mode prod --docs-base https://staging.universalmanifest.net --resolver-base https://staging.myum.net",
+    "smoke:endpoints:staging:contract": "node scripts/smoke-endpoints.mjs --mode prod --docs-base https://staging.universalmanifest.net --resolver-base https://staging.myum.net --contract",
+    "smoke:endpoints:prod": "node scripts/smoke-endpoints.mjs --mode prod --docs-base https://universalmanifest.net --resolver-base https://myum.net",
+    "smoke:endpoints:prod:contract": "node scripts/smoke-endpoints.mjs --mode prod --docs-base https://universalmanifest.net --resolver-base https://myum.net --contract",
+    "resolve:staging-targets": "node scripts/select-staging-bases.mjs --format json",
+    "verify:postdeploy:staging": "node scripts/post-deploy-verify.mjs --mode prod --docs-base https://staging.universalmanifest.net --resolver-base https://staging.myum.net --resolver-www-base https://www.staging.myum.net",
+    "verify:postdeploy:prod": "node scripts/post-deploy-verify.mjs --mode prod --docs-base https://universalmanifest.net --resolver-base https://myum.net --resolver-www-base https://www.myum.net",
+    "test:v05:conformance": "node scripts/test-v05-conformance.mjs",
+    "test:v05:types": "tsc --noEmit --strict --target es2022 --module nodenext --moduleResolution nodenext --skipLibCheck scripts/test-v05-types.ts"
+  },
+  "keywords": [
+    "universal-manifest",
+    "identity",
+    "json-ld",
+    "manifest",
+    "validation",
+    "ed25519",
+    "portable-identity",
+    "decentralized-identity"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/UniversalManifest/universal-manifest.git",
+    "directory": "packages/universal-manifest"
+  },
+  "homepage": "https://universalmanifest.net",
+  "devDependencies": {
+    "@types/node": "^22.10.7",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@noble/curves": "2.4.0",
+    "@sd-jwt/core": "0.23.2"
+  }
+}

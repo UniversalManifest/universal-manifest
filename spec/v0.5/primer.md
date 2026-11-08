@@ -3,7 +3,7 @@ lang: en
 title: Universal Manifest — Primer (v0.5)
 ---
 
-> **v0.5.0 release candidate 1.** Published as tag `v0.5.0-rc.1` of `UniversalManifest/universal-manifest`. Wire version `0.5`; namespace `https://universalmanifest.net/ns/v0.5`; reading routes `/spec/v0.5/`. A release candidate is not the final v0.5.0 release, and it is not a completed implementation or conformance qualification. Feature-specific PREVIEW and conditional requirements remain in force.
+> **v0.5.0.** Published as tag `v0.5.0` of `UniversalManifest/universal-manifest`, with the same wire files as release candidate 1 (`v0.5.0-rc.1`). Wire version `0.5`; namespace `https://universalmanifest.net/ns/v0.5`; reading routes `/spec/v0.5/`. It is a mechanism release, not a completed implementation or conformance qualification. Feature-specific PREVIEW and conditional requirements remain in force.
 
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 <!-- SPDX-FileCopyrightText: 2026 SumSet Tech LLC -->

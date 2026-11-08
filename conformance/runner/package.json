@@ -1,0 +1,17 @@
+{
+  "name": "@universalmanifest/conformance-runner",
+  "private": true,
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "type": "module",
+  "description": "Universal Manifest standalone conformance runner",
+  "bin": {
+    "um-conformance-runner": "./cli.mjs"
+  },
+  "scripts": {
+    "test": "node --test",
+    "run:typescript-adapter": "node ./cli.mjs --mode command --adapter-command \"node ../adapters/typescript/adapter.mjs\" --report ./conformance-report.json",
+    "run:typescript-adapter:http": "node ./cli.mjs --mode http --adapter-endpoint http://127.0.0.1:8788/validate --report ./conformance-report.json",
+    "run:typescript-adapter:v04": "node ./cli.mjs --mode command --adapter-command \"node ../adapters/typescript/adapter.mjs\" --versions 0.4 --impl-name um-typescript-reference --impl-language typescript --report ./conformance-report-v04.json"
+  }
+}

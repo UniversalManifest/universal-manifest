@@ -1,16 +1,16 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 <!-- SPDX-FileCopyrightText: 2026 SumSet Tech LLC -->
 
-> **v0.5.0 release candidate 1.** Published as tag `v0.5.0-rc.1` of `UniversalManifest/universal-manifest`. Wire version `0.5`; namespace `https://universalmanifest.net/ns/v0.5`; reading routes `/spec/v0.5/`. A release candidate is not the final v0.5.0 release, and it is not a completed implementation or conformance qualification. Feature-specific PREVIEW and conditional requirements remain in force.
+> **v0.5.0.** Published as tag `v0.5.0` of `UniversalManifest/universal-manifest`, with the same wire files as release candidate 1 (`v0.5.0-rc.1`). Wire version `0.5`; namespace `https://universalmanifest.net/ns/v0.5`; reading routes `/spec/v0.5/`. It is a mechanism release, not a completed implementation or conformance qualification. Feature-specific PREVIEW and conditional requirements remain in force.
 
 > This is the **draft standalone profile registry** required by [EXT-OPT §O6](ext-opt.md#o6-profile-registration-mechanism). It prepares the list of Universal Manifest profiles and subsidiary value registries that share §O6's registration process. Its draft tables do not independently establish registration. Once published under §O6, this registry is **versioned independently of the specification** and is updated between specification releases.
 >
-> **Status:** This document is <span class="preview-tag">PREVIEW</span> — it is the first issue of the registry and is under maintainer review. Entries marked `provisional` are not yet registered and confer no conformance standing.
+> **Status:** This document is <span class="preview-tag">PREVIEW</span> — it is the first issue of the registry, the local draft that §O6 describes, with the maintainer decisions below adopted for v0.5. Identifiers marked `provisional` are not registered and confer no conformance standing.
 
-> **Editor's note (remove before first publication).** Two questions must be answered by the maintainers before this document can be published as normative, and both are marked inline where they bite:
+> **Maintainer decisions for v0.5.**
 >
-> 1. **The post-quantum suite's registration remains pending.** “Signature Profile B” means JCS + ES256 in [EXT-OPT §O15](ext-opt.md#o15-signature-profile-b-jcs--es256); [EXT-T2 §T2.3.2](ext-t2.md#t23-post-quantum-signatures) uses the descriptive name **JCS + ML-DSA-65**. The proposed post-quantum identifier and verification/carrier parameters still require §O6 review and conformance integration. No additional profile letter is adopted by this draft.
-> 2. **§O6's status vocabulary has three values** (`active`, `deprecated`, `sunset`) and §O6 step 1 requires at least one conformance fixture before registration. Most profiles named across the document set are design-stage and have no fixture, so under a literal reading they cannot appear here at all. This draft adds a fourth status, **`provisional`**, for entries that are named in the specification set but not yet registrable. Adding it is new normative text and requires maintainer adoption.
+> 1. **The post-quantum suite is not registered in v0.5.** “Signature Profile B” means JCS + ES256 in [EXT-OPT §O15](ext-opt.md#o15-signature-profile-b-jcs--es256); [EXT-T2 §T2.3.2](ext-t2.md#t23-post-quantum-signatures) uses the descriptive name **JCS + ML-DSA-65**. Its identifier, verification and carrier parameters still need §O6 review and conformance integration, which is later-version work. No additional profile letter is assigned.
+> 2. **`provisional` is adopted as a listing status.** §O6 defines three statuses for registered profiles (`active`, `deprecated`, `sunset`) and requires at least one conformance fixture before registration. Most profiles named across the document set are design-stage and have no fixture. This registry lists them as **`provisional`**: named and reserved against collision, not registered, and conferring no conformance standing. `provisional` is not a registration status under §O6.
 
 # Universal Manifest Profile Registry <span class="preview-tag">PREVIEW</span>
 
@@ -22,7 +22,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ## R1. Scope
 
-This document prepares the registry that [EXT-OPT §O6](ext-opt.md#o6-profile-registration-mechanism) requires. §O6 defines the registration *mechanism*; this document holds the draft *contents*. Explicit recognition in the Base or a normative extension remains the authority for existing profiles. A draft entry does not activate an additional registration.
+This document prepares the registry that [EXT-OPT §O6](ext-opt.md#o6-profile-registration-mechanism) requires. §O6 defines the registration *mechanism*; this document holds the draft *contents*. Explicit recognition in the Base or a normative extension remains the authority for existing profiles. A draft listing does not activate an additional registration.
 
 This registry is published independently of the specification version. A profile is registered, deprecated, or sunset by editing this document through the process in [R4](#r4-registration-procedure); no specification release is required and none is implied. Where the published `schema.json` enumerates values that correspond to entries here — today, the `algorithm` enumeration of the `signature` category — that enumeration is the **wire projection** of this registry, and this registry is the governing record.
 
@@ -49,16 +49,16 @@ Profile identifiers are `@id`-coerced in the published JSON-LD context, so a reg
 
 ## R3. Entry Fields and Status Vocabulary
 
-Each entry carries the six fields §O6 requires: **identifier**, **name**, **version**, **status**, **specification URI**, and **registration date**.
+Each registry entry carries the six fields §O6 requires: **identifier**, **name**, **version**, **status**, **specification URI**, and **registration date**, with one of §O6's three statuses. The registry also lists **provisional identifiers**: names reserved against collision that are not registry entries. A provisional identifier is shown with the label `provisional` and "Not registered", and §O6's entry fields and statuses do not apply to it.
 
 Status values:
 
 - **`active`** — registered. The profile has completed [R4](#r4-registration-procedure), including at least one conformance fixture integrated into the suite. Only an `active` profile is registered for conformance purposes.
-- **`provisional`** — named in the specification document set, but not registered. It has not completed R4 and MAY lack a conformance fixture. A `provisional` entry confers **no** conformance standing, and an evaluator MUST NOT treat a `provisional` identifier as recognized. This status exists so that identifiers already visible in the specification set are reserved against collision and are publicly accounted for. *(PENDING maintainer adoption — see the editor's note above; §O6 as written defines only the three statuses below.)*
+- **`provisional`** — named in the specification document set, but not registered. It has not completed R4 and MAY lack a conformance fixture. A `provisional` identifier confers **no** conformance standing, and an evaluator MUST NOT treat a `provisional` identifier as recognized. This status exists so that identifiers already visible in the specification set are reserved against collision and are publicly accounted for. *(Adopted by the maintainers for v0.5. `provisional` is a listing label for identifiers that are not registry entries; §O6's three statuses below apply to registry entries.)*
 - **`deprecated`** — registered, superseded or withdrawn, and carrying a date and a superseding-profile reference where one exists. Evaluators SHOULD warn on a reference to a deprecated profile but MUST NOT reject a manifest solely for referencing one.
 - **`sunset`** — withdrawn at a major-version boundary. Evaluators MAY reject.
 
-Where a specification URI is given as a section reference rather than a stable published URL, the entry is by definition not yet independently citable; such entries are `provisional`.
+For a `provisional` identifier, a specification URI given as a section reference rather than a stable published URL is not yet independently citable. A section reference in an `active` entry, such as Base §1.6 or EXT-OPT §O15, points to text that already recognizes the profile.
 
 ## R4. Registration Procedure
 
@@ -66,7 +66,7 @@ In this document, **the maintainers** means the maintainers of the canonical `Un
 
 Registration follows the five steps of [EXT-OPT §O6](ext-opt.md#o6-profile-registration-mechanism), restated here as the operative procedure:
 
-1. **Proposal.** The author submits a specification to the maintainers via the UM-RFC mechanism, including a scope statement, normative requirements using RFC 2119 keywords, security considerations, an interoperability assessment, and **at least one conformance test fixture**.
+1. **Proposal.** The author submits a specification to the maintainers as an issue or pull request on the canonical `UniversalManifest/universal-manifest` repository, including a scope statement, normative requirements using RFC 2119 keywords, security considerations, an interoperability assessment, and **at least one conformance test fixture**.
 2. **Review.** The maintainers review for completeness, security, and interoperability, and MUST verify that the proposed profile does not conflict with an existing profile at the same extension point.
 3. **Conformance integration.** The author supplies the fixtures; the maintainers integrate them into the conformance suite.
 4. **Registration.** On the maintainers' public acceptance, the profile receives its canonical identifier and its entry is added to this document with status `active`.
@@ -97,7 +97,7 @@ Registration follows the five steps of [EXT-OPT §O6](ext-opt.md#o6-profile-regi
 - Notes: ECDSA over NIST P-256 with SHA-256. Canonicalization and signing input are identical to Profile A. `signature.value` is the base64url of the raw 64-byte `R || S`; DER is rejected. The profile imposes **no** low-S rule and **no** RFC 6979 requirement, because hardware signers expose no nonce control. Optional-additive for evaluators. This profile exists so that hardware key custody — Secure Enclave, StrongBox, TPM — is reachable, since those chips hold P-256 keys only.
 
 **`um:profile:signature:jcs-ml-dsa-65`**
-- Name: JCS + ML-DSA-65 *(proposed registration; see editor's note)*
+- Name: JCS + ML-DSA-65 *(not registered in v0.5; see the maintainer decisions above)*
 - Version: 0.1
 - Status: `provisional`
 - Specification: EXT-T2 §T2.3.2 (post-quantum signatures)
@@ -149,6 +149,6 @@ A value appearing in a design-stage draft is **not** registered. Appearance of a
 
 ## R7. Maintenance
 
-On publication under [R4](#r4-registration-procedure), this document becomes the registry of record. Maintainer changes then take effect on publication, independently of any specification release. The current draft has not performed that publication act.
+On publication under [R4](#r4-registration-procedure) at the address §O6 names, this document becomes the registry of record. Maintainer changes then take effect on publication, independently of any specification release. v0.5.0 carries this document as the local draft that §O6 describes; it has not performed that publication act.
 
 Each change MUST preserve the append-only property of identifiers: entries may change status and version, but an identifier once published here is never reused for different semantics, and never removed.

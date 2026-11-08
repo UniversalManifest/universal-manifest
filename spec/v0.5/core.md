@@ -1,16 +1,16 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 <!-- SPDX-FileCopyrightText: 2026 SumSet Tech LLC -->
 
-> **v0.5.0 release candidate 1.** Published as tag `v0.5.0-rc.1` of `UniversalManifest/universal-manifest`. Wire version `0.5`; namespace `https://universalmanifest.net/ns/v0.5`; reading routes `/spec/v0.5/`. A release candidate is not the final v0.5.0 release, and it is not a completed implementation or conformance qualification. Feature-specific PREVIEW and conditional requirements remain in force.
+> **v0.5.0.** Published as tag `v0.5.0` of `UniversalManifest/universal-manifest`, with the same wire files as release candidate 1 (`v0.5.0-rc.1`). Wire version `0.5`; namespace `https://universalmanifest.net/ns/v0.5`; reading routes `/spec/v0.5/`. It is a mechanism release, not a completed implementation or conformance qualification. Feature-specific PREVIEW and conditional requirements remain in force.
 
 > This is the **Base** of the Universal Manifest v0.5 document set: the complete Tier-0 / Tier-1 evaluator and holder requirements. The source defines the baseline; implementations and the new-version conformance corpus still require qualification before an interoperability claim. Higher-tier and optional requirements remain specified by the companion profiles. New readers should start with the [Primer](primer.md); worked examples live in the [Cookbook](cookbook.md).
 
 # Universal Manifest v0.5 Specification — Base
 
-This version (upon publication): <https://universalmanifest.net/spec/v0.5/core/>
-Latest stable version: <https://universalmanifest.net/spec/v0.3/>
+This version: <https://universalmanifest.net/spec/v0.5/core/>
+Previous version: <https://universalmanifest.net/spec/v0.4/>
 History: <https://universalmanifest.net/spec/>
-v0.5.0 release candidate 1, published as tag `v0.5.0-rc.1`. The immutable revision of https://github.com/UniversalManifest/universal-manifest identified by a release is authoritative; main is the working source and the website is its generated reading view.
+v0.5.0, published as tag `v0.5.0`. The immutable revision of https://github.com/UniversalManifest/universal-manifest identified by a release is authoritative; main is the working source and the website is its generated reading view.
 Copyright (c) 2026 SumSet Tech LLC and the Universal Manifest contributors.
 Grig Bilham — inventor, architect, and author of the Universal Manifest.
 This specification is available under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0). It is free and remains free. Earlier published revisions retain their original licence notices.
@@ -30,7 +30,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ## Status of This Document
 
-Universal Manifest v0.5.0 release candidate 1 carries forward the accepted v0.4 editorial contract and earlier v0.3 baseline, with a distinct wire version, immutable namespace and stricter version-bound Profile A signature acceptance. It is a release candidate, published as tag `v0.5.0-rc.1`; no complete implementation qualification or institutional ratification is asserted.
+Universal Manifest v0.5.0 carries forward the accepted v0.4 editorial contract and earlier v0.3 baseline, with a distinct wire version, immutable namespace and stricter version-bound Profile A signature acceptance. It is published as tag `v0.5.0`; no complete implementation qualification or institutional ratification is asserted.
 
 This **Base** document carries the Tier-0/Tier-1 conformance surface. Features that a conformance claim *adds* above Tier 1, and capabilities orthogonal to the tier ladder, live in companion extensions ([EXT-T1](ext-t1.md), [EXT-T2](ext-t2.md), [EXT-T3](ext-t3.md), [EXT-OPT](ext-opt.md)); the Base names each and points to it. Requirements in PREVIEW sections become final only after maintainer review.
 
@@ -141,7 +141,7 @@ The `@context` member establishes the semantic definitions of terms used within 
 
 The namespace URI is versioned. Manifests conforming to this specification MUST use `https://universalmanifest.net/ns/v0.5`. Evaluators that support an earlier version MAY process manifests declaring it; an evaluator processing a v0.3 manifest under this specification applies the v0.5 evaluation sequence with the backwards-compatibility rules of [EXT-T1](ext-t1.md).
 
-The `um:` prefix used throughout (in `@type` values such as `um:Manifest` and registry identifiers such as `um:reason:`) expands to the IRI `https://universalmanifest.net/ns/um#`. The full term definitions for a given version are fixed by that version's context document, identified by the versioned namespace URI (and, upon publication, served there); this version's context document, with its content hash, is reproduced in [Appendix B](#appendix-b-versioned-context-document-normative-reference) and is normative for context integrity ([§6.10](#context-integrity)). Until publication, the normative copy is `spec/v0.5/schema.jsonld` in the specification repository.
+The `um:` prefix used throughout (in `@type` values such as `um:Manifest` and registry identifiers such as `um:reason:`) expands to the IRI `https://universalmanifest.net/ns/um#`. The full term definitions for a given version are fixed by that version's context document, identified by the versioned namespace URI (and served there); this version's context document, with its content hash, is reproduced in [Appendix B](#appendix-b-versioned-context-document-normative-reference) and is normative for context integrity ([§6.10](#context-integrity)). The same normative document is `spec/v0.5/schema.jsonld` in the specification repository.
 
 ### 1.2.2. `@id` member (abstract property `id`)
 
@@ -382,7 +382,7 @@ A facet MAY carry an encrypted entity payload using the JWE inline encryption pr
 
 ### 2.3.1. Declaration
 
-An encrypted facet declares its encrypted payload in place of (or alongside) a plaintext `entity`. The facet retains its plaintext `@id` and `@type` (`um:Facet`) so consent matching and receipt recording operate normally; the sensitive content is confined to the encrypted payload.
+An encrypted facet declares its encrypted payload in place of (or alongside) a plaintext `entity`. The facet retains its plaintext `@id` and `@type` (`um:Facet`) so consent matching and receipt recording operate normally; the sensitive content is confined to the encrypted payload. These labels are deliberately not hidden. A party that sees a sealed facet learns its `@id`, its `@type` and any other plaintext member, such as `name`, and can match them across presentations. v0.5 gives sealed-facet labels no unlinkability.
 
 An encrypted facet MUST carry the facet member `encryptionProfile` with the value `"jwe-inline-v1"` (this profile's identifier). That member is the declaration that the facet's `entity` value is an encrypted payload rather than a plaintext `um:Entity`: the facet's `entity` value MUST be the JWE object of [§2.3.2](#jwe-structure). An evaluator recognizes an encrypted facet by the presence of `encryptionProfile: "jwe-inline-v1"` and reads its payload as a JWE accordingly.
 
@@ -619,7 +619,7 @@ A Conformant Bilateral Participant MUST implement both Evaluator Behavior ([§4.
 
 ## 4.4. Standalone Conformance Suite
 
-Implementations validate conformance claims natively by testing against the official `conformance/` suite — fixture validation (accepting valid stubs and correctly isolating/flagging malformed artifacts like missing contexts or expired manifests). Implementations claiming v0.5 conformance MUST satisfy the normative requirements of this specification. The standalone conformance suite is the canonical evidence mechanism; implementations SHOULD publish their suite results and claimed level per the conformance profile that, upon publication, will be served at <https://universalmanifest.net/conformance/v0.5/> (until then, the suite lives at `conformance/v0.5/` in the specification repository). The v0.5 suite extends the v0.3 suite with tests for newly normative features. Design-stage preview profiles (EXT-OPT O2.6/O12/O13/O14) have no conformance tests until finalized; other PREVIEW features may carry structural (shape-only) fixtures while their enforcement profiles remain PREVIEW, as itemized in the conformance summary (`spec/v0.5/CONFORMANCE.md` §9 in the specification repository — the two-grade PREVIEW policy).
+Implementations validate conformance claims natively by testing against the official `conformance/` suite — fixture validation (accepting valid stubs and correctly isolating/flagging malformed artifacts like missing contexts or expired manifests). Implementations claiming v0.5 conformance MUST satisfy the normative requirements of this specification. The standalone conformance suite is the canonical evidence mechanism; implementations SHOULD publish their suite results and claimed level per the conformance profile served at <https://universalmanifest.net/conformance/v0.5/> (the same suite is `conformance/v0.5/` in the specification repository). The v0.5 suite extends the v0.3 suite with tests for newly normative features. Design-stage preview profiles (EXT-OPT O2.6/O12/O13/O14) have no conformance tests until finalized; other PREVIEW features may carry structural (shape-only) fixtures while their enforcement profiles remain PREVIEW, as itemized in the conformance summary (`spec/v0.5/CONFORMANCE.md` §9 in the specification repository — the two-grade PREVIEW policy).
 
 ## 4.5. Conformance to the Abstract Data Model
 
@@ -676,6 +676,8 @@ Implementers MUST use Signature Profile A ([§1.6](#signature-profile-a-jcs--ed2
 ## 6.2. TTL Enforcement
 
 Bounding the `expiresAt` timeline is the primary defense against presentation replay spoofing. For interactive presentations, the `presentationProof` mechanism ([EXT-T1](ext-t1.md)) additionally binds a presentation to a specific verifier and challenge, preventing replay within the TTL window.
+
+**Clock trust.** Every time check in this specification compares against the evaluation time: freshness, consent windows, liveness, unlock windows, delegation expiry and claim expiry. These checks are only as strong as the clock that supplies that time. On a platform with no trusted or attested time source, a party that controls the local clock can defeat expiry, and a receipt does not show otherwise. The Rust reference evaluator takes the evaluation time only as an explicit input and never reads an ambient clock. The TypeScript reference evaluator reads the host clock when the caller supplies no evaluation time; a caller that needs an auditable time passes it explicitly.
 
 ## 6.3. Resource Limits
 
@@ -831,7 +833,7 @@ Values a verifier sets can link one holder's visits to that verifier, and a hold
 
 ### 7.1.1. Selective Disclosure: Dual-Track Model <span class="preview-tag">PREVIEW</span>
 
-Manifest-level selective disclosure is offered along two tracks: **Track A (baseline)** — SD-JWT-style selective disclosure, the interoperable default — and **Track B** — BBS+ derived proofs for privacy-critical deployments, which remove one repeated value, the issuer's signature. Other carried values can still link presentations, so Track B alone does not prevent verifier-to-verifier correlation. The Base establishes Track A as the baseline selective-disclosure behavior consistent with holder-controlled projection above; the full dual-track model, and Track B's unlinkable-proof mechanics, are specified in [EXT-T2](ext-t2.md).
+Manifest-level selective disclosure is offered along two tracks: **Track A (baseline)** — SD-JWT-style selective disclosure, the interoperable default — and **Track B** — BBS+ derived proofs for privacy-critical deployments, which remove one repeated value, the issuer's signature. Other carried values can still link presentations, so Track B alone does not prevent verifier-to-verifier correlation. The Base establishes Track A as the baseline selective-disclosure behavior consistent with holder-controlled projection above; the full dual-track model, and Track B's derived-proof mechanics, are specified in [EXT-T2](ext-t2.md).
 
 ## 7.2. Private-Data Handling: Derived Writes and Honest Limits <span class="preview-tag">PREVIEW</span>
 
@@ -907,9 +909,9 @@ Change control for Universal Manifest media types and for the profile registry r
 
 # Appendix B. Versioned Context Document (Normative Reference)
 
-The full term definitions for v0.5 are fixed by the versioned context document identified by the namespace URI `https://universalmanifest.net/ns/v0.5` (which, upon publication, will also be served there; until then the normative copy is `spec/v0.5/schema.jsonld` in the specification repository). That document, together with its content hash, is the **normative reference for context integrity** ([§6.10](#context-integrity)): an evaluator pins this content-hashed copy rather than fetching an arbitrary remote context at evaluation time. The context document defines the `um:` term set (`um:Manifest`, `um:Facet`, `um:Entity`, `um:Consent`, `um:Receipt`, `um:Device`, the `um:reason:` and `um:profile:` registries, and the structural member terms) over the base IRI `https://universalmanifest.net/ns/um#`.
+The full term definitions for v0.5 are fixed by the versioned context document identified by the namespace URI `https://universalmanifest.net/ns/v0.5` (and served there; the same normative document is `spec/v0.5/schema.jsonld` in the specification repository). That document, together with its content hash, is the **normative reference for context integrity** ([§6.10](#context-integrity)): an evaluator pins this content-hashed copy rather than fetching an arbitrary remote context at evaluation time. The context document defines the `um:` term set (`um:Manifest`, `um:Facet`, `um:Entity`, `um:Consent`, `um:Receipt`, `um:Device`, the `um:reason:` and `um:profile:` registries, and the structural member terms) over the base IRI `https://universalmanifest.net/ns/um#`.
 
-The versioned namespace URI identifies an **immutable document**, not a mutable network resource ([EXT-OPT](ext-opt.md#o17-context-integrity-production-detail)). Its normative body is the JSON-LD context document reproduced verbatim below; the same document is carried unchanged as the machine-readable artifact `schema.jsonld` in the v0.5 artifact directory (`spec/v0.5/schema.jsonld` in the specification repository — the normative copy until publication; upon publication it will also be served at `https://universalmanifest.net/ns/universal-manifest/v0.5/schema.jsonld`). The reproduction below, that artifact, and any copy retrieved from the namespace URI are the same byte sequence: UTF-8 text with LF (U+000A) line endings and a single trailing LF. Trust in the term definitions derives from the content hash, never from the retrieval channel.
+The versioned namespace URI identifies an **immutable document**, not a mutable network resource ([EXT-OPT](ext-opt.md#o17-context-integrity-production-detail)). Its normative body is the JSON-LD context document reproduced verbatim below; the same document is carried unchanged as the machine-readable artifact `schema.jsonld` in the v0.5 artifact directory (`spec/v0.5/schema.jsonld` in the specification repository, also served at `https://universalmanifest.net/ns/universal-manifest/v0.5/schema.jsonld`). The reproduction below, that artifact, and any copy retrieved from the namespace URI are the same byte sequence: UTF-8 text with LF (U+000A) line endings and a single trailing LF. Trust in the term definitions derives from the content hash, never from the retrieval channel.
 
 The content hash of the v0.5 context document is the SHA-256 multihash computed over exactly those bytes, per the computation rule in [EXT-OPT](ext-opt.md#o17-context-integrity-production-detail):
 

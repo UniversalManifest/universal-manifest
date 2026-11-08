@@ -1,0 +1,12 @@
+{
+  "name": "@universalmanifest/conformance-adapter-typescript",
+  "private": true,
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "type": "module",
+  "description": "Reference Universal Manifest adapter for standalone conformance runner",
+  "scripts": {
+    "adapter": "node ./adapter.mjs",
+    "server": "node ./server.mjs"
+  }
+}

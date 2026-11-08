@@ -3,7 +3,7 @@ lang: en
 title: Universal Manifest v0.5 — Document Set Index (Conformance-Tier Stack)
 ---
 
-> **v0.5.0 release candidate 1.** Published as tag `v0.5.0-rc.1` of `UniversalManifest/universal-manifest`. Wire version `0.5`; namespace `https://universalmanifest.net/ns/v0.5`; reading routes `/spec/v0.5/`. A release candidate is not the final v0.5.0 release, and it is not a completed implementation or conformance qualification. Feature-specific PREVIEW and conditional requirements remain in force.
+> **v0.5.0.** Published as tag `v0.5.0` of `UniversalManifest/universal-manifest`, with the same wire files as release candidate 1 (`v0.5.0-rc.1`). Wire version `0.5`; namespace `https://universalmanifest.net/ns/v0.5`; reading routes `/spec/v0.5/`. It is a mechanism release, not a completed implementation or conformance qualification. Feature-specific PREVIEW and conditional requirements remain in force.
 
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 <!-- SPDX-FileCopyrightText: 2026 SumSet Tech LLC -->
@@ -12,7 +12,7 @@ title: Universal Manifest v0.5 — Document Set Index (Conformance-Tier Stack)
 
 The v0.5 candidate is organized as a **conformance-tier stack**: a breadth-first Primer, a Tier-0/Tier-1 Base, four companion profiles that a conformance claim *adds* by tier or by optional feature, and a Cookbook of worked examples. The question that decides what you read and build is *"what level of assurance am I certifying to?"*
 
-This is v0.5.0 release candidate 1, published as tag `v0.5.0-rc.1` and derived from the accepted v0.4 editorial set. Historical v0.3/v0.4 artifacts remain unchanged. The immutable canonical GitHub release is authoritative; the website is a downstream view. See [migration and release notes](README.md#migration-from-published-v04).
+This is v0.5.0, published as tag `v0.5.0` and derived from the accepted v0.4 editorial set. Historical v0.3/v0.4 artifacts remain unchanged. The immutable canonical GitHub release is authoritative; the website is a downstream view. See [migration and release notes](README.md#migration-from-published-v04).
 
 ## The documents
 
